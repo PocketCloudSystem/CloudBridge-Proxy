@@ -1,0 +1,4 @@
+name: CloudBridge
+version: 1.0
+main: de.pocketcloud.cloudbridge.CloudBridge
+author: r3pt1s
