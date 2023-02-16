@@ -10,8 +10,9 @@ public class ChangeStatusTask extends Task {
     @Override
     public void onRun(int currentTick) {
         if (CloudAPI.getInstance().getCurrentServer() == null) return;
+        if (CloudAPI.getInstance().getCurrentTemplate() == null) return;
         if (CloudAPI.getInstance().getCurrentServer().getServerStatus() == ServerStatus.IN_GAME || CloudAPI.getInstance().getCurrentServer().getServerStatus() == ServerStatus.STOPPING) return;
-        if (ProxyServer.getInstance().getPlayers().size() >= ProxyServer.getInstance().getConfiguration().getMaxPlayerCount()) {
+        if (ProxyServer.getInstance().getPlayers().size() >= CloudAPI.getInstance().getCurrentTemplate().getMaxPlayerCount()) {
             CloudAPI.getInstance().changeStatus(ServerStatus.FULL);
         } else {
             if (CloudAPI.getInstance().getCurrentServer().getServerStatus() == ServerStatus.FULL) {
