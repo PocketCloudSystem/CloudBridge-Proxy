@@ -3,9 +3,9 @@ package de.pocketcloud.cloudbridge.handler;
 import de.pocketcloud.cloudbridge.api.CloudAPI;
 import de.pocketcloud.cloudbridge.api.server.CloudServer;
 import dev.waterdog.waterdogpe.ProxyServer;
+import dev.waterdog.waterdogpe.network.connection.handler.IJoinHandler;
 import dev.waterdog.waterdogpe.network.serverinfo.ServerInfo;
 import dev.waterdog.waterdogpe.player.ProxiedPlayer;
-import dev.waterdog.waterdogpe.utils.types.IJoinHandler;
 
 public class JoinHandler implements IJoinHandler {
 

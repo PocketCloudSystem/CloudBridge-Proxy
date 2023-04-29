@@ -9,9 +9,9 @@ import de.pocketcloud.cloudbridge.network.packet.impl.normal.PlayerDisconnectPac
 import de.pocketcloud.cloudbridge.network.packet.impl.request.CheckPlayerMaintenanceRequestPacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.response.CheckPlayerMaintenanceResponsePacket;
 import de.pocketcloud.cloudbridge.network.request.RequestManager;
-import dev.waterdog.waterdogpe.event.defaults.PlayerDisconnectEvent;
+import dev.waterdog.waterdogpe.event.defaults.PlayerDisconnectedEvent;
 import dev.waterdog.waterdogpe.event.defaults.PlayerLoginEvent;
-import dev.waterdog.waterdogpe.event.defaults.PreTransferEvent;
+import dev.waterdog.waterdogpe.event.defaults.ServerTransferRequestEvent;
 import dev.waterdog.waterdogpe.player.ProxiedPlayer;
 import dev.waterdog.waterdogpe.utils.config.JsonConfig;
 
@@ -32,12 +32,12 @@ public class EventListener {
         }
     }
 
-    public static void onDisconnect(PlayerDisconnectEvent event) {
+    public static void onDisconnected(PlayerDisconnectedEvent event) {
         ProxiedPlayer player = event.getPlayer();
         Network.getInstance().sendPacket(new PlayerDisconnectPacket(new CloudPlayer(player.getName(), player.getAddress().getAddress().getHostAddress() + ":" + player.getAddress().getPort(), player.getXuid(), player.getUniqueId().toString(), null, null)));
     }
 
-    public static void onTransfer(PreTransferEvent event) {
+    public static void onTransfer(ServerTransferRequestEvent event) {
         Network.getInstance().sendPacket(new CloudPlayerSwitchServerPacket(event.getPlayer().getName(), event.getTargetServer().getServerName()));
     }
 }

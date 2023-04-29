@@ -64,7 +64,7 @@ public class PacketPool {
         try {
             packet = packetClass.newInstance();
         } catch (Exception e) {
-            MainLogger.getLogger().logException(e);
+            MainLogger.getLogger().throwing(e);
         }
         return packet;
     }
