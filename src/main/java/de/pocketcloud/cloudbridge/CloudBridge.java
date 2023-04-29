@@ -1,7 +1,6 @@
 package de.pocketcloud.cloudbridge;
 
 import de.pocketcloud.cloudbridge.api.CloudAPI;
-import de.pocketcloud.cloudbridge.handler.ForcedHostHandler;
 import de.pocketcloud.cloudbridge.handler.JoinHandler;
 import de.pocketcloud.cloudbridge.handler.ReconnectHandler;
 import de.pocketcloud.cloudbridge.listener.EventListener;
