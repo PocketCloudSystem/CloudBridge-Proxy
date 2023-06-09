@@ -23,8 +23,8 @@
             <url>https://repo.opencollab.dev/maven-snapshots/</url>
         </repository>
         <repository>
-            <id>waterdog</id>
-            <url>https://repo.waterdog.dev/artifactory/main/</url>
+            <id>waterdogpe-snapshots</id>
+            <url>https://repo.waterdog.dev/snapshots</url>
         </repository>
     </repositories>
 
