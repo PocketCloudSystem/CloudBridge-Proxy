@@ -2,7 +2,7 @@ package de.pocketcloud.cloudbridge.api.player;
 
 import de.pocketcloud.cloudbridge.api.CloudAPI;
 import de.pocketcloud.cloudbridge.api.server.CloudServer;
-import de.pocketcloud.cloudbridge.utils.Utils;
+import de.pocketcloud.cloudbridge.util.Utils;
 
 import java.util.HashMap;
 import java.util.Map;

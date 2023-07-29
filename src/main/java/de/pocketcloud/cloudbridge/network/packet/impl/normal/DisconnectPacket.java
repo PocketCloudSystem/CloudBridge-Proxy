@@ -1,8 +1,10 @@
 package de.pocketcloud.cloudbridge.network.packet.impl.normal;
 
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
-import de.pocketcloud.cloudbridge.network.packet.content.PacketContent;
+import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
 import de.pocketcloud.cloudbridge.network.packet.impl.types.DisconnectReason;
+import dev.waterdog.waterdogpe.ProxyServer;
+import dev.waterdog.waterdogpe.logger.MainLogger;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -15,18 +17,29 @@ public class DisconnectPacket extends CloudPacket {
     }
 
     @Override
-    protected void encodePayload(PacketContent content) {
-        super.encodePayload(content);
-        content.putDisconnectReason(disconnectReason);
+    protected void encodePayload(PacketData packetData) {
+        super.encodePayload(packetData);
+        packetData.writeDisconnectReason(disconnectReason);
     }
 
     @Override
-    protected void decodePayload(PacketContent content) {
-        super.decodePayload(content);
-        disconnectReason = content.readDisconnectReason();
+    protected void decodePayload(PacketData packetData) {
+        super.decodePayload(packetData);
+        disconnectReason = packetData.readDisconnectReason();
     }
 
     public DisconnectReason getDisconnectReason() {
         return disconnectReason;
+    }
+
+    @Override
+    public void handle() {
+        if (this.disconnectReason == DisconnectReason.CLOUD_SHUTDOWN) {
+            MainLogger.getLogger().warning("§4Cloud was stopped! Shutdown...");
+            ProxyServer.getInstance().shutdown();
+        } else {
+            MainLogger.getLogger().warning("§4Server shutdown was ordered by the cloud! Shutdown...");
+            ProxyServer.getInstance().shutdown();
+        }
     }
 }

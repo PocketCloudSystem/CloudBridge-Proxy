@@ -1,6 +1,6 @@
 package de.pocketcloud.cloudbridge.api.template;
 
-import de.pocketcloud.cloudbridge.utils.Utils;
+import de.pocketcloud.cloudbridge.util.Utils;
 import java.util.Map;
 
 public class Template {

@@ -2,7 +2,7 @@ package de.pocketcloud.cloudbridge.network.packet.impl.normal;
 
 import de.pocketcloud.cloudbridge.api.server.status.ServerStatus;
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
-import de.pocketcloud.cloudbridge.network.packet.content.PacketContent;
+import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -15,18 +15,21 @@ public class CloudServerStatusChangePacket extends CloudPacket {
     }
 
     @Override
-    protected void encodePayload(PacketContent content) {
-        super.encodePayload(content);
-        content.putServerStatus(newStatus);
+    protected void encodePayload(PacketData packetData) {
+        super.encodePayload(packetData);
+        packetData.writeServerStatus(newStatus);
     }
 
     @Override
-    protected void decodePayload(PacketContent content) {
-        super.decodePayload(content);
-        newStatus = content.readServerStatus();
+    protected void decodePayload(PacketData packetData) {
+        super.decodePayload(packetData);
+        newStatus = packetData.readServerStatus();
     }
 
     public ServerStatus getNewStatus() {
         return newStatus;
     }
+
+    @Override
+    public void handle() {}
 }

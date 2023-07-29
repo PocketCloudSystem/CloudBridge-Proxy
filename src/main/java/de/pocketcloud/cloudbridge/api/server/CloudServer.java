@@ -4,7 +4,7 @@ import de.pocketcloud.cloudbridge.api.CloudAPI;
 import de.pocketcloud.cloudbridge.api.server.data.CloudServerData;
 import de.pocketcloud.cloudbridge.api.server.status.ServerStatus;
 import de.pocketcloud.cloudbridge.api.template.Template;
-import de.pocketcloud.cloudbridge.utils.Utils;
+import de.pocketcloud.cloudbridge.util.Utils;
 
 import java.util.Map;
 

@@ -1,7 +1,9 @@
 package de.pocketcloud.cloudbridge.network.packet.impl.normal;
 
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
-import de.pocketcloud.cloudbridge.network.packet.content.PacketContent;
+import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
+import dev.waterdog.waterdogpe.ProxyServer;
+import dev.waterdog.waterdogpe.player.ProxiedPlayer;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -16,17 +18,17 @@ public class PlayerKickPacket extends CloudPacket {
     }
 
     @Override
-    protected void encodePayload(PacketContent content) {
-        super.encodePayload(content);
-        content.put(player);
-        content.put(reason);
+    protected void encodePayload(PacketData packetData) {
+        super.encodePayload(packetData);
+        packetData.write(player);
+        packetData.write(reason);
     }
 
     @Override
-    protected void decodePayload(PacketContent content) {
-        super.decodePayload(content);
-        player = content.readString();
-        reason = content.readString();
+    protected void decodePayload(PacketData packetData) {
+        super.decodePayload(packetData);
+        player = packetData.readString();
+        reason = packetData.readString();
     }
 
     public String getPlayer() {
@@ -35,5 +37,11 @@ public class PlayerKickPacket extends CloudPacket {
 
     public String getReason() {
         return reason;
+    }
+
+    @Override
+    public void handle() {
+        ProxiedPlayer player;
+        if ((player = ProxyServer.getInstance().getPlayer(this.player)) != null) player.disconnect(reason);
     }
 }

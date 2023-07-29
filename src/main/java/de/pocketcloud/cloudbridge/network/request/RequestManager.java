@@ -7,6 +7,7 @@ import de.pocketcloud.cloudbridge.task.RequestCheckTask;
 import dev.waterdog.waterdogpe.ProxyServer;
 
 import java.util.HashMap;
+import java.util.function.Consumer;
 
 public class RequestManager {
 
@@ -18,6 +19,7 @@ public class RequestManager {
     }
 
     public RequestPacket sendRequest(RequestPacket requestPacket) {
+        requestPacket.prepare();
         requests.put(requestPacket.getRequestId(), requestPacket);
         ProxyServer.getInstance().getScheduler().scheduleRepeating(new RequestCheckTask(requestPacket), 20);
         Network.getInstance().sendPacket(requestPacket);
@@ -36,8 +38,8 @@ public class RequestManager {
         if (requests.containsKey(responsePacket.getRequestId())) {
             RequestPacket requestPacket = requests.getOrDefault(responsePacket.getRequestId(), null);
             if (requestPacket != null) {
-                if (requestPacket.getThen() != null) {
-                    requestPacket.getThen().accept(responsePacket);
+                for (Consumer<ResponsePacket> then : requestPacket.getThen()) {
+                    then.accept(responsePacket);
                 }
             }
         }

@@ -1,7 +1,7 @@
 package de.pocketcloud.cloudbridge.network.packet.impl.response;
 
 import de.pocketcloud.cloudbridge.network.packet.ResponsePacket;
-import de.pocketcloud.cloudbridge.network.packet.content.PacketContent;
+import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
 import de.pocketcloud.cloudbridge.network.packet.impl.types.ErrorReason;
 import lombok.NoArgsConstructor;
 
@@ -10,24 +10,26 @@ public class CloudServerStartResponsePacket extends ResponsePacket {
 
     private ErrorReason errorReason;
 
-    public CloudServerStartResponsePacket(String requestId, ErrorReason errorReason) {
-        super(requestId);
+    public CloudServerStartResponsePacket(ErrorReason errorReason) {
         this.errorReason = errorReason;
     }
 
     @Override
-    protected void encodePayload(PacketContent content) {
-        super.encodePayload(content);
-        content.putErrorReason(errorReason);
+    protected void encodePayload(PacketData packetData) {
+        super.encodePayload(packetData);
+        packetData.writeErrorReason(errorReason);
     }
 
     @Override
-    protected void decodePayload(PacketContent content) {
-        super.decodePayload(content);
-        errorReason = content.readErrorReason();
+    protected void decodePayload(PacketData packetData) {
+        super.decodePayload(packetData);
+        errorReason = packetData.readErrorReason();
     }
 
     public ErrorReason getErrorReason() {
         return errorReason;
     }
+
+    @Override
+    public void handle() {}
 }

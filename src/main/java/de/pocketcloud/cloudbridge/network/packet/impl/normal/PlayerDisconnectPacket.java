@@ -1,32 +1,36 @@
 package de.pocketcloud.cloudbridge.network.packet.impl.normal;
 
-import de.pocketcloud.cloudbridge.api.player.CloudPlayer;
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
-import de.pocketcloud.cloudbridge.network.packet.content.PacketContent;
+import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class PlayerDisconnectPacket extends CloudPacket {
 
-    private CloudPlayer player;
+    private String playerName;
 
-    public PlayerDisconnectPacket(CloudPlayer player) {
-        this.player = player;
+    public PlayerDisconnectPacket(String playerName) {
+        this.playerName = playerName;
     }
 
     @Override
-    protected void encodePayload(PacketContent content) {
-        super.encodePayload(content);
-        content.putPlayer(player);
+    protected void encodePayload(PacketData packetData) {
+        super.encodePayload(packetData);
+        packetData.write(playerName);
     }
 
     @Override
-    protected void decodePayload(PacketContent content) {
-        super.decodePayload(content);
-        player = content.readPlayer();
+    protected void decodePayload(PacketData packetData) {
+        super.decodePayload(packetData);
+        playerName = packetData.readString();
     }
 
-    public CloudPlayer getPlayer() {
-        return player;
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    @Override
+    public void handle() {
+
     }
 }

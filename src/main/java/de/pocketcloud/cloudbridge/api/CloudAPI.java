@@ -5,6 +5,7 @@ import de.pocketcloud.cloudbridge.api.registry.Registry;
 import de.pocketcloud.cloudbridge.api.server.CloudServer;
 import de.pocketcloud.cloudbridge.api.server.status.ServerStatus;
 import de.pocketcloud.cloudbridge.api.template.Template;
+import de.pocketcloud.cloudbridge.language.Language;
 import de.pocketcloud.cloudbridge.network.Network;
 import de.pocketcloud.cloudbridge.network.packet.RequestPacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.normal.CloudServerSavePacket;
@@ -15,11 +16,11 @@ import de.pocketcloud.cloudbridge.network.packet.impl.request.LoginRequestPacket
 import de.pocketcloud.cloudbridge.network.packet.impl.response.LoginResponsePacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.types.VerifyStatus;
 import de.pocketcloud.cloudbridge.network.request.RequestManager;
+import de.pocketcloud.cloudbridge.util.GeneralSettings;
 import dev.waterdog.waterdogpe.ProxyServer;
 import dev.waterdog.waterdogpe.logger.MainLogger;
 import dev.waterdog.waterdogpe.network.serverinfo.ServerInfo;
 import dev.waterdog.waterdogpe.player.ProxiedPlayer;
-import dev.waterdog.waterdogpe.utils.config.YamlConfig;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,8 +29,8 @@ import java.util.stream.Collectors;
 
 public class CloudAPI {
 
-    private static CloudAPI instance;
-    private VerifyStatus verified = VerifyStatus.NOT_VERIFIED;
+    private static CloudAPI instance = null;
+    private VerifyStatus verified = VerifyStatus.NOT_APPLIED;
 
     public CloudAPI() {
         instance = this;
@@ -37,17 +38,19 @@ public class CloudAPI {
 
     public void processLogin() {
         if (verified == VerifyStatus.VERIFIED) return;
-        RequestManager.getInstance().sendRequest(new LoginRequestPacket(getServerName(), (int) ProcessHandle.current().pid())).then(responsePacket -> {
+        RequestManager.getInstance().sendRequest(new LoginRequestPacket(GeneralSettings.getServerName(), (int) ProcessHandle.current().pid())).then(responsePacket -> {
             LoginResponsePacket loginResponsePacket = (LoginResponsePacket) responsePacket;
             if (loginResponsePacket.getVerifyStatus() == VerifyStatus.VERIFIED) {
-                MainLogger.getLogger().info("§rThis cloud server was §averified §rby the cloud!");
+                MainLogger.getLogger().info(Language.current().translate("inGame.server.verified"));
                 verified = VerifyStatus.VERIFIED;
             } else {
-                MainLogger.getLogger().error("§4This cloud server wasn't §averified by the cloud! Shutdown...");
+                verified = VerifyStatus.DENIED;
+                MainLogger.getLogger().error(Language.current().translate("inGame.server.verify.denied"));
                 ProxyServer.getInstance().shutdown();
             }
         }).failure(packet -> {
-            MainLogger.getLogger().error("§4The cloud didn't respond on the verify request! Shutdown...");
+            verified = VerifyStatus.DENIED;
+            MainLogger.getLogger().error(Language.current().translate("inGame.server.verify.failed"));
             ProxyServer.getInstance().shutdown();
         });
     }
@@ -113,7 +116,7 @@ public class CloudAPI {
         return lobbyServices.get(0);
     }
 
-    public List<CloudServer> getServersOfTemplate(Template template) {
+    public List<CloudServer> getServersByTemplate(Template template) {
         return getServers().stream().filter(server -> server.getTemplate().getName().equals(template.getName())).collect(Collectors.toList());
     }
 
@@ -144,28 +147,12 @@ public class CloudAPI {
         return getPlayers().stream().filter(player -> player.getXboxUserId().equals(xboxUserId)).findFirst().orElse(null);
     }
 
-    public String getServerName() {
-        return new YamlConfig(ProxyServer.getInstance().getDataPath().toString() + "/config.yml").getString("server-name");
-    }
-
-    public String getTemplateName() {
-        return new YamlConfig(ProxyServer.getInstance().getDataPath().toString() + "/config.yml").getString("template");
-    }
-
-    public int getCloudPort() {
-        return Integer.parseInt(new YamlConfig(ProxyServer.getInstance().getDataPath().toString() + "/config.yml").getString("cloud-port"));
-    }
-
-    public String getCloudPath() {
-        return new YamlConfig(ProxyServer.getInstance().getDataPath().toString() + "/config.yml").getString("cloud-path");
-    }
-
     public CloudServer getCurrentServer() {
-        return getServerByName(getServerName());
+        return getServerByName(GeneralSettings.getServerName());
     }
 
     public Template getCurrentTemplate() {
-        return getTemplateByName(getTemplateName());
+        return getTemplateByName(GeneralSettings.getTemplateName());
     }
 
     public ArrayList<CloudServer> getServers() {
@@ -185,6 +172,7 @@ public class CloudAPI {
     }
 
     public static CloudAPI getInstance() {
+        if (instance == null) instance = new CloudAPI();
         return instance;
     }
 }

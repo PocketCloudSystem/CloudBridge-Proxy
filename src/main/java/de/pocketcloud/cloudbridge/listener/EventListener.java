@@ -2,8 +2,9 @@ package de.pocketcloud.cloudbridge.listener;
 
 import de.pocketcloud.cloudbridge.api.CloudAPI;
 import de.pocketcloud.cloudbridge.api.player.CloudPlayer;
+import de.pocketcloud.cloudbridge.language.Language;
 import de.pocketcloud.cloudbridge.network.Network;
-import de.pocketcloud.cloudbridge.network.packet.impl.normal.CloudPlayerSwitchServerPacket;
+import de.pocketcloud.cloudbridge.network.packet.impl.normal.PlayerSwitchServerPacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.normal.PlayerConnectPacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.normal.PlayerDisconnectPacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.request.CheckPlayerMaintenanceRequestPacket;
@@ -13,7 +14,6 @@ import dev.waterdog.waterdogpe.event.defaults.PlayerDisconnectedEvent;
 import dev.waterdog.waterdogpe.event.defaults.PlayerLoginEvent;
 import dev.waterdog.waterdogpe.event.defaults.ServerTransferRequestEvent;
 import dev.waterdog.waterdogpe.player.ProxiedPlayer;
-import dev.waterdog.waterdogpe.utils.config.JsonConfig;
 
 public class EventListener {
 
@@ -26,7 +26,7 @@ public class EventListener {
             RequestManager.getInstance().sendRequest(new CheckPlayerMaintenanceRequestPacket(player.getName())).then(responsePacket -> {
                 CheckPlayerMaintenanceResponsePacket checkPlayerMaintenanceResponsePacket = (CheckPlayerMaintenanceResponsePacket) responsePacket;
                 if (!checkPlayerMaintenanceResponsePacket.getValue()) {
-                    player.disconnect(new JsonConfig(CloudAPI.getInstance().getCloudPath() + "/storage/inGame/messages.json").getString("template-maintenance"));
+                    player.disconnect(Language.current().translate("inGame.template.kick.maintenance"));
                 }
             });
         }
@@ -34,10 +34,10 @@ public class EventListener {
 
     public static void onDisconnected(PlayerDisconnectedEvent event) {
         ProxiedPlayer player = event.getPlayer();
-        Network.getInstance().sendPacket(new PlayerDisconnectPacket(new CloudPlayer(player.getName(), player.getAddress().getAddress().getHostAddress() + ":" + player.getAddress().getPort(), player.getXuid(), player.getUniqueId().toString(), null, null)));
+        Network.getInstance().sendPacket(new PlayerDisconnectPacket(player.getName()));
     }
 
     public static void onTransfer(ServerTransferRequestEvent event) {
-        Network.getInstance().sendPacket(new CloudPlayerSwitchServerPacket(event.getPlayer().getName(), event.getTargetServer().getServerName()));
+        Network.getInstance().sendPacket(new PlayerSwitchServerPacket(event.getPlayer().getName(), event.getTargetServer().getServerName()));
     }
 }

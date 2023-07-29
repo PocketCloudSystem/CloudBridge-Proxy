@@ -2,14 +2,8 @@ package de.pocketcloud.cloudbridge.network.packet.pool;
 
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.normal.*;
-import de.pocketcloud.cloudbridge.network.packet.impl.request.CheckPlayerMaintenanceRequestPacket;
-import de.pocketcloud.cloudbridge.network.packet.impl.request.CloudServerStartRequestPacket;
-import de.pocketcloud.cloudbridge.network.packet.impl.request.CloudServerStopRequestPacket;
-import de.pocketcloud.cloudbridge.network.packet.impl.request.LoginRequestPacket;
-import de.pocketcloud.cloudbridge.network.packet.impl.response.CheckPlayerMaintenanceResponsePacket;
-import de.pocketcloud.cloudbridge.network.packet.impl.response.CloudServerStartResponsePacket;
-import de.pocketcloud.cloudbridge.network.packet.impl.response.CloudServerStopResponsePacket;
-import de.pocketcloud.cloudbridge.network.packet.impl.response.LoginResponsePacket;
+import de.pocketcloud.cloudbridge.network.packet.impl.request.*;
+import de.pocketcloud.cloudbridge.network.packet.impl.response.*;
 import dev.waterdog.waterdogpe.logger.MainLogger;
 
 import java.util.HashMap;
@@ -25,40 +19,38 @@ public class PacketPool {
         registerPacket(LoginRequestPacket.class);
         registerPacket(LoginResponsePacket.class);
         registerPacket(DisconnectPacket.class);
-        registerPacket(KeepALivePacket.class);
+        registerPacket(KeepAlivePacket.class);
         registerPacket(CommandSendPacket.class);
-        registerPacket(LocalPlayerRegisterPacket.class);
-        registerPacket(LocalPlayerUpdatePacket.class);
-        registerPacket(LocalPlayerUnregisterPacket.class);
-        registerPacket(LocalServerRegisterPacket.class);
-        registerPacket(LocalServerUpdatePacket.class);
-        registerPacket(LocalServerUnregisterPacket.class);
-        registerPacket(LocalTemplateRegisterPacket.class);
-        registerPacket(LocalTemplateUpdatePacket.class);
-        registerPacket(LocalTemplateUnregisterPacket.class);
+        registerPacket(CommandSendAnswerPacket.class);
+        registerPacket(ConsoleTextPacket.class);
         registerPacket(PlayerConnectPacket.class);
         registerPacket(PlayerDisconnectPacket.class);
+        registerPacket(PlayerKickPacket.class);
+        registerPacket(CloudServerSavePacket.class);
+        registerPacket(CloudServerStatusChangePacket.class);
+        registerPacket(PlayerSwitchServerPacket.class);
+        registerPacket(TemplateSyncPacket.class);
+        registerPacket(ServerSyncPacket.class);
+        registerPacket(PlayerSyncPacket.class);
         registerPacket(CloudServerStartRequestPacket.class);
         registerPacket(CloudServerStartResponsePacket.class);
         registerPacket(CloudServerStopRequestPacket.class);
         registerPacket(CloudServerStopResponsePacket.class);
-        registerPacket(CloudServerSavePacket.class);
-        registerPacket(CloudServerStatusChangePacket.class);
-        registerPacket(ProxyRegisterServerPacket.class);
-        registerPacket(ProxyUnregisterServerPacket.class);
-        registerPacket(CloudPlayerSwitchServerPacket.class);
-        registerPacket(PlayerKickPacket.class);
         registerPacket(CheckPlayerMaintenanceRequestPacket.class);
         registerPacket(CheckPlayerMaintenanceResponsePacket.class);
+        registerPacket(CheckPlayerNotifyRequestPacket.class);
+        registerPacket(CheckPlayerNotifyResponsePacket.class);
+        registerPacket(ProxyRegisterServerPacket.class);
+        registerPacket(ProxyUnregisterServerPacket.class);
     }
 
     public void registerPacket(Class<? extends CloudPacket> clazz) {
         packets.put(clazz.getSimpleName(), clazz);
     }
 
-    public CloudPacket getPacketById(String identifier) {
-        if (!packets.containsKey(identifier)) return null;
-        Class<? extends CloudPacket> packetClass = packets.get(identifier);
+    public CloudPacket getPacketById(String pid) {
+        if (!packets.containsKey(pid)) return null;
+        Class<? extends CloudPacket> packetClass = packets.getOrDefault(pid, null);
         if (packetClass == null) return null;
         CloudPacket packet = null;
         try {

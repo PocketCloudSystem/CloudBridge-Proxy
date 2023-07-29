@@ -1,8 +1,12 @@
 package de.pocketcloud.cloudbridge.network.packet.impl.normal;
 
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
-import de.pocketcloud.cloudbridge.network.packet.content.PacketContent;
+import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
+import dev.waterdog.waterdogpe.ProxyServer;
+import dev.waterdog.waterdogpe.network.serverinfo.BedrockServerInfo;
 import lombok.NoArgsConstructor;
+
+import java.net.InetSocketAddress;
 
 @NoArgsConstructor
 public class ProxyRegisterServerPacket extends CloudPacket {
@@ -16,17 +20,17 @@ public class ProxyRegisterServerPacket extends CloudPacket {
     }
 
     @Override
-    protected void encodePayload(PacketContent content) {
-        super.encodePayload(content);
-        content.put(serverName);
-        content.put(port);
+    protected void encodePayload(PacketData packetData) {
+        super.encodePayload(packetData);
+        packetData.write(serverName);
+        packetData.write(port);
     }
 
     @Override
-    protected void decodePayload(PacketContent content) {
-        super.decodePayload(content);
-        serverName = content.readString();
-        port = ((Number) content.readDouble()).intValue();
+    protected void decodePayload(PacketData packetData) {
+        super.decodePayload(packetData);
+        serverName = packetData.readString();
+        port = ((Number) packetData.readDouble()).intValue();
     }
 
     public String getServerName() {
@@ -35,5 +39,10 @@ public class ProxyRegisterServerPacket extends CloudPacket {
 
     public int getPort() {
         return port;
+    }
+
+    @Override
+    public void handle() {
+        ProxyServer.getInstance().registerServerInfo(new BedrockServerInfo(serverName, new InetSocketAddress(port), null));
     }
 }

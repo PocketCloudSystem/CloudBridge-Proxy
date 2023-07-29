@@ -1,7 +1,7 @@
 package de.pocketcloud.cloudbridge.network.packet.impl.response;
 
 import de.pocketcloud.cloudbridge.network.packet.ResponsePacket;
-import de.pocketcloud.cloudbridge.network.packet.content.PacketContent;
+import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
 import de.pocketcloud.cloudbridge.network.packet.impl.types.VerifyStatus;
 import lombok.NoArgsConstructor;
 
@@ -10,24 +10,26 @@ public class LoginResponsePacket extends ResponsePacket {
 
     private VerifyStatus verifyStatus;
 
-    public LoginResponsePacket(String requestId, VerifyStatus verifyStatus) {
-        super(requestId);
+    public LoginResponsePacket(VerifyStatus verifyStatus) {
         this.verifyStatus = verifyStatus;
     }
 
     @Override
-    protected void encodePayload(PacketContent content) {
-        super.encodePayload(content);
-        content.putVerifyStatus(verifyStatus);
+    protected void encodePayload(PacketData packetData) {
+        super.encodePayload(packetData);
+        packetData.writeVerifyStatus(verifyStatus);
     }
 
     @Override
-    protected void decodePayload(PacketContent content) {
-        super.decodePayload(content);
-        verifyStatus = content.readVerifyStatus();
+    protected void decodePayload(PacketData packetData) {
+        super.decodePayload(packetData);
+        verifyStatus = packetData.readVerifyStatus();
     }
 
     public VerifyStatus getVerifyStatus() {
         return verifyStatus;
     }
+
+    @Override
+    public void handle() {}
 }

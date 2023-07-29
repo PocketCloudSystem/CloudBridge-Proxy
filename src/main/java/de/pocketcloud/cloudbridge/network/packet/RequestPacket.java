@@ -1,36 +1,38 @@
 package de.pocketcloud.cloudbridge.network.packet;
 
-import de.pocketcloud.cloudbridge.network.packet.content.PacketContent;
-import de.pocketcloud.cloudbridge.utils.Utils;
+import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
+import de.pocketcloud.cloudbridge.util.Utils;
+
+import java.util.ArrayList;
 import java.util.UUID;
 import java.util.function.Consumer;
 
 public class RequestPacket extends CloudPacket {
 
     private String requestId;
-    private final double sentTime;
-    private Consumer<ResponsePacket> then = null;
+    private double sentTime;
+    private final ArrayList<Consumer<ResponsePacket>> then = new ArrayList<>();
     private Consumer<RequestPacket> failure = null;
 
-    public RequestPacket() {
+    public void prepare() {
         requestId = UUID.randomUUID().toString();
-        sentTime = Utils.microtime();
+        sentTime = Utils.time();
     }
 
     @Override
-    public void encode(PacketContent content) {
-        super.encode(content);
-        content.put(requestId);
+    public void encode(PacketData packetData) {
+        super.encode(packetData);
+        packetData.write(requestId);
     }
 
     @Override
-    public void decode(PacketContent content) {
-        super.decode(content);
-        requestId = content.readString();
+    public void decode(PacketData packetData) {
+        super.decode(packetData);
+        requestId = packetData.readString();
     }
 
     public RequestPacket then(Consumer<ResponsePacket> then) {
-        this.then = then;
+        this.then.add(then);
         return this;
     }
 
@@ -47,11 +49,13 @@ public class RequestPacket extends CloudPacket {
         return sentTime;
     }
 
-    public Consumer<ResponsePacket> getThen() {
+    public ArrayList<Consumer<ResponsePacket>> getThen() {
         return then;
     }
 
     public Consumer<RequestPacket> getFailure() {
         return failure;
     }
+
+    final public void handle() {}
 }

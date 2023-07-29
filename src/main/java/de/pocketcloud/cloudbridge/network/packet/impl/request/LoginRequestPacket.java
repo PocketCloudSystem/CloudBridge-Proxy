@@ -1,7 +1,7 @@
 package de.pocketcloud.cloudbridge.network.packet.impl.request;
 
 import de.pocketcloud.cloudbridge.network.packet.RequestPacket;
-import de.pocketcloud.cloudbridge.network.packet.content.PacketContent;
+import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -11,23 +11,22 @@ public class LoginRequestPacket extends RequestPacket {
     private int processId;
 
     public LoginRequestPacket(String serverName, int processId) {
-        super();
         this.serverName = serverName;
         this.processId = processId;
     }
 
     @Override
-    protected void encodePayload(PacketContent content) {
-        super.encodePayload(content);
-        content.put(serverName);
-        content.put(processId);
+    protected void encodePayload(PacketData packetData) {
+        super.encodePayload(packetData);
+        packetData.write(serverName);
+        packetData.write(processId);
     }
 
     @Override
-    protected void decodePayload(PacketContent content) {
-        super.decodePayload(content);
-        serverName = content.readString();
-        processId = content.readInt();
+    protected void decodePayload(PacketData packetData) {
+        super.decodePayload(packetData);
+        serverName = packetData.readString();
+        processId = packetData.readInt();
     }
 
     public String getServerName() {

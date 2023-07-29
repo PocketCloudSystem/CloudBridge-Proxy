@@ -1,13 +1,17 @@
 package de.pocketcloud.cloudbridge.network;
 
 import de.pocketcloud.cloudbridge.CloudBridge;
+import de.pocketcloud.cloudbridge.event.NetworkCloseEvent;
+import de.pocketcloud.cloudbridge.event.NetworkConnectEvent;
+import de.pocketcloud.cloudbridge.event.NetworkPacketReceiveEvent;
 import de.pocketcloud.cloudbridge.event.NetworkPacketSendEvent;
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
-import de.pocketcloud.cloudbridge.network.packet.handler.PacketHandler;
-import de.pocketcloud.cloudbridge.network.packet.handler.encode.PacketEncoder;
-import de.pocketcloud.cloudbridge.network.packet.listener.PacketListener;
+import de.pocketcloud.cloudbridge.network.packet.ResponsePacket;
+import de.pocketcloud.cloudbridge.network.packet.handler.PacketSerializer;
 import de.pocketcloud.cloudbridge.network.packet.pool.PacketPool;
 import de.pocketcloud.cloudbridge.network.request.RequestManager;
+import de.pocketcloud.cloudbridge.util.GeneralSettings;
+import de.pocketcloud.cloudbridge.util.Utils;
 import dev.waterdog.waterdogpe.ProxyServer;
 import dev.waterdog.waterdogpe.logger.MainLogger;
 
@@ -22,8 +26,6 @@ public class Network implements Runnable {
 
     private static Network instance;
     private final PacketPool packetPool;
-    private final PacketListener packetListener;
-    private final PacketHandler packetHandler;
     private final RequestManager requestManager;
     private final InetSocketAddress address;
     private DatagramSocket socket;
@@ -33,8 +35,6 @@ public class Network implements Runnable {
         instance = this;
         this.address = address;
         packetPool = new PacketPool();
-        packetListener = new PacketListener();
-        packetHandler = new PacketHandler();
         requestManager = new RequestManager();
 
         MainLogger.getLogger().info("Try to connect to §e" + address.toString() + "§r...");
@@ -47,7 +47,25 @@ public class Network implements Runnable {
         do {
             String buffer;
             if ((buffer = read()) != null) {
-                PacketHandler.getInstance().handle(buffer);
+                CloudPacket packet = PacketSerializer.decode(buffer);
+                if (packet != null) {
+                    NetworkPacketReceiveEvent ev = new NetworkPacketReceiveEvent(packet);
+                    ProxyServer.getInstance().getEventManager().callEvent(ev);
+                    if (ev.isCancelled()) return;
+                    packet.handle();
+
+                    if (packet instanceof ResponsePacket) {
+                        RequestManager.getInstance().callThen(((ResponsePacket) packet));
+                        RequestManager.getInstance().removeRequest(((ResponsePacket) packet).getRequestId());
+                    }
+                } else {
+                    MainLogger.getLogger().warning("§cReceived an unknown packet from the cloud!");
+                    try {
+                        MainLogger.getLogger().debug(GeneralSettings.isNetworkEncryptionEnabled() ? Utils.decompress(buffer.getBytes(StandardCharsets.UTF_8)) : buffer);
+                    } catch (IOException e) {
+                        MainLogger.getLogger().throwing(e);
+                    }
+                }
             }
         } while (connected);
     }
@@ -55,6 +73,7 @@ public class Network implements Runnable {
     public void connect() {
         if (connected) return;
         try {
+            ProxyServer.getInstance().getEventManager().callEvent(new NetworkConnectEvent(address));
             socket = new DatagramSocket();
             socket.connect(address);
             socket.setSendBufferSize(1024 * 1024 * 8);
@@ -92,6 +111,7 @@ public class Network implements Runnable {
     public void close() {
         if (!connected) return;
         connected = false;
+        ProxyServer.getInstance().getEventManager().callEvent(new NetworkCloseEvent());
         socket.disconnect();
         socket.close();
     }
@@ -99,7 +119,7 @@ public class Network implements Runnable {
     public boolean sendPacket(CloudPacket packet) {
         if (connected) {
             try {
-                String json = PacketEncoder.encode(packet);
+                String json = PacketSerializer.encode(packet);
                 NetworkPacketSendEvent ev = new NetworkPacketSendEvent(packet);
                 ProxyServer.getInstance().getEventManager().callEvent(ev);
 
@@ -113,14 +133,6 @@ public class Network implements Runnable {
 
     public PacketPool getPacketPool() {
         return packetPool;
-    }
-
-    public PacketListener getPacketListener() {
-        return packetListener;
-    }
-
-    public PacketHandler getPacketHandler() {
-        return packetHandler;
     }
 
     public RequestManager getRequestManager() {

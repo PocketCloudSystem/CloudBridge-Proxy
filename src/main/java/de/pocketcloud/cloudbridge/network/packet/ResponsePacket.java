@@ -1,27 +1,23 @@
 package de.pocketcloud.cloudbridge.network.packet;
 
-import de.pocketcloud.cloudbridge.network.packet.content.PacketContent;
+import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class ResponsePacket extends CloudPacket {
+public abstract class ResponsePacket extends CloudPacket {
 
-    private String requestId;
+    private String requestId = "";
 
-    public ResponsePacket(String requestId) {
-        this.requestId = requestId;
+    @Override
+    public void encode(PacketData packetData) {
+        super.encode(packetData);
+        packetData.write(requestId);
     }
 
     @Override
-    public void encode(PacketContent content) {
-        super.encode(content);
-        content.put(requestId);
-    }
-
-    @Override
-    public void decode(PacketContent content) {
-        super.decode(content);
-        requestId = content.readString();
+    public void decode(PacketData packetData) {
+        super.decode(packetData);
+        requestId = packetData.readString();
     }
 
     public String getRequestId() {
