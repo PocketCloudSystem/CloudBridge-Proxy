@@ -1,0 +1,49 @@
+package de.pocketcloud.cloudbridge.network.packet.impl.normal;
+
+import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
+import de.pocketcloud.cloudbridge.network.packet.impl.types.LogType;
+import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
+import dev.waterdog.waterdogpe.logger.MainLogger;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+public class ConsoleTextPacket extends CloudPacket {
+
+    private String text;
+    private LogType logType;
+
+    public ConsoleTextPacket(String text, LogType logType) {
+        this.text = text;
+        this.logType = logType;
+    }
+
+    @Override
+    protected void encodePayload(PacketData packetData) {
+        super.encodePayload(packetData);
+        packetData.write(text);
+        packetData.writeLogType(logType);
+    }
+
+    @Override
+    protected void decodePayload(PacketData packetData) {
+        super.decodePayload(packetData);
+        text = packetData.readString();
+        logType = packetData.readLogType();
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public LogType getLogType() {
+        return logType;
+    }
+
+    @Override
+    public void handle() {
+        if (logType == LogType.INFO) MainLogger.getLogger().info(text);
+        else if (logType == LogType.DEBUG) MainLogger.getLogger().debug(text);
+        else if (logType == LogType.WARN) MainLogger.getLogger().warning(text);
+        else if (logType == LogType.ERROR) MainLogger.getLogger().error(text);
+    }
+}
