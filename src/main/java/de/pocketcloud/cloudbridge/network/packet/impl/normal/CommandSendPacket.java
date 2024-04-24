@@ -6,8 +6,10 @@ import de.pocketcloud.cloudbridge.network.packet.impl.types.CommandExecutionResu
 import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
 import de.pocketcloud.cloudbridge.util.CloudCommandSender;
 import dev.waterdog.waterdogpe.ProxyServer;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 public class CommandSendPacket extends CloudPacket {
 
@@ -27,10 +29,6 @@ public class CommandSendPacket extends CloudPacket {
     protected void decodePayload(PacketData packetData) {
         super.decodePayload(packetData);
         commandLine = packetData.readString();
-    }
-
-    public String getCommandLine() {
-        return commandLine;
     }
 
     @Override

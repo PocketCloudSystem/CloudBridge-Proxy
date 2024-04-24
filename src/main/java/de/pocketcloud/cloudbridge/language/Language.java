@@ -2,8 +2,11 @@ package de.pocketcloud.cloudbridge.language;
 
 import de.pocketcloud.cloudbridge.util.GeneralSettings;
 import dev.waterdog.waterdogpe.utils.config.YamlConfig;
+import lombok.Getter;
+
 import java.util.List;
 
+@Getter
 public enum Language {
 
     GERMAN("German", GeneralSettings.getCloudPath() + "storage/de_DE.yml", List.of("de_DE", "ger", "Deutsch")),
@@ -40,15 +43,4 @@ public enum Language {
         return message;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public List<String> getAliases() {
-        return aliases;
-    }
-
-    public YamlConfig getConfig() {
-        return config;
-    }
 }

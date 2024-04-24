@@ -4,17 +4,16 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class Utils {
 
-    public static byte[] compress(String string) throws IOException {
+    public static byte[] compress(String string) {
         return Base64.getEncoder().encode(string.getBytes(StandardCharsets.UTF_8));
     }
 
-    public static String decompress(final byte[] compressed) throws IOException {
+    public static String decompress(final byte[] compressed) {
         return new String(Base64.getDecoder().decode(compressed));
     }
 

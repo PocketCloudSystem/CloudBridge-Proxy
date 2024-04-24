@@ -3,8 +3,10 @@ package de.pocketcloud.cloudbridge.network.packet.impl.normal;
 import de.pocketcloud.cloudbridge.api.server.status.ServerStatus;
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
 import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 public class CloudServerStatusChangePacket extends CloudPacket {
 
@@ -24,10 +26,6 @@ public class CloudServerStatusChangePacket extends CloudPacket {
     protected void decodePayload(PacketData packetData) {
         super.decodePayload(packetData);
         newStatus = packetData.readServerStatus();
-    }
-
-    public ServerStatus getNewStatus() {
-        return newStatus;
     }
 
     @Override

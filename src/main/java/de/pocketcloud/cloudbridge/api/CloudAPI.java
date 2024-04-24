@@ -38,7 +38,7 @@ public class CloudAPI {
 
     public void processLogin() {
         if (verified == VerifyStatus.VERIFIED) return;
-        RequestManager.getInstance().sendRequest(new LoginRequestPacket(GeneralSettings.getServerName(), (int) ProcessHandle.current().pid())).then(responsePacket -> {
+        RequestManager.getInstance().sendRequest(new LoginRequestPacket(GeneralSettings.getServerName(), (int) ProcessHandle.current().pid(), ProxyServer.getInstance().getConfiguration().getMaxPlayerCount())).then(responsePacket -> {
             LoginResponsePacket loginResponsePacket = (LoginResponsePacket) responsePacket;
             if (loginResponsePacket.getVerifyStatus() == VerifyStatus.VERIFIED) {
                 MainLogger.getLogger().info(Language.current().translate("inGame.server.verified"));

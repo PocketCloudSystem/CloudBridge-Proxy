@@ -3,8 +3,10 @@ package de.pocketcloud.cloudbridge.network.packet.impl.normal;
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
 import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
 import dev.waterdog.waterdogpe.ProxyServer;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 public class ProxyUnregisterServerPacket extends CloudPacket {
 
@@ -24,10 +26,6 @@ public class ProxyUnregisterServerPacket extends CloudPacket {
     protected void decodePayload(PacketData packetData) {
         super.decodePayload(packetData);
         serverName = packetData.readString();
-    }
-
-    public String getServerName() {
-        return serverName;
     }
 
     @Override

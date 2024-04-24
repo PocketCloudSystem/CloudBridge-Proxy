@@ -5,8 +5,10 @@ import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
 import de.pocketcloud.cloudbridge.network.packet.impl.types.DisconnectReason;
 import dev.waterdog.waterdogpe.ProxyServer;
 import dev.waterdog.waterdogpe.logger.MainLogger;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 public class DisconnectPacket extends CloudPacket {
 
@@ -26,10 +28,6 @@ public class DisconnectPacket extends CloudPacket {
     protected void decodePayload(PacketData packetData) {
         super.decodePayload(packetData);
         disconnectReason = packetData.readDisconnectReason();
-    }
-
-    public DisconnectReason getDisconnectReason() {
-        return disconnectReason;
     }
 
     @Override

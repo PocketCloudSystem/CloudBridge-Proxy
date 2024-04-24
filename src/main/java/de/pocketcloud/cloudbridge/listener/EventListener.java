@@ -25,7 +25,7 @@ public class EventListener {
         if (CloudAPI.getInstance().getCurrentTemplate().isMaintenance()) {
             RequestManager.getInstance().sendRequest(new CheckPlayerMaintenanceRequestPacket(player.getName())).then(responsePacket -> {
                 CheckPlayerMaintenanceResponsePacket checkPlayerMaintenanceResponsePacket = (CheckPlayerMaintenanceResponsePacket) responsePacket;
-                if (!checkPlayerMaintenanceResponsePacket.getValue()) {
+                if (!checkPlayerMaintenanceResponsePacket.isValue()) {
                     player.disconnect(Language.current().translate("inGame.template.kick.maintenance"));
                 }
             });

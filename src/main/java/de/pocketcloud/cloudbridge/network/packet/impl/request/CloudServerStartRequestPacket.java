@@ -2,8 +2,10 @@ package de.pocketcloud.cloudbridge.network.packet.impl.request;
 
 import de.pocketcloud.cloudbridge.network.packet.RequestPacket;
 import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 public class CloudServerStartRequestPacket extends RequestPacket {
 
@@ -19,7 +21,7 @@ public class CloudServerStartRequestPacket extends RequestPacket {
     protected void encodePayload(PacketData packetData) {
         super.encodePayload(packetData);
         packetData.write(template);
-        packetData.write(packetData);
+        packetData.write(count);
     }
 
     @Override
@@ -27,13 +29,5 @@ public class CloudServerStartRequestPacket extends RequestPacket {
         super.decodePayload(packetData);
         template = packetData.readString();
         count = packetData.readInt();
-    }
-
-    public String getTemplate() {
-        return template;
-    }
-
-    public int getCount() {
-        return count;
     }
 }

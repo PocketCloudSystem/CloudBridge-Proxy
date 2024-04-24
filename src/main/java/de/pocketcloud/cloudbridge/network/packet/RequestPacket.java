@@ -2,11 +2,15 @@ package de.pocketcloud.cloudbridge.network.packet;
 
 import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
 import de.pocketcloud.cloudbridge.util.Utils;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+@Getter
+@NoArgsConstructor
 public class RequestPacket extends CloudPacket {
 
     private String requestId;
@@ -36,25 +40,8 @@ public class RequestPacket extends CloudPacket {
         return this;
     }
 
-    public RequestPacket failure(Consumer<RequestPacket> failure) {
+    public void failure(Consumer<RequestPacket> failure) {
         this.failure = failure;
-        return this;
-    }
-
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public double getSentTime() {
-        return sentTime;
-    }
-
-    public ArrayList<Consumer<ResponsePacket>> getThen() {
-        return then;
-    }
-
-    public Consumer<RequestPacket> getFailure() {
-        return failure;
     }
 
     final public void handle() {}

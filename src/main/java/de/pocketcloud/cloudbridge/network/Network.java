@@ -14,6 +14,7 @@ import de.pocketcloud.cloudbridge.util.GeneralSettings;
 import de.pocketcloud.cloudbridge.util.Utils;
 import dev.waterdog.waterdogpe.ProxyServer;
 import dev.waterdog.waterdogpe.logger.MainLogger;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -24,11 +25,17 @@ import java.nio.charset.StandardCharsets;
 
 public class Network implements Runnable {
 
+    @Getter
     private static Network instance;
+    @Getter
     private final PacketPool packetPool;
+    @Getter
     private final RequestManager requestManager;
+    @Getter
     private final InetSocketAddress address;
+    @Getter
     private DatagramSocket socket;
+    @Getter
     private boolean connected = false;
 
     public Network(InetSocketAddress address) {
@@ -60,11 +67,7 @@ public class Network implements Runnable {
                     }
                 } else {
                     MainLogger.getLogger().warning("§cReceived an unknown packet from the cloud!");
-                    try {
-                        MainLogger.getLogger().debug(GeneralSettings.isNetworkEncryptionEnabled() ? Utils.decompress(buffer.getBytes(StandardCharsets.UTF_8)) : buffer);
-                    } catch (IOException e) {
-                        MainLogger.getLogger().throwing(e);
-                    }
+                    MainLogger.getLogger().debug(GeneralSettings.isNetworkEncryptionEnabled() ? Utils.decompress(buffer.getBytes(StandardCharsets.UTF_8)) : buffer);
                 }
             }
         } while (connected);
@@ -82,7 +85,7 @@ public class Network implements Runnable {
             MainLogger.getLogger().info("Successfully connected to §e" + address.toString() + "§r!");
             MainLogger.getLogger().info("§cWaiting for incoming packets...");
         } catch (SocketException e) {
-            e.printStackTrace();
+            ProxyServer.getInstance().getLogger().error("Failed to connect", e);
         }
     }
 
@@ -103,7 +106,7 @@ public class Network implements Runnable {
         try {
             socket.receive(packet);
         } catch (IOException e) {
-            e.printStackTrace();
+            ProxyServer.getInstance().getLogger().error("Failed to receive a packet", e);
         }
         return new String(packet.getData()).trim();
     }
@@ -131,27 +134,4 @@ public class Network implements Runnable {
         return false;
     }
 
-    public PacketPool getPacketPool() {
-        return packetPool;
-    }
-
-    public RequestManager getRequestManager() {
-        return requestManager;
-    }
-
-    public boolean isConnected() {
-        return connected;
-    }
-
-    public InetSocketAddress getAddress() {
-        return address;
-    }
-
-    public DatagramSocket getSocket() {
-        return socket;
-    }
-
-    public static Network getInstance() {
-        return instance;
-    }
 }

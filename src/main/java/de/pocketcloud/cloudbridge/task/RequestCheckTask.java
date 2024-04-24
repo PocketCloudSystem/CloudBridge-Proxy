@@ -4,7 +4,9 @@ import de.pocketcloud.cloudbridge.network.packet.RequestPacket;
 import de.pocketcloud.cloudbridge.network.request.RequestManager;
 import de.pocketcloud.cloudbridge.util.Utils;
 import dev.waterdog.waterdogpe.scheduler.Task;
+import lombok.Getter;
 
+@Getter
 public class RequestCheckTask extends Task {
 
     private final RequestPacket requestPacket;
@@ -33,7 +35,4 @@ public class RequestCheckTask extends Task {
 
     }
 
-    public RequestPacket getRequestPacket() {
-        return requestPacket;
-    }
 }

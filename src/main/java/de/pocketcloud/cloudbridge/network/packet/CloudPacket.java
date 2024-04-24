@@ -1,8 +1,10 @@
 package de.pocketcloud.cloudbridge.network.packet;
 
 import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 public abstract class CloudPacket {
 

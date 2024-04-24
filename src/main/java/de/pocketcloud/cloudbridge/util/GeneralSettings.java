@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class GeneralSettings {
 
-    private static HashMap<String, Object> data = new HashMap<>();
+    private static final HashMap<String, Object> data = new HashMap<>();
 
     public static void sync() {
         YamlConfig config = new YamlConfig(ProxyServer.getInstance().getDataPath().toString() + "/config.yml");

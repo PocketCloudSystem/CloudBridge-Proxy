@@ -4,9 +4,11 @@ import dev.waterdog.waterdogpe.ProxyServer;
 import dev.waterdog.waterdogpe.command.ConsoleCommandSender;
 import dev.waterdog.waterdogpe.utils.types.TextContainer;
 import dev.waterdog.waterdogpe.utils.types.TranslationContainer;
+import lombok.Getter;
 
 import java.util.ArrayList;
 
+@Getter
 public class CloudCommandSender extends ConsoleCommandSender {
 
     public CloudCommandSender() {
@@ -35,7 +37,4 @@ public class CloudCommandSender extends ConsoleCommandSender {
         return "CLOUD";
     }
 
-    public ArrayList<String> getCachedMessages() {
-        return cachedMessages;
-    }
 }

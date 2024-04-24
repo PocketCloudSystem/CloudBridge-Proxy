@@ -3,8 +3,10 @@ package de.pocketcloud.cloudbridge.network.packet.impl.normal;
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.types.CommandExecutionResult;
 import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 public class CommandSendAnswerPacket extends CloudPacket {
 
@@ -24,10 +26,6 @@ public class CommandSendAnswerPacket extends CloudPacket {
     protected void decodePayload(PacketData packetData) {
         super.decodePayload(packetData);
         result = packetData.readCommandExecutionResult();
-    }
-
-    public CommandExecutionResult getResult() {
-        return result;
     }
 
     @Override

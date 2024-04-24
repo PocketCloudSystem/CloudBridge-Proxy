@@ -18,6 +18,7 @@ import dev.waterdog.waterdogpe.event.defaults.PlayerLoginEvent;
 import dev.waterdog.waterdogpe.event.defaults.ServerTransferRequestEvent;
 import dev.waterdog.waterdogpe.player.ProxiedPlayer;
 import dev.waterdog.waterdogpe.plugin.Plugin;
+import lombok.Getter;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -25,8 +26,10 @@ import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@Getter
 public class CloudBridge extends Plugin {
 
+    @Getter
     private static CloudBridge instance;
     private final ExecutorService threadPool = Executors.newCachedThreadPool();
     private Network network;
@@ -40,7 +43,7 @@ public class CloudBridge extends Plugin {
         try {
             network = new Network(new InetSocketAddress(InetAddress.getByName("127.0.0.1"), GeneralSettings.getNetworkPort()));
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            ProxyServer.getInstance().getLogger().error("Failed to build the network", e);
         }
 
         ProxyServer.getInstance().getEventManager().subscribe(PlayerLoginEvent.class, EventListener::onLogin);
@@ -63,17 +66,5 @@ public class CloudBridge extends Plugin {
         network.sendPacket(new DisconnectPacket(DisconnectReason.SERVER_SHUTDOWN));
         network.close();
         threadPool.shutdownNow();
-    }
-
-    public Network getNetwork() {
-        return network;
-    }
-
-    public ExecutorService getThreadPool() {
-        return threadPool;
-    }
-
-    public static CloudBridge getInstance() {
-        return instance;
     }
 }

@@ -4,8 +4,10 @@ import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.types.LogType;
 import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
 import dev.waterdog.waterdogpe.logger.MainLogger;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 public class ConsoleTextPacket extends CloudPacket {
 
@@ -29,14 +31,6 @@ public class ConsoleTextPacket extends CloudPacket {
         super.decodePayload(packetData);
         text = packetData.readString();
         logType = packetData.readLogType();
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public LogType getLogType() {
-        return logType;
     }
 
     @Override

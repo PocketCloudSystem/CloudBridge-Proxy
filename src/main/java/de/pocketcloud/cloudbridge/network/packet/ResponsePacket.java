@@ -1,8 +1,10 @@
 package de.pocketcloud.cloudbridge.network.packet;
 
 import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 public abstract class ResponsePacket extends CloudPacket {
 
@@ -18,9 +20,5 @@ public abstract class ResponsePacket extends CloudPacket {
     public void decode(PacketData packetData) {
         super.decode(packetData);
         requestId = packetData.readString();
-    }
-
-    public String getRequestId() {
-        return requestId;
     }
 }

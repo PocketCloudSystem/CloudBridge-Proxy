@@ -5,11 +5,13 @@ import de.pocketcloud.cloudbridge.network.packet.impl.normal.*;
 import de.pocketcloud.cloudbridge.network.packet.impl.request.*;
 import de.pocketcloud.cloudbridge.network.packet.impl.response.*;
 import dev.waterdog.waterdogpe.logger.MainLogger;
+import lombok.Getter;
 
 import java.util.HashMap;
 
 public class PacketPool {
 
+    @Getter
     private static PacketPool instance;
 
     private final HashMap<String, Class<? extends CloudPacket>> packets = new HashMap<>();
@@ -61,7 +63,4 @@ public class PacketPool {
         return packet;
     }
 
-    public static PacketPool getInstance() {
-        return instance;
-    }
 }

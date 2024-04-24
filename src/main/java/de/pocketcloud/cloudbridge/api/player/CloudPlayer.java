@@ -3,17 +3,22 @@ package de.pocketcloud.cloudbridge.api.player;
 import de.pocketcloud.cloudbridge.api.CloudAPI;
 import de.pocketcloud.cloudbridge.api.server.CloudServer;
 import de.pocketcloud.cloudbridge.util.Utils;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
 public class CloudPlayer {
 
     private final String name;
     private final String host;
     private final String xboxUserId;
     private final String uniqueId;
+    @Setter
     private CloudServer currentServer;
+    @Setter
     private CloudServer currentProxy;
 
     public CloudPlayer(String name, String host, String xboxUserId, String uniqueId, CloudServer currentServer, CloudServer currentProxy) {
@@ -22,38 +27,6 @@ public class CloudPlayer {
         this.xboxUserId = xboxUserId;
         this.uniqueId = uniqueId;
         this.currentServer = currentServer;
-        this.currentProxy = currentProxy;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public String getXboxUserId() {
-        return xboxUserId;
-    }
-
-    public String getUniqueId() {
-        return uniqueId;
-    }
-
-    public CloudServer getCurrentServer() {
-        return currentServer;
-    }
-
-    public CloudServer getCurrentProxy() {
-        return currentProxy;
-    }
-
-    public void setCurrentServer(CloudServer currentServer) {
-        this.currentServer = currentServer;
-    }
-
-    public void setCurrentProxy(CloudServer currentProxy) {
         this.currentProxy = currentProxy;
     }
 

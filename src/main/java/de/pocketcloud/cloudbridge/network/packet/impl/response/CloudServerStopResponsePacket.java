@@ -3,8 +3,10 @@ package de.pocketcloud.cloudbridge.network.packet.impl.response;
 import de.pocketcloud.cloudbridge.network.packet.ResponsePacket;
 import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
 import de.pocketcloud.cloudbridge.network.packet.impl.types.ErrorReason;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 public class CloudServerStopResponsePacket extends ResponsePacket {
 
@@ -24,10 +26,6 @@ public class CloudServerStopResponsePacket extends ResponsePacket {
     protected void decodePayload(PacketData packetData) {
         super.decodePayload(packetData);
         errorReason = packetData.readErrorReason();
-    }
-
-    public ErrorReason getErrorReason() {
-        return errorReason;
     }
 
     @Override

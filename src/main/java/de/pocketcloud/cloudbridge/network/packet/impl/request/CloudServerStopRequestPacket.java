@@ -2,8 +2,10 @@ package de.pocketcloud.cloudbridge.network.packet.impl.request;
 
 import de.pocketcloud.cloudbridge.network.packet.RequestPacket;
 import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 public class CloudServerStopRequestPacket extends RequestPacket {
 
@@ -23,9 +25,5 @@ public class CloudServerStopRequestPacket extends RequestPacket {
     protected void decodePayload(PacketData packetData) {
         super.decodePayload(packetData);
         server = packetData.readString();
-    }
-
-    public String getServer() {
-        return server;
     }
 }

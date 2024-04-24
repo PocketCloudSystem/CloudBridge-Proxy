@@ -4,6 +4,7 @@ import de.pocketcloud.cloudbridge.api.player.CloudPlayer;
 import de.pocketcloud.cloudbridge.api.server.CloudServer;
 import de.pocketcloud.cloudbridge.api.server.status.ServerStatus;
 import de.pocketcloud.cloudbridge.api.template.Template;
+import dev.waterdog.waterdogpe.ProxyServer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,7 +51,9 @@ public class Registry {
         if (template == null) return;
         try {
             template.apply(newData);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            ProxyServer.getInstance().getLogger().error("Failed to apply settings to a template", e);
+        }
     }
 
     public static void updatePlayer(String playerName, String serverName) {

@@ -5,10 +5,12 @@ import de.pocketcloud.cloudbridge.api.server.CloudServer;
 import de.pocketcloud.cloudbridge.api.server.status.ServerStatus;
 import de.pocketcloud.cloudbridge.api.template.Template;
 import de.pocketcloud.cloudbridge.network.packet.impl.types.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.*;
 
+@Getter
 @NoArgsConstructor
 public class PacketData {
 
@@ -63,7 +65,7 @@ public class PacketData {
     }
 
     public Object read() {
-        if (data.size() > 0) {
+        if (!data.isEmpty()) {
             Object get = data.get(0);
             data.remove(0);
             Collection<Object> oldContent = new ArrayList<>(data);
@@ -216,7 +218,4 @@ public class PacketData {
         }
     }
 
-    public ArrayList<Object> getData() {
-        return data;
-    }
 }
