@@ -44,6 +44,7 @@ public class PacketPool {
         registerPacket(CheckPlayerNotifyResponsePacket.class);
         registerPacket(ProxyRegisterServerPacket.class);
         registerPacket(ProxyUnregisterServerPacket.class);
+        registerPacket(PlayerTransferPacket.class);
     }
 
     public void registerPacket(Class<? extends CloudPacket> clazz) {
@@ -62,5 +63,4 @@ public class PacketPool {
         }
         return packet;
     }
-
 }
