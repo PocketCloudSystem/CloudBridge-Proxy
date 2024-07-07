@@ -8,6 +8,7 @@ import de.pocketcloud.cloudbridge.listener.EventListener;
 import de.pocketcloud.cloudbridge.network.Network;
 import de.pocketcloud.cloudbridge.network.packet.impl.normal.DisconnectPacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.types.DisconnectReason;
+import de.pocketcloud.cloudbridge.network.packet.pool.PacketPool;
 import de.pocketcloud.cloudbridge.task.ChangeStatusTask;
 import de.pocketcloud.cloudbridge.task.TimeoutTask;
 import de.pocketcloud.cloudbridge.util.GeneralSettings;
@@ -36,7 +37,7 @@ public class CloudBridge extends Plugin {
     public long lastKeepALiveCheck = 0;
 
     @Override
-    public void onEnable() {
+    public void onStartup() {
         instance = this;
         GeneralSettings.sync();
 
@@ -45,7 +46,10 @@ public class CloudBridge extends Plugin {
         } catch (UnknownHostException e) {
             ProxyServer.getInstance().getLogger().error("Failed to build the network", e);
         }
+    }
 
+    @Override
+    public void onEnable() {
         ProxyServer.getInstance().getEventManager().subscribe(PlayerLoginEvent.class, EventListener::onLogin);
         ProxyServer.getInstance().getEventManager().subscribe(PlayerDisconnectedEvent.class, EventListener::onDisconnected);
         ProxyServer.getInstance().getEventManager().subscribe(ServerTransferRequestEvent.class, EventListener::onTransfer);

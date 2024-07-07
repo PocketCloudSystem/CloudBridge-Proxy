@@ -41,7 +41,7 @@ public class Network implements Runnable {
     public Network(InetSocketAddress address) {
         instance = this;
         this.address = address;
-        packetPool = new PacketPool();
+        this.packetPool = new PacketPool();
         requestManager = new RequestManager();
 
         MainLogger.getLogger().info("Try to connect to §e" + address.toString() + "§r...");
@@ -133,5 +133,4 @@ public class Network implements Runnable {
         }
         return false;
     }
-
 }
