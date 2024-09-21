@@ -3,10 +3,8 @@ package de.pocketcloud.cloudbridge.network.packet.impl.normal;
 import de.pocketcloud.cloudbridge.api.player.CloudPlayer;
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
 import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @NoArgsConstructor
 public class PlayerConnectPacket extends CloudPacket {
 
@@ -30,4 +28,8 @@ public class PlayerConnectPacket extends CloudPacket {
 
     @Override
     public void handle() {}
+
+    public CloudPlayer getPlayer() {
+        return player;
+    }
 }

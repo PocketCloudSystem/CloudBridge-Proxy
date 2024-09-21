@@ -1,10 +1,8 @@
 package de.pocketcloud.cloudbridge.network.packet;
 
 import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @NoArgsConstructor
 public abstract class CloudPacket {
 
@@ -28,4 +26,8 @@ public abstract class CloudPacket {
     protected void decodePayload(PacketData packetData) {}
 
     abstract public void handle();
+
+    public boolean isEncoded() {
+        return encoded;
+    }
 }

@@ -5,10 +5,8 @@ import de.pocketcloud.cloudbridge.api.registry.Registry;
 import de.pocketcloud.cloudbridge.api.template.Template;
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
 import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @NoArgsConstructor
 public class TemplateSyncPacket extends CloudPacket {
 
@@ -43,5 +41,13 @@ public class TemplateSyncPacket extends CloudPacket {
                 Registry.unregisterTemplate(template.getName());
             } else Registry.updateTemplate(template.getName(), template.toArray());
         }
+    }
+
+    public Template getTemplate() {
+        return template;
+    }
+
+    public boolean isRemoval() {
+        return removal;
     }
 }

@@ -2,10 +2,8 @@ package de.pocketcloud.cloudbridge.network.packet.impl.response;
 
 import de.pocketcloud.cloudbridge.network.packet.ResponsePacket;
 import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @NoArgsConstructor
 public class CheckPlayerNotifyResponsePacket extends ResponsePacket {
 
@@ -29,4 +27,8 @@ public class CheckPlayerNotifyResponsePacket extends ResponsePacket {
 
     @Override
     public void handle() {}
+
+    public boolean isValue() {
+        return value;
+    }
 }

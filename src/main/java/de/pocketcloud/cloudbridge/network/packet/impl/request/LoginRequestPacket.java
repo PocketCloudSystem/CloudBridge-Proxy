@@ -2,10 +2,8 @@ package de.pocketcloud.cloudbridge.network.packet.impl.request;
 
 import de.pocketcloud.cloudbridge.network.packet.RequestPacket;
 import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @NoArgsConstructor
 public class LoginRequestPacket extends RequestPacket {
 
@@ -33,5 +31,9 @@ public class LoginRequestPacket extends RequestPacket {
         serverName = packetData.readString();
         processId = packetData.readInt();
         maxPlayerCount = packetData.readInt();
+    }
+
+    public String getServerName() {
+        return serverName;
     }
 }

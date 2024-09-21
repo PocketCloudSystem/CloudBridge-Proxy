@@ -1,11 +1,9 @@
 package de.pocketcloud.cloudbridge.event;
 
 import dev.waterdog.waterdogpe.event.Event;
-import lombok.Getter;
 
 import java.net.InetSocketAddress;
 
-@Getter
 public class NetworkConnectEvent extends Event {
 
     private final InetSocketAddress address;
@@ -14,4 +12,7 @@ public class NetworkConnectEvent extends Event {
         this.address = address;
     }
 
+    public InetSocketAddress getAddress() {
+        return address;
+    }
 }

@@ -8,7 +8,6 @@ import de.pocketcloud.cloudbridge.listener.EventListener;
 import de.pocketcloud.cloudbridge.network.Network;
 import de.pocketcloud.cloudbridge.network.packet.impl.normal.DisconnectPacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.types.DisconnectReason;
-import de.pocketcloud.cloudbridge.network.packet.pool.PacketPool;
 import de.pocketcloud.cloudbridge.task.ChangeStatusTask;
 import de.pocketcloud.cloudbridge.task.TimeoutTask;
 import de.pocketcloud.cloudbridge.util.GeneralSettings;
@@ -19,7 +18,6 @@ import dev.waterdog.waterdogpe.event.defaults.PlayerLoginEvent;
 import dev.waterdog.waterdogpe.event.defaults.ServerTransferRequestEvent;
 import dev.waterdog.waterdogpe.player.ProxiedPlayer;
 import dev.waterdog.waterdogpe.plugin.Plugin;
-import lombok.Getter;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -27,10 +25,8 @@ import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Getter
 public class CloudBridge extends Plugin {
 
-    @Getter
     private static CloudBridge instance;
     private final ExecutorService threadPool = Executors.newCachedThreadPool();
     private Network network;
@@ -70,5 +66,17 @@ public class CloudBridge extends Plugin {
         network.sendPacket(new DisconnectPacket(DisconnectReason.SERVER_SHUTDOWN));
         network.close();
         threadPool.shutdownNow();
+    }
+
+    public Network getNetwork() {
+        return network;
+    }
+
+    public static CloudBridge getInstance() {
+        return instance;
+    }
+
+    public ExecutorService getThreadPool() {
+        return threadPool;
     }
 }

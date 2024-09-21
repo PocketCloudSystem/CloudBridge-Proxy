@@ -1,40 +1,21 @@
 package de.pocketcloud.cloudbridge.api.template;
 
 import de.pocketcloud.cloudbridge.util.Utils;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Map;
 
 public class Template {
 
-    @Setter
-    @Getter
     private String name;
-    @Setter
-    @Getter
     private boolean lobby;
-    @Setter
-    @Getter
     private boolean maintenance;
     private boolean staticServers;
-    @Setter
-    @Getter
     private int maxPlayerCount;
-    @Setter
-    @Getter
     private int minServerCount;
-    @Setter
-    @Getter
     private int maxServerCount;
-    @Setter
-    @Getter
     private boolean startNewWhenFull;
-    @Setter
-    @Getter
     private boolean autoStart;
-    @Getter
-    private String templateType;
+    private final String templateType;
 
     public Template(String name, boolean lobby, boolean maintenance, boolean staticServers, int maxPlayerCount, int minServerCount, int maxServerCount, boolean startNewWhenFull, boolean autoStart, String templateType) {
         this.name = name;
@@ -67,7 +48,82 @@ public class Template {
         maxServerCount = ((Number) data.get("maxServerCount")).intValue();
         startNewWhenFull = (Boolean) data.get("startNewWhenFull");
         autoStart = (Boolean) data.get("autoStart");
-        templateType = (String) data.get("templateType");
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isLobby() {
+        return lobby;
+    }
+
+    public void setLobby(boolean lobby) {
+        this.lobby = lobby;
+    }
+
+    public boolean isMaintenance() {
+        return maintenance;
+    }
+
+    public void setMaintenance(boolean maintenance) {
+        this.maintenance = maintenance;
+    }
+
+    public boolean isStaticServers() {
+        return staticServers;
+    }
+
+    public void setStaticServers(boolean staticServers) {
+        this.staticServers = staticServers;
+    }
+
+    public int getMaxPlayerCount() {
+        return maxPlayerCount;
+    }
+
+    public void setMaxPlayerCount(int maxPlayerCount) {
+        this.maxPlayerCount = maxPlayerCount;
+    }
+
+    public int getMinServerCount() {
+        return minServerCount;
+    }
+
+    public void setMinServerCount(int minServerCount) {
+        this.minServerCount = minServerCount;
+    }
+
+    public int getMaxServerCount() {
+        return maxServerCount;
+    }
+
+    public void setMaxServerCount(int maxServerCount) {
+        this.maxServerCount = maxServerCount;
+    }
+
+    public boolean isStartNewWhenFull() {
+        return startNewWhenFull;
+    }
+
+    public void setStartNewWhenFull(boolean startNewWhenFull) {
+        this.startNewWhenFull = startNewWhenFull;
+    }
+
+    public boolean isAutoStart() {
+        return autoStart;
+    }
+
+    public void setAutoStart(boolean autoStart) {
+        this.autoStart = autoStart;
+    }
+
+    public String getTemplateType() {
+        return templateType;
     }
 
     public Map<String, Object> toArray() {

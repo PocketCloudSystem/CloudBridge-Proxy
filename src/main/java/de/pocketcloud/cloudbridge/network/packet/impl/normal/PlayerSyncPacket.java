@@ -5,10 +5,8 @@ import de.pocketcloud.cloudbridge.api.player.CloudPlayer;
 import de.pocketcloud.cloudbridge.api.registry.Registry;
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
 import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @NoArgsConstructor
 public class PlayerSyncPacket extends CloudPacket {
 
@@ -45,5 +43,13 @@ public class PlayerSyncPacket extends CloudPacket {
                 Registry.updatePlayer(player.getName(), player.getCurrentServer().getName());
             }
         }
+    }
+
+    public CloudPlayer getPlayer() {
+        return player;
+    }
+
+    public boolean isRemoval() {
+        return removal;
     }
 }

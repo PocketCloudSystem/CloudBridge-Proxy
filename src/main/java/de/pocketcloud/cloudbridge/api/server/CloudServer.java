@@ -5,18 +5,14 @@ import de.pocketcloud.cloudbridge.api.server.data.CloudServerData;
 import de.pocketcloud.cloudbridge.api.server.status.ServerStatus;
 import de.pocketcloud.cloudbridge.api.template.Template;
 import de.pocketcloud.cloudbridge.util.Utils;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Map;
 
-@Getter
 public class CloudServer {
 
     private final int id;
     private final Template template;
     private final CloudServerData cloudServerData;
-    @Setter
     private ServerStatus serverStatus;
 
     public CloudServer(int id, Template template, CloudServerData cloudServerData, ServerStatus serverStatus) {
@@ -28,6 +24,26 @@ public class CloudServer {
 
     public String getName() {
         return template.getName() + "-" + id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Template getTemplate() {
+        return template;
+    }
+
+    public CloudServerData getCloudServerData() {
+        return cloudServerData;
+    }
+
+    public ServerStatus getServerStatus() {
+        return serverStatus;
+    }
+
+    public void setServerStatus(ServerStatus serverStatus) {
+        this.serverStatus = serverStatus;
     }
 
     public Map<String, Object> toArray() {

@@ -1,7 +1,6 @@
 package de.pocketcloud.cloudbridge.network.packet.impl.types;
 
 import de.pocketcloud.cloudbridge.util.Utils;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Map;

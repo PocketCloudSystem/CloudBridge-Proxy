@@ -5,10 +5,8 @@ import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
 import de.pocketcloud.cloudbridge.network.packet.impl.types.DisconnectReason;
 import dev.waterdog.waterdogpe.ProxyServer;
 import dev.waterdog.waterdogpe.logger.MainLogger;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @NoArgsConstructor
 public class DisconnectPacket extends CloudPacket {
 
@@ -39,5 +37,9 @@ public class DisconnectPacket extends CloudPacket {
             MainLogger.getLogger().warning("§4Server shutdown was ordered by the cloud! Shutdown...");
             ProxyServer.getInstance().shutdown();
         }
+    }
+
+    public DisconnectReason getDisconnectReason() {
+        return disconnectReason;
     }
 }

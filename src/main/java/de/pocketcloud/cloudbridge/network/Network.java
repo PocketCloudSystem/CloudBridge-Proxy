@@ -14,7 +14,6 @@ import de.pocketcloud.cloudbridge.util.GeneralSettings;
 import de.pocketcloud.cloudbridge.util.Utils;
 import dev.waterdog.waterdogpe.ProxyServer;
 import dev.waterdog.waterdogpe.logger.MainLogger;
-import lombok.Getter;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -25,17 +24,11 @@ import java.nio.charset.StandardCharsets;
 
 public class Network implements Runnable {
 
-    @Getter
     private static Network instance;
-    @Getter
     private final PacketPool packetPool;
-    @Getter
     private final RequestManager requestManager;
-    @Getter
     private final InetSocketAddress address;
-    @Getter
     private DatagramSocket socket;
-    @Getter
     private boolean connected = false;
 
     public Network(InetSocketAddress address) {
@@ -132,5 +125,29 @@ public class Network implements Runnable {
             }
         }
         return false;
+    }
+
+    public static Network getInstance() {
+        return instance;
+    }
+
+    public PacketPool getPacketPool() {
+        return packetPool;
+    }
+
+    public RequestManager getRequestManager() {
+        return requestManager;
+    }
+
+    public InetSocketAddress getAddress() {
+        return address;
+    }
+
+    public DatagramSocket getSocket() {
+        return socket;
+    }
+
+    public boolean isConnected() {
+        return connected;
     }
 }

@@ -1,14 +1,9 @@
 package de.pocketcloud.cloudbridge.api.server.data;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
 public class CloudServerData {
 
     private final int port;
     private final int maxPlayers;
-    @Setter
     private int processId;
 
     public CloudServerData(int port, int maxPlayers, int processId) {
@@ -17,4 +12,19 @@ public class CloudServerData {
         this.processId = processId;
     }
 
+    public int getPort() {
+        return port;
+    }
+
+    public int getMaxPlayers() {
+        return maxPlayers;
+    }
+
+    public int getProcessId() {
+        return processId;
+    }
+
+    public void setProcessId(int processId) {
+        this.processId = processId;
+    }
 }

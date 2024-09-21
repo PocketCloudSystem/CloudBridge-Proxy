@@ -5,10 +5,8 @@ import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
 import dev.waterdog.waterdogpe.ProxyServer;
 import dev.waterdog.waterdogpe.network.serverinfo.ServerInfo;
 import dev.waterdog.waterdogpe.player.ProxiedPlayer;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @NoArgsConstructor
 public class PlayerTransferPacket extends CloudPacket {
 
@@ -41,5 +39,13 @@ public class PlayerTransferPacket extends CloudPacket {
                 player.connect(info);
             }
         }
+    }
+
+    public String getPlayer() {
+        return player;
+    }
+
+    public String getServer() {
+        return server;
     }
 }
