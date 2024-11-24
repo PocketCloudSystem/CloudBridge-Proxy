@@ -1,5 +1,6 @@
 package de.pocketcloud.cloudbridge.listener;
 
+import de.pocketcloud.cloudbridge.CloudBridge;
 import de.pocketcloud.cloudbridge.api.CloudAPI;
 import de.pocketcloud.cloudbridge.api.player.CloudPlayer;
 import de.pocketcloud.cloudbridge.language.Language;
@@ -19,6 +20,12 @@ public class EventListener {
 
     public static void onLogin(PlayerLoginEvent event) {
         ProxiedPlayer player = event.getPlayer();
+        if (!CloudBridge.getInstance().getAcceptedProtocols().contains(player.getProtocol().getProtocol())) {
+            event.setCancelReason("Login failed. (Incompatible Protocol Version)");
+            event.setCancelled();
+            return;
+        }
+
         Network.getInstance().sendPacket(new PlayerConnectPacket(new CloudPlayer(player.getName(), player.getAddress().getAddress().getHostAddress() + ":" + player.getAddress().getPort(), player.getXuid(), player.getUniqueId().toString(), null, null)));
 
         if (CloudAPI.getInstance().getCurrentTemplate() == null) return;
