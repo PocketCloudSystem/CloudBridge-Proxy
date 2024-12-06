@@ -6,11 +6,11 @@ import de.pocketcloud.cloudbridge.network.packet.impl.types.VerifyStatus;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class LoginResponsePacket extends ResponsePacket {
+public class ServerHandshakeResponsePacket extends ResponsePacket {
 
     private VerifyStatus verifyStatus;
 
-    public LoginResponsePacket(VerifyStatus verifyStatus) {
+    public ServerHandshakeResponsePacket(VerifyStatus verifyStatus) {
         this.verifyStatus = verifyStatus;
     }
 

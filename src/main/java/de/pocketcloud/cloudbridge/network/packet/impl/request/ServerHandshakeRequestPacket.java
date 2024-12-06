@@ -5,13 +5,13 @@ import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class LoginRequestPacket extends RequestPacket {
+public class ServerHandshakeRequestPacket extends RequestPacket {
 
     private String serverName;
     private int processId;
     private int maxPlayerCount;
 
-    public LoginRequestPacket(String serverName, int processId, int maxPlayerCount) {
+    public ServerHandshakeRequestPacket(String serverName, int processId, int maxPlayerCount) {
         this.serverName = serverName;
         this.processId = processId;
         this.maxPlayerCount = maxPlayerCount;

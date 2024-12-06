@@ -12,8 +12,8 @@ import de.pocketcloud.cloudbridge.network.packet.impl.normal.CloudServerSavePack
 import de.pocketcloud.cloudbridge.network.packet.impl.normal.CloudServerStatusChangePacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.request.CloudServerStartRequestPacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.request.CloudServerStopRequestPacket;
-import de.pocketcloud.cloudbridge.network.packet.impl.request.LoginRequestPacket;
-import de.pocketcloud.cloudbridge.network.packet.impl.response.LoginResponsePacket;
+import de.pocketcloud.cloudbridge.network.packet.impl.request.ServerHandshakeRequestPacket;
+import de.pocketcloud.cloudbridge.network.packet.impl.response.ServerHandshakeResponsePacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.types.VerifyStatus;
 import de.pocketcloud.cloudbridge.network.request.RequestManager;
 import de.pocketcloud.cloudbridge.util.GeneralSettings;
@@ -38,8 +38,8 @@ public class CloudAPI {
 
     public void processLogin() {
         if (verified == VerifyStatus.VERIFIED) return;
-        RequestManager.getInstance().sendRequest(new LoginRequestPacket(GeneralSettings.getServerName(), (int) ProcessHandle.current().pid(), ProxyServer.getInstance().getConfiguration().getMaxPlayerCount())).then(responsePacket -> {
-            LoginResponsePacket loginResponsePacket = (LoginResponsePacket) responsePacket;
+        RequestManager.getInstance().sendRequest(new ServerHandshakeRequestPacket(GeneralSettings.getServerName(), (int) ProcessHandle.current().pid(), ProxyServer.getInstance().getConfiguration().getMaxPlayerCount())).then(responsePacket -> {
+            ServerHandshakeResponsePacket loginResponsePacket = (ServerHandshakeResponsePacket) responsePacket;
             if (loginResponsePacket.getVerifyStatus() == VerifyStatus.VERIFIED) {
                 MainLogger.getLogger().info(Language.current().translate("inGame.server.verified"));
                 verified = VerifyStatus.VERIFIED;

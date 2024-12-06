@@ -16,8 +16,8 @@ public class PacketPool {
 
     public PacketPool() {
         instance = this;
-        registerPacket(LoginRequestPacket.class);
-        registerPacket(LoginResponsePacket.class);
+        registerPacket(ServerHandshakeRequestPacket.class);
+        registerPacket(ServerHandshakeResponsePacket.class);
         registerPacket(DisconnectPacket.class);
         registerPacket(KeepAlivePacket.class);
         registerPacket(CommandSendPacket.class);
@@ -32,6 +32,7 @@ public class PacketPool {
         registerPacket(TemplateSyncPacket.class);
         registerPacket(ServerSyncPacket.class);
         registerPacket(PlayerSyncPacket.class);
+        registerPacket(LanguageSyncPacket.class);
         registerPacket(CloudServerStartRequestPacket.class);
         registerPacket(CloudServerStartResponsePacket.class);
         registerPacket(CloudServerStopRequestPacket.class);
