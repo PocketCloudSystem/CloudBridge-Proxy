@@ -36,5 +36,4 @@ public class CloudCommandSender extends ConsoleCommandSender {
     public String getName() {
         return "CLOUD";
     }
-
 }
