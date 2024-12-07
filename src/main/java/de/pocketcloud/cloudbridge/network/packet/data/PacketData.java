@@ -6,6 +6,7 @@ import de.pocketcloud.cloudbridge.api.server.status.ServerStatus;
 import de.pocketcloud.cloudbridge.api.template.Template;
 import de.pocketcloud.cloudbridge.network.packet.impl.types.*;
 import lombok.NoArgsConstructor;
+import org.yaml.snakeyaml.Yaml;
 
 import java.util.*;
 
@@ -133,6 +134,14 @@ public class PacketData {
             return (read instanceof Map<?,?> ? (Map<?, ?>) read : Map.of());
         } catch (Exception e) {
             return Map.of();
+        }
+    }
+
+    public Map<?, ?> readYaml() {
+        try {
+            return new Yaml().loadAs(readString(), Map.class);
+        } catch (Exception e) {
+            return null;
         }
     }
 

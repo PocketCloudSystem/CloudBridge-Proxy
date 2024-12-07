@@ -78,8 +78,8 @@ public class Network implements Runnable {
             ProxyServer.getInstance().getEventManager().callEvent(new NetworkConnectEvent(address));
             socket = new DatagramSocket();
             socket.connect(address);
-            socket.setSendBufferSize(65536);
-            socket.setReceiveBufferSize(65536);
+            socket.setSendBufferSize(1024 * 1024 * 8);
+            socket.setReceiveBufferSize(1024 * 1024 * 8);
             connected = true;
             MainLogger.getLogger().info("Successfully connected to §e" + address.toString() + "§r!");
             MainLogger.getLogger().info("§cWaiting for incoming packets...");
@@ -100,7 +100,7 @@ public class Network implements Runnable {
 
     public String read() {
         if (!connected) return null;
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[1024 * 1024 * 8];
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
         try {
             socket.receive(packet);

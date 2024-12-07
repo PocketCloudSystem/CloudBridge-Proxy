@@ -3,32 +3,38 @@ package de.pocketcloud.cloudbridge.network.packet.impl.normal;
 import de.pocketcloud.cloudbridge.language.Language;
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
 import de.pocketcloud.cloudbridge.network.packet.data.PacketData;
+import org.yaml.snakeyaml.Yaml;
 
 import java.util.Map;
 
 public class LanguageSyncPacket extends CloudPacket {
 
-    private Map<String, Map<String, String>> data;
+    private String language;
+    private Map<String, String> messages;
 
     @Override
     protected void encodePayload(PacketData packetData) {
-        packetData.write(data);
+        packetData.write(language);
+        packetData.write(messages);
     }
 
     @Override
     protected void decodePayload(PacketData packetData) {
-        data = (Map<String, Map<String, String>>) packetData.readMap();
+        language = packetData.readString();
+        messages = (Map<String, String>) packetData.readMap();
     }
 
-    public Map<String, Map<String, String>> getData() {
-        return data;
+    public String getLanguage() {
+        return language;
+    }
+
+    public Map<String, String> getMessages() {
+        return messages;
     }
 
     @Override
     public void handle() {
-        data.forEach((key, value) -> {
-            Language language;
-            if ((language = Language.get(key)) != null) language.sync(value);
-        });
+        Language lang;
+        if ((lang = Language.get(language)) != null) lang.sync(messages);
     }
 }
