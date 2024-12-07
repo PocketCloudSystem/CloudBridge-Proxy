@@ -1,4 +1,4 @@
-package de.pocketcloud.cloudbridge.network.packet.utils;
+package de.pocketcloud.cloudbridge.network.packet.data;
 
 import de.pocketcloud.cloudbridge.api.player.CloudPlayer;
 import de.pocketcloud.cloudbridge.api.server.CloudServer;

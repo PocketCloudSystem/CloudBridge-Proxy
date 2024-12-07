@@ -69,7 +69,7 @@ public class CloudPlayer {
     }
 
     public static CloudPlayer fromArray(Map<?,?> map) {
-        if (Utils.containKeys(map, "name", "host", "xboxUserId", "uniqueId")) return null;
+        if (!Utils.containKeys(map, "name", "host", "xboxUserId", "uniqueId")) return null;
         return new CloudPlayer(
                 (String) map.get("name"),
                 (String) map.get("host"),

@@ -4,7 +4,7 @@ import de.pocketcloud.cloudbridge.api.CloudAPI;
 import de.pocketcloud.cloudbridge.api.player.CloudPlayer;
 import de.pocketcloud.cloudbridge.api.registry.Registry;
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
-import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
+import de.pocketcloud.cloudbridge.network.packet.data.PacketData;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor

@@ -13,11 +13,11 @@ public class Template {
     private int maxPlayerCount;
     private int minServerCount;
     private int maxServerCount;
-    private boolean startNewWhenFull;
+    private double startNewPercentage;
     private boolean autoStart;
     private final String templateType;
 
-    public Template(String name, boolean lobby, boolean maintenance, boolean staticServers, int maxPlayerCount, int minServerCount, int maxServerCount, boolean startNewWhenFull, boolean autoStart, String templateType) {
+    public Template(String name, boolean lobby, boolean maintenance, boolean staticServers, int maxPlayerCount, int minServerCount, int maxServerCount, double startNewPercentage, boolean autoStart, String templateType) {
         this.name = name;
         this.lobby = lobby;
         this.maintenance = maintenance;
@@ -25,7 +25,7 @@ public class Template {
         this.maxPlayerCount = maxPlayerCount;
         this.minServerCount = minServerCount;
         this.maxServerCount = maxServerCount;
-        this.startNewWhenFull = startNewWhenFull;
+        this.startNewPercentage = startNewPercentage;
         this.autoStart = autoStart;
         this.templateType = templateType;
     }
@@ -46,7 +46,7 @@ public class Template {
         maxPlayerCount = ((Number) data.get("maxPlayerCount")).intValue();
         minServerCount = ((Number) data.get("minServerCount")).intValue();
         maxServerCount = ((Number) data.get("maxServerCount")).intValue();
-        startNewWhenFull = (Boolean) data.get("startNewWhenFull");
+        startNewPercentage = (double) data.get("startNewPercentage");
         autoStart = (Boolean) data.get("autoStart");
     }
 
@@ -106,12 +106,12 @@ public class Template {
         this.maxServerCount = maxServerCount;
     }
 
-    public boolean isStartNewWhenFull() {
-        return startNewWhenFull;
+    public double getStartNewPercentage() {
+        return startNewPercentage;
     }
 
-    public void setStartNewWhenFull(boolean startNewWhenFull) {
-        this.startNewWhenFull = startNewWhenFull;
+    public void setStartNewPercentage(double startNewPercentage) {
+        this.startNewPercentage = startNewPercentage;
     }
 
     public boolean isAutoStart() {
@@ -135,14 +135,14 @@ public class Template {
                 "maxPlayerCount", maxPlayerCount,
                 "minServerCount", minServerCount,
                 "maxServerCount", maxServerCount,
-                "startNewWhenFull", startNewWhenFull,
+                "startNewPercentage", startNewPercentage,
                 "autoStart", autoStart,
                 "templateType", templateType
         );
     }
 
     public static Template fromArray(Map<?,?> map) {
-        if (Utils.containKeys(map, "name", "lobby", "maintenance", "static", "maxPlayerCount", "minServerCount", "maxServerCount", "startNewWhenFull", "autoStart", "templateType")) return null;
+        if (!Utils.containKeys(map, "name", "lobby", "maintenance", "static", "maxPlayerCount", "minServerCount", "maxServerCount", "startNewPercentage", "autoStart", "templateType")) return null;
         return new Template(
                 (String) map.get("name"),
                 (Boolean) map.get("lobby"),
@@ -151,7 +151,7 @@ public class Template {
                 ((Number) map.get("maxPlayerCount")).intValue(),
                 ((Number) map.get("minServerCount")).intValue(),
                 ((Number) map.get("maxServerCount")).intValue(),
-                (Boolean) map.get("startNewWhenFull"),
+                (double) map.get("startNewPercentage"),
                 (Boolean) map.get("autoStart"),
                 (String) map.get("templateType")
         );

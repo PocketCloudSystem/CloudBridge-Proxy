@@ -10,6 +10,7 @@ import de.pocketcloud.cloudbridge.network.Network;
 import de.pocketcloud.cloudbridge.network.packet.RequestPacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.normal.CloudServerSavePacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.normal.CloudServerStatusChangePacket;
+import de.pocketcloud.cloudbridge.network.packet.impl.normal.KeepAlivePacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.request.CloudServerStartRequestPacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.request.CloudServerStopRequestPacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.request.ServerHandshakeRequestPacket;
@@ -43,6 +44,7 @@ public class CloudAPI {
             if (loginResponsePacket.getVerifyStatus() == VerifyStatus.VERIFIED) {
                 MainLogger.getLogger().info(Language.current().translate("inGame.server.verified"));
                 verified = VerifyStatus.VERIFIED;
+                Network.getInstance().sendPacket(new KeepAlivePacket());
             } else {
                 verified = VerifyStatus.DENIED;
                 MainLogger.getLogger().error(Language.current().translate("inGame.server.verify.denied"));

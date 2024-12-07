@@ -6,6 +6,7 @@ import de.pocketcloud.cloudbridge.event.NetworkConnectEvent;
 import de.pocketcloud.cloudbridge.event.NetworkPacketReceiveEvent;
 import de.pocketcloud.cloudbridge.event.NetworkPacketSendEvent;
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
+import de.pocketcloud.cloudbridge.network.packet.RequestPacket;
 import de.pocketcloud.cloudbridge.network.packet.ResponsePacket;
 import de.pocketcloud.cloudbridge.network.packet.handler.PacketSerializer;
 import de.pocketcloud.cloudbridge.network.packet.pool.PacketPool;
@@ -16,10 +17,7 @@ import dev.waterdog.waterdogpe.ProxyServer;
 import dev.waterdog.waterdogpe.logger.MainLogger;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetSocketAddress;
-import java.net.SocketException;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 
 public class Network implements Runnable {
@@ -44,26 +42,34 @@ public class Network implements Runnable {
 
     @Override
     public void run() {
-        do {
-            String buffer;
-            if ((buffer = read()) != null) {
-                CloudPacket packet = PacketSerializer.decode(buffer);
-                if (packet != null) {
-                    NetworkPacketReceiveEvent ev = new NetworkPacketReceiveEvent(packet);
-                    ProxyServer.getInstance().getEventManager().callEvent(ev);
-                    if (ev.isCancelled()) return;
-                    packet.handle();
+        while (connected) {
+            try {
+                String buffer;
+                if ((buffer = read()) != null) {
+                    CloudPacket packet = PacketSerializer.decode(buffer);
+                    if (packet != null) {
+                        NetworkPacketReceiveEvent ev = new NetworkPacketReceiveEvent(packet);
+                        ProxyServer.getInstance().getEventManager().callEvent(ev);
+                        if (ev.isCancelled()) {
+                            MainLogger.getLogger().warning("Packet processing was cancelled");
+                            continue;
+                        }
 
-                    if (packet instanceof ResponsePacket) {
-                        RequestManager.getInstance().callThen(((ResponsePacket) packet));
-                        RequestManager.getInstance().removeRequest(((ResponsePacket) packet).getRequestId());
+                        packet.handle();
+
+                        if (packet instanceof ResponsePacket) {
+                            RequestManager.getInstance().callThen(((ResponsePacket) packet));
+                            RequestManager.getInstance().removeRequest(((ResponsePacket) packet).getRequestId());
+                        }
+                    } else {
+                        MainLogger.getLogger().warning("§cReceived an unknown packet from the cloud!");
+                        MainLogger.getLogger().debug(GeneralSettings.isNetworkEncryptionEnabled() ? Utils.decompress(buffer.getBytes(StandardCharsets.UTF_8)) : buffer);
                     }
-                } else {
-                    MainLogger.getLogger().warning("§cReceived an unknown packet from the cloud!");
-                    MainLogger.getLogger().debug(GeneralSettings.isNetworkEncryptionEnabled() ? Utils.decompress(buffer.getBytes(StandardCharsets.UTF_8)) : buffer);
                 }
+            } catch (Exception e) {
+                MainLogger.getLogger().error("§cSomething went wrong while processing a packet!", e);
             }
-        } while (connected);
+        }
     }
 
     public void connect() {
@@ -72,8 +78,8 @@ public class Network implements Runnable {
             ProxyServer.getInstance().getEventManager().callEvent(new NetworkConnectEvent(address));
             socket = new DatagramSocket();
             socket.connect(address);
-            socket.setSendBufferSize(1024 * 1024 * 8);
-            socket.setReceiveBufferSize(1024 * 1024 * 8);
+            socket.setSendBufferSize(65536);
+            socket.setReceiveBufferSize(65536);
             connected = true;
             MainLogger.getLogger().info("Successfully connected to §e" + address.toString() + "§r!");
             MainLogger.getLogger().info("§cWaiting for incoming packets...");
@@ -93,15 +99,16 @@ public class Network implements Runnable {
     }
 
     public String read() {
-        if (!connected) return "";
-        byte[] buffer = new byte[1024 * 1024 * 8];
+        if (!connected) return null;
+        byte[] buffer = new byte[1024];
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
         try {
             socket.receive(packet);
         } catch (IOException e) {
             ProxyServer.getInstance().getLogger().error("Failed to receive a packet", e);
+            return null;
         }
-        return new String(packet.getData()).trim();
+        return new String(packet.getData(), 0, packet.getLength()).trim();
     }
 
     public void close() {

@@ -59,7 +59,7 @@ public class CloudServer {
     }
 
     public static CloudServer fromArray(Map<?,?> map) {
-        if (Utils.containKeys(map, "name", "id", "template", "port", "maxPlayers", "processId", "serverStatus")) return null;
+        if (!Utils.containKeys(map, "name", "id", "template", "port", "maxPlayers", "processId", "serverStatus")) return null;
         Template template;
         if ((template = CloudAPI.getInstance().getTemplateByName((String)map.get("template"))) == null) return null;
         ServerStatus serverStatus;

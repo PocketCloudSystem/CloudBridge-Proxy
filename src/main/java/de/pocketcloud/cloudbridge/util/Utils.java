@@ -32,13 +32,8 @@ public class Utils {
     }
 
     public static boolean containKeys(Map<?,?> map, String... keys) {
-        boolean result = true;
-        for (String key : keys)
-            if (!map.containsKey(key)) {
-                result = false;
-                break;
-            }
-        return !result;
+        for (String key : keys) if (!map.containsKey(key)) return false;
+        return true;
     }
 
     public static long time() {

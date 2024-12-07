@@ -3,7 +3,7 @@ package de.pocketcloud.cloudbridge.network.packet.handler;
 import com.google.gson.Gson;
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
 import de.pocketcloud.cloudbridge.network.packet.pool.PacketPool;
-import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
+import de.pocketcloud.cloudbridge.network.packet.data.PacketData;
 import de.pocketcloud.cloudbridge.util.GeneralSettings;
 import de.pocketcloud.cloudbridge.util.Utils;
 import dev.waterdog.waterdogpe.logger.MainLogger;

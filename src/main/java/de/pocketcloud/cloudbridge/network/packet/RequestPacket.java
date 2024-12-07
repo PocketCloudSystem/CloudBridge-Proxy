@@ -1,6 +1,6 @@
 package de.pocketcloud.cloudbridge.network.packet;
 
-import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
+import de.pocketcloud.cloudbridge.network.packet.data.PacketData;
 import de.pocketcloud.cloudbridge.util.Utils;
 import lombok.NoArgsConstructor;
 

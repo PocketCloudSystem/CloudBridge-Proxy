@@ -38,7 +38,7 @@ public enum Language {
     }
 
     public String translate(String key, String ...params) {
-        String message = messages.getOrDefault(key, "").replace("{PREFIX}", messages.getOrDefault("inGame.prefix", ""));
+        String message = messages.getOrDefault(key, key).replace("{PREFIX}", messages.getOrDefault("inGame.prefix", ""));
         for (int i = 0; i < params.length; i++) message = message.replace("%" + i + "%", params[i]);
         return message;
     }

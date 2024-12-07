@@ -1,7 +1,7 @@
 package de.pocketcloud.cloudbridge.network.packet.impl.normal;
 
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
-import de.pocketcloud.cloudbridge.network.packet.utils.PacketData;
+import de.pocketcloud.cloudbridge.network.packet.data.PacketData;
 import de.pocketcloud.cloudbridge.network.packet.impl.types.DisconnectReason;
 import dev.waterdog.waterdogpe.ProxyServer;
 import dev.waterdog.waterdogpe.logger.MainLogger;
