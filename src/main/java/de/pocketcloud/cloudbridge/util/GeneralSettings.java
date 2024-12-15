@@ -15,6 +15,7 @@ public class GeneralSettings {
         data.put("server_name", config.getString("server-name"));
         data.put("template_name", config.getString("template"));
         data.put("language", config.getString("cloud-language"));
+        data.put("cloud_path", config.getString("cloud-"));
     }
 
     public static int getNetworkPort() {
@@ -31,6 +32,10 @@ public class GeneralSettings {
 
     public static String getLanguage() {
         return (String) data.get("language");
+    }
+
+    public static String getCloudPath() {
+        return (String) data.get("cloud_path");
     }
 
     public static boolean isNetworkEncryptionEnabled() {
