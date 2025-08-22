@@ -6,7 +6,6 @@ import de.pocketcloud.cloudbridge.event.NetworkConnectEvent;
 import de.pocketcloud.cloudbridge.event.NetworkPacketReceiveEvent;
 import de.pocketcloud.cloudbridge.event.NetworkPacketSendEvent;
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
-import de.pocketcloud.cloudbridge.network.packet.RequestPacket;
 import de.pocketcloud.cloudbridge.network.packet.ResponsePacket;
 import de.pocketcloud.cloudbridge.network.packet.handler.PacketSerializer;
 import de.pocketcloud.cloudbridge.network.packet.pool.PacketPool;
@@ -15,13 +14,16 @@ import de.pocketcloud.cloudbridge.util.GeneralSettings;
 import de.pocketcloud.cloudbridge.util.Utils;
 import dev.waterdog.waterdogpe.ProxyServer;
 import dev.waterdog.waterdogpe.logger.MainLogger;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
+@Getter
 public class Network implements Runnable {
 
+    @Getter
     private static Network instance;
     private final PacketPool packetPool;
     private final RequestManager requestManager;
@@ -94,8 +96,9 @@ public class Network implements Runnable {
             socket.send(packet);
             return true;
         } catch (IOException e) {
-            return false;
+            MainLogger.getLogger().error("Failed to send packet to the server", e);
         }
+        return false;
     }
 
     public String read() {
@@ -126,35 +129,13 @@ public class Network implements Runnable {
                 NetworkPacketSendEvent ev = new NetworkPacketSendEvent(packet);
                 ProxyServer.getInstance().getEventManager().callEvent(ev);
 
-                if (!ev.isCancelled()) return write(json);
+                if (!ev.isCancelled()) {
+                    return write(json);
+                }
             } catch (Exception e) {
-                return false;
+                MainLogger.getLogger().error("Something went wrong while sending a packet", e);
             }
         }
         return false;
-    }
-
-    public static Network getInstance() {
-        return instance;
-    }
-
-    public PacketPool getPacketPool() {
-        return packetPool;
-    }
-
-    public RequestManager getRequestManager() {
-        return requestManager;
-    }
-
-    public InetSocketAddress getAddress() {
-        return address;
-    }
-
-    public DatagramSocket getSocket() {
-        return socket;
-    }
-
-    public boolean isConnected() {
-        return connected;
     }
 }

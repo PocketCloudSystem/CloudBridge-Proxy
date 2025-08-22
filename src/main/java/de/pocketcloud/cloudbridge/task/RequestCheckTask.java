@@ -31,8 +31,5 @@ public class RequestCheckTask extends Task {
     }
 
     @Override
-    public void onCancel() {
-
-    }
-
+    public void onCancel() {}
 }

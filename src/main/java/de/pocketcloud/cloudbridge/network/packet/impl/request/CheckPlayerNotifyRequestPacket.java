@@ -2,8 +2,10 @@ package de.pocketcloud.cloudbridge.network.packet.impl.request;
 
 import de.pocketcloud.cloudbridge.network.packet.RequestPacket;
 import de.pocketcloud.cloudbridge.network.packet.data.PacketData;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 public class CheckPlayerNotifyRequestPacket extends RequestPacket {
 
@@ -25,7 +27,4 @@ public class CheckPlayerNotifyRequestPacket extends RequestPacket {
         player = packetData.readString();
     }
 
-    public String getPlayer() {
-        return player;
-    }
 }

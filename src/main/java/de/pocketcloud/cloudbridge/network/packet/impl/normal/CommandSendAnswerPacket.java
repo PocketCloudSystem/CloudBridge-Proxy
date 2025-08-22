@@ -3,8 +3,10 @@ package de.pocketcloud.cloudbridge.network.packet.impl.normal;
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
 import de.pocketcloud.cloudbridge.network.packet.impl.types.CommandExecutionResult;
 import de.pocketcloud.cloudbridge.network.packet.data.PacketData;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 public class CommandSendAnswerPacket extends CloudPacket {
 
@@ -29,7 +31,4 @@ public class CommandSendAnswerPacket extends CloudPacket {
     @Override
     public void handle() {}
 
-    public CommandExecutionResult getResult() {
-        return result;
-    }
 }

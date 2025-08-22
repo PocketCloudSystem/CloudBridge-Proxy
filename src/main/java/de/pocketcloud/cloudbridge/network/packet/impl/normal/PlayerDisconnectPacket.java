@@ -2,8 +2,10 @@ package de.pocketcloud.cloudbridge.network.packet.impl.normal;
 
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
 import de.pocketcloud.cloudbridge.network.packet.data.PacketData;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 public class PlayerDisconnectPacket extends CloudPacket {
 
@@ -28,7 +30,4 @@ public class PlayerDisconnectPacket extends CloudPacket {
     @Override
     public void handle() {}
 
-    public String getPlayerName() {
-        return playerName;
-    }
 }
