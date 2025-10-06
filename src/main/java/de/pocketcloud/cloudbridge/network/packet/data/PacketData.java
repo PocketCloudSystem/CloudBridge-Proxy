@@ -5,11 +5,13 @@ import de.pocketcloud.cloudbridge.api.server.CloudServer;
 import de.pocketcloud.cloudbridge.api.server.status.ServerStatus;
 import de.pocketcloud.cloudbridge.api.template.Template;
 import de.pocketcloud.cloudbridge.network.packet.impl.types.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.yaml.snakeyaml.Yaml;
 
 import java.util.*;
 
+@Getter
 @NoArgsConstructor
 public class PacketData {
 
@@ -225,7 +227,4 @@ public class PacketData {
         }
     }
 
-    public ArrayList<Object> getData() {
-        return data;
-    }
 }

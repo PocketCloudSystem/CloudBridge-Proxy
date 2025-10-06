@@ -4,10 +4,12 @@ import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
 import de.pocketcloud.cloudbridge.network.packet.data.PacketData;
 import dev.waterdog.waterdogpe.ProxyServer;
 import dev.waterdog.waterdogpe.network.serverinfo.BedrockServerInfo;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.net.InetSocketAddress;
 
+@Getter
 @NoArgsConstructor
 public class ProxyRegisterServerPacket extends CloudPacket {
 
@@ -30,7 +32,7 @@ public class ProxyRegisterServerPacket extends CloudPacket {
     protected void decodePayload(PacketData packetData) {
         super.decodePayload(packetData);
         serverName = packetData.readString();
-        port = ((Number) packetData.readDouble()).intValue();
+        port = packetData.readDouble().intValue();
     }
 
     @Override
@@ -38,11 +40,4 @@ public class ProxyRegisterServerPacket extends CloudPacket {
         ProxyServer.getInstance().registerServerInfo(new BedrockServerInfo(serverName, new InetSocketAddress(port), null));
     }
 
-    public String getServerName() {
-        return serverName;
-    }
-
-    public int getPort() {
-        return port;
-    }
 }

@@ -3,10 +3,11 @@ package de.pocketcloud.cloudbridge.network.packet.impl.normal;
 import de.pocketcloud.cloudbridge.language.Language;
 import de.pocketcloud.cloudbridge.network.packet.CloudPacket;
 import de.pocketcloud.cloudbridge.network.packet.data.PacketData;
-import org.yaml.snakeyaml.Yaml;
+import lombok.Getter;
 
 import java.util.Map;
 
+@Getter
 public class LanguageSyncPacket extends CloudPacket {
 
     private String language;
@@ -22,14 +23,6 @@ public class LanguageSyncPacket extends CloudPacket {
     protected void decodePayload(PacketData packetData) {
         language = packetData.readString();
         messages = (Map<String, String>) packetData.readMap();
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public Map<String, String> getMessages() {
-        return messages;
     }
 
     @Override

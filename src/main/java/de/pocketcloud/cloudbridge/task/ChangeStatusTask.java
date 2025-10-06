@@ -22,7 +22,5 @@ public class ChangeStatusTask extends Task {
     }
 
     @Override
-    public void onCancel() {
-
-    }
+    public void onCancel() {}
 }
