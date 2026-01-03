@@ -5,7 +5,9 @@ import de.pocketcloud.cloud.bridge.api.object.server.CloudServer;
 import de.pocketcloud.cloud.bridge.util.CloudEnvironmentConfig;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public final class CloudServerProvider implements CloudAPIProvider {
     
@@ -41,6 +43,10 @@ public final class CloudServerProvider implements CloudAPIProvider {
         CloudServer server = get(CloudEnvironmentConfig.getServerName());
         if (server == null) throw new RuntimeException("The return value of current() should not be null, wait for CloudAPI to index");
         return server;
+    }
+
+    public List<CloudServer> lobbyServers() {
+        return servers.values().stream().filter(server -> server.getTemplate().isLobby()).collect(Collectors.toList());
     }
 
     public Map<String, CloudServer> getAll() {

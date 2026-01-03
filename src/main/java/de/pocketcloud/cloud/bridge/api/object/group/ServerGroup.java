@@ -1,5 +1,6 @@
 package de.pocketcloud.cloud.bridge.api.object.group;
 
+import de.pocketcloud.cloud.bridge.CloudBridge;
 import de.pocketcloud.cloud.bridge.api.object.template.Template;
 import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
 import de.pocketcloud.cloud.bridge.util.Utils;
@@ -72,6 +73,8 @@ public final class ServerGroup implements PacketData.Writable {
                 templates
             );
         } catch (ClassCastException e) {
+            CloudBridge.getInstance().getLogger().error(e);
+            e.printStackTrace();
             return null;
         }
     }

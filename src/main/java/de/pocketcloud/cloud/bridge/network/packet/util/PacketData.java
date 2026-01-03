@@ -1,8 +1,6 @@
 package de.pocketcloud.cloud.bridge.network.packet.util;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import com.google.gson.*;
 import de.pocketcloud.cloud.bridge.api.object.group.ServerGroup;
 import de.pocketcloud.cloud.bridge.api.object.player.CloudPlayer;
 import de.pocketcloud.cloud.bridge.api.object.server.CloudServer;
@@ -11,9 +9,9 @@ import de.pocketcloud.cloud.bridge.api.object.template.Template;
 import de.pocketcloud.cloud.bridge.network.packet.data.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 public final class PacketData {
 
@@ -47,13 +45,6 @@ public final class PacketData {
     public Object read() {
         if (readIndex >= data.size()) return null;
         return data.get(readIndex++);
-    }
-
-    public void readAll(Object... refs) {
-        for (int i = 0; i < refs.length; i++) {
-            if (isEmpty()) throw new NoSuchElementException("Passed too many references, packet buffer is empty");
-            refs[i] = read();
-        }
     }
 
     public String readString() {
@@ -103,7 +94,10 @@ public final class PacketData {
         Object read = read();
         if (read instanceof List) {
             return (List<Object>) read;
+        } else if (read instanceof JsonArray jsonArray) {
+            return (List<Object>) toObject(jsonArray);
         }
+
         return null;
     }
 
@@ -112,7 +106,10 @@ public final class PacketData {
         Object read = read();
         if (read instanceof Map) {
             return (Map<String, Object>) read;
+        } else if (read instanceof JsonObject jsonObject) {
+            return (Map<String, Object>) toObject(jsonObject);
         }
+
         return null;
     }
 
@@ -206,6 +203,35 @@ public final class PacketData {
             }
         }
         return new PacketData(list);
+    }
+
+    public static Object toObject(JsonElement el) {
+        if (el.isJsonNull()) return null;
+
+        if (el.isJsonPrimitive()) {
+            JsonPrimitive p = el.getAsJsonPrimitive();
+            if (p.isBoolean()) return p.getAsBoolean();
+            if (p.isNumber()) {
+                String n = p.getAsString();
+                return n.contains(".") ? Double.parseDouble(n) : Long.parseLong(n);
+            }
+            return p.getAsString();
+        }
+
+        if (el.isJsonArray()) {
+            List<Object> list = new ArrayList<>();
+            for (JsonElement e : el.getAsJsonArray()) {
+                list.add(toObject(e));
+            }
+            return list;
+        }
+
+        Map<String, Object> map = new HashMap<>();
+        for (Map.Entry<String, JsonElement> e : el.getAsJsonObject().entrySet()) {
+            map.put(e.getKey(), toObject(e.getValue()));
+        }
+
+        return map;
     }
 
     public interface Writable {

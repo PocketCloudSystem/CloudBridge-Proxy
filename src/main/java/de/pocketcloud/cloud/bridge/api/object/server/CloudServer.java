@@ -1,5 +1,6 @@
 package de.pocketcloud.cloud.bridge.api.object.server;
 
+import de.pocketcloud.cloud.bridge.CloudBridge;
 import de.pocketcloud.cloud.bridge.api.object.player.CloudPlayer;
 import de.pocketcloud.cloud.bridge.api.object.server.data.CloudServerData;
 import de.pocketcloud.cloud.bridge.api.object.server.data.CloudServerStorage;
@@ -115,14 +116,20 @@ public final class CloudServer implements PacketData.Writable {
             Integer processId = data.containsKey("processId") ? 
                 ((Number) data.get("processId")).intValue() : null;
             ServerStatus status = ServerStatus.fromName((String) data.get("serverStatus"));
-            
-            Map<String, Object> storage = data.containsKey("internalStorage") ?
-                (Map<String, Object>) data.get("internalStorage") : new HashMap<>();
-            
+
+            Map<String, Object> storage = Map.of();
+            if (data.containsKey("internalStorage")) {
+                if (data.get("internalStorage") instanceof Map) {
+                    storage = (Map<String, Object>) data.get("internalStorage");
+                }
+            }
+
             CloudServerData serverData = new CloudServerData(name, port, maxPlayers, processId);
             
             return new CloudServer(id, uuid, template, serverData, status, storage);
         } catch (ClassCastException | NullPointerException e) {
+            CloudBridge.getInstance().getLogger().error(e);
+            e.printStackTrace();
             return null;
         }
     }

@@ -15,10 +15,7 @@ public final class ServerHandshakeResponsePacket extends ResponsePacket {
     public ServerHandshakeResponsePacket(VerifyStatus verifyStatus) {
         this.verifyStatus = verifyStatus;
     }
-    
-    @Override
-    public void encodePayload(PacketData packetData) {}
-    
+
     @Override
     public void decodePayload(PacketData packetData) {
         verifyStatus = packetData.readVerifyStatus();

@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
+import java.nio.channels.ClosedSelectorException;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -85,6 +86,8 @@ public final class Network extends Thread {
             try {
                 selector.select(50);
 
+                if (!selector.isOpen()) break;
+
                 var keys = selector.selectedKeys().iterator();
                 while (keys.hasNext()) {
                     SelectionKey key = keys.next();
@@ -107,7 +110,9 @@ public final class Network extends Thread {
                         buffer.offer(unhandledPacket);
                     }
                 }
-            } catch (IOException e) {
+            } catch (ClosedSelectorException e) {
+                break;
+            }  catch (IOException e) {
                 if (running.get()) {
                     CloudBridge.getInstance().getLogger().error("Error receiving packet", e);
                 }
@@ -138,10 +143,10 @@ public final class Network extends Thread {
                 } else {
                     CloudBridge.getInstance().getLogger().warn("§cReceived an unknown packet from the cloud!");
                 }
-                
             } catch (Exception e) {
                 CloudBridge.getInstance().getLogger().error("Failed to handle packet from {}!", unhandledPacket.address());
                 CloudBridge.getInstance().getLogger().error(e);
+                e.printStackTrace();
             }
         }
     }
@@ -159,6 +164,7 @@ public final class Network extends Thread {
         } catch (IOException e) {
             CloudBridge.getInstance().getLogger().error("Failed to send packet {}: {}", packet.getName(), e.getMessage());
             CloudBridge.getInstance().getLogger().error(e);
+            e.printStackTrace();
             return false;
         }
     }
@@ -171,7 +177,10 @@ public final class Network extends Thread {
 
         try {
             if (channel != null && channel.isOpen()) channel.close();
-            if (selector != null && selector.isOpen()) selector.close();
+            if (selector != null && selector.isOpen()) {
+                selector.wakeup();
+                selector.close();
+            }
         } catch (IOException ignored) {}
     }
     

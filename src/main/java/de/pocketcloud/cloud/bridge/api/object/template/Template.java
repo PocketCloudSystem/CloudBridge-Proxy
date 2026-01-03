@@ -1,5 +1,6 @@
 package de.pocketcloud.cloud.bridge.api.object.template;
 
+import de.pocketcloud.cloud.bridge.CloudBridge;
 import de.pocketcloud.cloud.bridge.api.object.group.ServerGroup;
 import de.pocketcloud.cloud.bridge.api.provider.ServerGroupProvider;
 import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
@@ -91,7 +92,7 @@ public final class Template implements PacketData.Writable {
         return data;
     }
     
-    public static Template read(Map<String, Object> data) {
+    public static Template read(Map<String, ?> data) {
         if (!Utils.containKeys(data, "name", "lobby", "maintenance", "static", "alwaysCopyToStaticServers",
                 "maxPlayerCount", "minServerCount", "maxServerCount", "startNewPercentage",
                 "autoStart", "templateType")) return null;
@@ -111,6 +112,8 @@ public final class Template implements PacketData.Writable {
                 (String) data.get("templateType")
             );
         } catch (ClassCastException | NullPointerException e) {
+            CloudBridge.getInstance().getLogger().error(e);
+            e.printStackTrace();
             return null;
         }
     }

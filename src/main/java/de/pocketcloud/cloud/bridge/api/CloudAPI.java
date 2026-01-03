@@ -8,6 +8,7 @@ import de.pocketcloud.cloud.bridge.network.packet.impl.KeepAlivePacket;
 import de.pocketcloud.cloud.bridge.network.packet.impl.request.ServerHandshakeRequestPacket;
 import de.pocketcloud.cloud.bridge.network.packet.impl.response.ServerHandshakeResponsePacket;
 import de.pocketcloud.cloud.bridge.util.CloudEnvironmentConfig;
+import de.pocketcloud.cloud.bridge.util.Utils;
 import dev.waterdog.waterdogpe.ProxyServer;
 import lombok.Getter;
 
@@ -43,6 +44,7 @@ public final class CloudAPI {
                  this.verifyStatus = status;
 
                  if (status == VerifyStatus.VERIFIED) {
+                     CloudBridge.getInstance().setLastKeepAliveCheck(Utils.time());
                      CloudBridge.getInstance().startTasks();
                      CloudBridge.getInstance().getLogger().info(LanguageKey.INGAME_SERVER_VERIFIED.translate());
                      KeepAlivePacket.create().sendPacket(); // Start keep-alive cycle

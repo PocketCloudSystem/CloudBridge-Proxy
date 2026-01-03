@@ -25,12 +25,12 @@ public record Language(String name, Map<String, String> messages) {
         return translate(message, Map.of());
     }
 
-    public String translate(String key, Map<String, String> args) {
+    public String translate(String key, Map<String, Object> args) {
         String message = messages.getOrDefault(key, key);
         message = message.replace("{PREFIX}", messages.getOrDefault("inGame.prefix", ""));
 
-        for (Map.Entry<String, String> entry : args.entrySet()) {
-            message = message.replace("%" + entry.getKey() + "%", entry.getValue());
+        for (Map.Entry<String, Object> entry : args.entrySet()) {
+            message = message.replace("%" + entry.getKey() + "%", entry.getValue().toString());
         }
 
         return message;

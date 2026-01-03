@@ -24,7 +24,7 @@ public enum LanguageKey {
     INGAME_NOTIFY_MESSAGE_SERVER_STARTING("inGame.notify.message.server_starting"),
     INGAME_NOTIFY_MESSAGE_SERVER_STOPPING("inGame.notify.message.server_stopping"),
     INGAME_NOTIFY_MESSAGE_SERVER_TIMED_OUT("inGame.notify.message.server_timed_out"),
-    INGAME_NOTIFY_MESSAGE_SERVER_STOP_TIMED("inGame.notify.message.server_stop_timed"),
+    INGAME_NOTIFY_MESSAGE_SERVER_STOP_TIMED_OUT("inGame.notify.message.server_stop_timed_out"),
     INGAME_NOTIFY_MESSAGE_SERVER_CRASHED("inGame.notify.message.server_crashed"),
     INGAME_NOTIFY_MESSAGE_SERVER_START_FAILED("inGame.notify.message.server_start_failed"),
     INGAME_NOTIFY_MESSAGE_PLAYER_JOINED("inGame.notify.message.player_joined"),
@@ -215,7 +215,7 @@ public enum LanguageKey {
         return translate(Map.of());
     }
 
-    public String translate(Map<String, String> args) {
+    public String translate(Map<String, Object> args) {
         return Language.current().translate(langKey, args);
     }
 }

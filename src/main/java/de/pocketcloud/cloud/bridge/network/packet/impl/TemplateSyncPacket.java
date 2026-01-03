@@ -28,10 +28,10 @@ public final class TemplateSyncPacket extends CloudPacket implements Clientbound
             TemplateProvider.provider().add(template);
         }
     }
-    
+
     @Override
     public void encodePayload(PacketData packetData) {}
-    
+
     @Override
     public void decodePayload(PacketData packetData) {
         template = packetData.readTemplate();

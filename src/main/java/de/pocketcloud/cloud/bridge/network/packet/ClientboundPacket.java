@@ -9,5 +9,8 @@ import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
 public interface ClientboundPacket extends Packet {
 
     @Override
-    void encodePayload(PacketData packetData);
+    void decodePayload(PacketData packetData);
+
+    @Override
+    default void encodePayload(PacketData packetData) {}
 }

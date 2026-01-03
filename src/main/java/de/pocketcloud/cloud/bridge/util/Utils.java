@@ -4,6 +4,10 @@ import java.util.Map;
 
 public class Utils {
 
+    public static double time() {
+        return System.currentTimeMillis() / 1000.0;
+    }
+
     public static boolean containKeys(Map<?, ?> map, String... key) {
         for (String s : key) {
             if (!map.containsKey(s))

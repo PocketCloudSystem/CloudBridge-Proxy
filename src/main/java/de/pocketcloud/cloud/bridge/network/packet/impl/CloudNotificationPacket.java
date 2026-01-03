@@ -1,29 +1,39 @@
 package de.pocketcloud.cloud.bridge.network.packet.impl;
 
+import de.pocketcloud.cloud.bridge.api.cache.NotificationListCache;
 import de.pocketcloud.cloud.bridge.network.packet.ClientboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.CloudboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.CloudPacket;
 import de.pocketcloud.cloud.bridge.network.packet.data.NotificationType;
 import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import dev.waterdog.waterdogpe.ProxyServer;
+import dev.waterdog.waterdogpe.player.ProxiedPlayer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Map;
 
 @Getter
 @NoArgsConstructor
 public final class CloudNotificationPacket extends CloudPacket implements ClientboundPacket, CloudboundPacket {
     
     private NotificationType notificationType;
-    private List<Object> args;
+    private Map<String, Object> args;
     
-    public CloudNotificationPacket(NotificationType notificationType, List<Object> args) {
+    public CloudNotificationPacket(NotificationType notificationType, Map<String, Object> args) {
         this.notificationType = notificationType;
         this.args = args;
     }
     
     @Override
-    public void handle() {}
+    public void handle() {
+        assert notificationType.getLangKey() != null;
+        String message = notificationType.getLangKey().translate(args);
+        for (String player : NotificationListCache.getAll()) {
+            ProxiedPlayer p = ProxyServer.getInstance().getPlayer(player);
+            if (p != null) p.sendMessage(message);
+        }
+    }
     
     @Override
     public void encodePayload(PacketData packetData) {
@@ -33,10 +43,10 @@ public final class CloudNotificationPacket extends CloudPacket implements Client
     @Override
     public void decodePayload(PacketData packetData) {
         notificationType = packetData.readNotificationType();
-        args = packetData.readArray();
+        args = packetData.readMap();
     }
 
-    public static CloudNotificationPacket create(NotificationType notificationType, List<Object> args) {
+    public static CloudNotificationPacket create(NotificationType notificationType, Map<String, Object> args) {
         return new CloudNotificationPacket(notificationType, args);
     }
 }

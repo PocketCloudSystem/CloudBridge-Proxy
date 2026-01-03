@@ -33,6 +33,11 @@ public abstract class RequestPacket extends CloudPacket implements CloudboundPac
         requestId = packetData.readString();
     }
 
+    @Override
+    public void decodePayload(PacketData packetData) {
+        CloudboundPacket.super.decodePayload(packetData);
+    }
+
     public final void invokeCallbacks(boolean failed, ResponsePacket responsePacket, Exception exception) {
         if (failed) {
             if (failureCallback != null) {

@@ -21,4 +21,9 @@ public abstract class ResponsePacket extends CloudPacket implements ClientboundP
         super.decode(packetData);
         requestId = packetData.readString();
     }
+
+    @Override
+    public void encodePayload(PacketData packetData) {
+        ClientboundPacket.super.encodePayload(packetData);
+    }
 }

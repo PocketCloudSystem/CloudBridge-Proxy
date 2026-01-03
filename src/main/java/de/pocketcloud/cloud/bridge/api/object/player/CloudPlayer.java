@@ -1,9 +1,11 @@
 package de.pocketcloud.cloud.bridge.api.object.player;
 
+import de.pocketcloud.cloud.bridge.CloudBridge;
 import de.pocketcloud.cloud.bridge.api.object.server.CloudServer;
 import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
 import de.pocketcloud.cloud.bridge.api.provider.CloudServerProvider;
 import de.pocketcloud.cloud.bridge.util.Utils;
+import dev.waterdog.waterdogpe.player.ProxiedPlayer;
 import lombok.Getter;
 
 import java.util.HashMap;
@@ -96,7 +98,13 @@ public final class CloudPlayer implements PacketData.Writable {
                 (String) data.get("currentProxy")
             );
         } catch (ClassCastException e) {
+            CloudBridge.getInstance().getLogger().error(e);
+            e.printStackTrace();
             return null;
         }
+    }
+
+    public static CloudPlayer fromProxiedPlayer(ProxiedPlayer proxiedPlayer) {
+        return new CloudPlayer(proxiedPlayer.getName(), proxiedPlayer.getAddress().getHostString(), proxiedPlayer.getXuid(), proxiedPlayer.getUniqueId().toString(), null, null);
     }
 }

@@ -2,6 +2,7 @@ package de.pocketcloud.cloud.bridge.network.packet;
 
 import de.pocketcloud.cloud.bridge.network.Network;
 import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.cloud.bridge.util.Utils;
 
 public abstract class CloudPacket implements Packet {
     
@@ -12,7 +13,7 @@ public abstract class CloudPacket implements Packet {
     public void encode(PacketData packetData) {
         if (encoded) throw new RuntimeException("Packet " + getName() + " has already been encoded");
         encoded = true;
-        packetData.write(getName()).write(sentTimestamp = System.currentTimeMillis() / 1000.0);
+        packetData.write(getName()).write(sentTimestamp = Utils.time());
         encodePayload(packetData);
     }
     
@@ -40,12 +41,12 @@ public abstract class CloudPacket implements Packet {
     }
     
     @Override
-    public boolean isEncoded() {
+    public final boolean isEncoded() {
         return encoded;
     }
     
     @Override
-    public Double getSentTimestamp() {
+    public final Double getSentTimestamp() {
         return sentTimestamp;
     }
 }

@@ -24,9 +24,6 @@ public final class ServerHandshakeRequestPacket extends RequestPacket {
     public void encodePayload(PacketData packetData) {
         packetData.writeAll(serverName, processId, maxPlayers);
     }
-    
-    @Override
-    public void decodePayload(PacketData packetData) {}
 
     public static RequestPacket makeRequest(String serverName, int pid, int maxPlayers) {
         return RequestManager.getInstance().send(new ServerHandshakeRequestPacket(serverName, pid, maxPlayers));

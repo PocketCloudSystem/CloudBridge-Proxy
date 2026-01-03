@@ -1,7 +1,11 @@
 package de.pocketcloud.cloud.bridge.network.packet;
 
 import de.pocketcloud.cloud.bridge.network.packet.impl.*;
+import de.pocketcloud.cloud.bridge.network.packet.impl.request.PlayerNotificationCheckRequestPacket;
+import de.pocketcloud.cloud.bridge.network.packet.impl.request.PlayerWhitelistCheckRequestPacket;
 import de.pocketcloud.cloud.bridge.network.packet.impl.request.ServerHandshakeRequestPacket;
+import de.pocketcloud.cloud.bridge.network.packet.impl.response.PlayerNotificationCheckResponsePacket;
+import de.pocketcloud.cloud.bridge.network.packet.impl.response.PlayerWhitelistCheckResponsePacket;
 import de.pocketcloud.cloud.bridge.network.packet.impl.response.ServerHandshakeResponsePacket;
 
 import java.util.HashMap;
@@ -45,12 +49,21 @@ public final class PacketPool {
         register(PlayerSyncPacket.class, PlayerSyncPacket::new);
         register(PlayerConnectPacket.class, PlayerConnectPacket::new);
         register(PlayerDisconnectPacket.class, PlayerDisconnectPacket::new);
+        register(PlayerKickPacket.class, PlayerKickPacket::new);
+        register(PlayerSwitchServerPacket.class, PlayerSwitchServerPacket::new);
+        register(ProxyRegisterServerPacket.class, ProxyRegisterServerPacket::new);
+        register(ProxyUnregisterServerPacket.class, ProxyUnregisterServerPacket::new);
+        register(PlayerNotificationCheckRequestPacket.class, PlayerNotificationCheckRequestPacket::new);
+        register(PlayerNotificationCheckResponsePacket.class, PlayerNotificationCheckResponsePacket::new);
+        register(PlayerWhitelistCheckRequestPacket.class, PlayerWhitelistCheckRequestPacket::new);
+        register(PlayerWhitelistCheckResponsePacket.class, PlayerWhitelistCheckResponsePacket::new);
+        register(MaintenanceListSyncPacket.class, MaintenanceListSyncPacket::new);
+        register(NotificationListSyncPacket.class, NotificationListSyncPacket::new);
     }
 
     public void register(Class<? extends CloudPacket> packetClass, Supplier<CloudPacket> supplier) {
         String packetName = packetClass.getSimpleName();
         packets.put(packetName, supplier);
-        System.out.println("Registered packet: " + packetName + " (" + packetClass.getName() + ")");
     }
 
     public CloudPacket get(String packetName) {
