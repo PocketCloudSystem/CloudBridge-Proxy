@@ -24,7 +24,7 @@ public class MaintenanceListSyncPacket extends CloudPacket implements Clientboun
     public void decodePayload(PacketData packetData) {
         maintenanceList = new ArrayList<>();
         for (Object o : packetData.readArray()) {
-            maintenanceList.add(o.toString());
+            maintenanceList.add((String) o);
         }
     }
 

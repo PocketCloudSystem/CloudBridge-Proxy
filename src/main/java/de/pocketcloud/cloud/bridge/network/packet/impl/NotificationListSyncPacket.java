@@ -24,7 +24,7 @@ public class NotificationListSyncPacket extends CloudPacket implements Clientbou
     public void decodePayload(PacketData packetData) {
         notificationList = new ArrayList<>();
         for (Object o : packetData.readArray()) {
-            notificationList.add(o.toString());
+            notificationList.add((String) o);
         }
     }
 

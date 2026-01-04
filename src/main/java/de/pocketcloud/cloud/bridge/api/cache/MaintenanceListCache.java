@@ -21,7 +21,7 @@ public class MaintenanceListCache {
     }
     
     public static boolean is(String player) {
-        return maintenanceList.contains(player);
+        return maintenanceList.stream().anyMatch(p -> p.equalsIgnoreCase(player));
     }
 
     public static ArrayList<String> getAll() {

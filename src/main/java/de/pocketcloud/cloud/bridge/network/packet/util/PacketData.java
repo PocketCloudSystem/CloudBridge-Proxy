@@ -92,8 +92,14 @@ public final class PacketData {
     @SuppressWarnings("unchecked")
     public List<Object> readArray() {
         Object read = read();
-        if (read instanceof List) {
-            return (List<Object>) read;
+        if (read instanceof List<?> list) {
+            List<Object> newList = new ArrayList<>();
+            for (var item : list) {
+                if (item instanceof JsonElement element) newList.add(toObject(element));
+                else newList.add(item);
+            }
+
+            return newList;
         } else if (read instanceof JsonArray jsonArray) {
             return (List<Object>) toObject(jsonArray);
         }

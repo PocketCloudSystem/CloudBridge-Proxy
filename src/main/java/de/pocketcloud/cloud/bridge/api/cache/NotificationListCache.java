@@ -21,7 +21,7 @@ public class NotificationListCache {
     }
 
     public static boolean is(String player) {
-        return notificationList.contains(player);
+        return notificationList.stream().anyMatch(p -> p.equalsIgnoreCase(player));
     }
 
     public static ArrayList<String> getAll() {
