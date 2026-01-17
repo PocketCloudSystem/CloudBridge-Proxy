@@ -6,7 +6,7 @@ import dev.waterdog.waterdogpe.utils.config.YamlConfig;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CloudEnvironmentConfig {
+final public class CloudEnvironmentConfig {
 
     private static final Map<String, Object> data = new HashMap<>();
 

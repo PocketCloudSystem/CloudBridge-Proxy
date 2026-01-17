@@ -12,6 +12,7 @@ import de.pocketcloud.cloud.bridge.task.RequestTimeoutTask;
 import de.pocketcloud.cloud.bridge.task.ServerTimeoutTask;
 import de.pocketcloud.cloud.bridge.task.StatusChangeTask;
 import de.pocketcloud.cloud.bridge.util.CloudEnvironmentConfig;
+import de.pocketcloud.cloud.bridge.util.ProcessUtils;
 import dev.waterdog.waterdogpe.ProxyServer;
 import dev.waterdog.waterdogpe.event.defaults.InitialServerDeterminedEvent;
 import dev.waterdog.waterdogpe.event.defaults.PlayerDisconnectedEvent;
@@ -74,12 +75,14 @@ public class CloudBridge extends Plugin {
 
         ProxyServer.getInstance().getScheduler().scheduleRepeating(() -> this.network.tick(), 1);
 
+        ProcessUtils.getCpuUsage();
         cloudAPI.requestLogin();
     }
 
     public void startTasks() {
         ProxyServer.getInstance().getScheduler().scheduleRepeating(new ServerTimeoutTask(), 20);
         ProxyServer.getInstance().getScheduler().scheduleRepeating(new StatusChangeTask(), 20);
+        ProxyServer.getInstance().getScheduler().scheduleDelayedRepeating(ProcessUtils::getCpuUsage, 40, 40);
     }
 
     @Override

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InGameModuleCache {
+final public class InGameModuleCache {
 
     public final static String SIGN_MODULE = "sign_module";
     public final static String NPC_MODULE = "npc_module";

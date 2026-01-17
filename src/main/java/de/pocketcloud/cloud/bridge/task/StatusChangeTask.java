@@ -7,7 +7,7 @@ import de.pocketcloud.cloud.bridge.api.provider.TemplateProvider;
 import dev.waterdog.waterdogpe.ProxyServer;
 import dev.waterdog.waterdogpe.scheduler.Task;
 
-public class StatusChangeTask extends Task {
+final public class StatusChangeTask extends Task {
 
     @Override
     public void onRun(int i) {

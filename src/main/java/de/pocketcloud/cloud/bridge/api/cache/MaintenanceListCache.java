@@ -3,7 +3,7 @@ package de.pocketcloud.cloud.bridge.api.cache;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MaintenanceListCache {
+final public class MaintenanceListCache {
 
     private static final ArrayList<String> maintenanceList = new ArrayList<>();
 

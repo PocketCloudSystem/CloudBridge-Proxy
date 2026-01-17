@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class EventListener {
+final public class EventListener {
 
     private static final List<String> initialConnects = new ArrayList<>();
 

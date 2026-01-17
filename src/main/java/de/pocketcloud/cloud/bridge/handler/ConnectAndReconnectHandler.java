@@ -14,7 +14,7 @@ import dev.waterdog.waterdogpe.player.ProxiedPlayer;
 
 import java.util.List;
 
-public class ConnectAndReconnectHandler implements IReconnectHandler, IJoinHandler {
+final public class ConnectAndReconnectHandler implements IReconnectHandler, IJoinHandler {
 
     public ServerInfo getFallbackServer(ProxiedPlayer player, ServerInfo oldServer, ReconnectReason reason, String kickMessage) {
         return anyLobbyServer(oldServer);

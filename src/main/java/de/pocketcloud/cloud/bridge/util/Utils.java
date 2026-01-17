@@ -2,7 +2,7 @@ package de.pocketcloud.cloud.bridge.util;
 
 import java.util.Map;
 
-public class Utils {
+final public class Utils {
 
     public static double time() {
         return System.currentTimeMillis() / 1000.0;

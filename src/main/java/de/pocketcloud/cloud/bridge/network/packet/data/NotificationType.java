@@ -17,7 +17,8 @@ public enum NotificationType implements PacketData.Writable {
     PLAYER_JOINED,
     PLAYER_LEFT,
     PLAYER_JOIN_FAILED,
-    PLAYER_KICKED;
+    PLAYER_KICKED,
+    PLAYER_SWITCHED_SERVER;
 
     public boolean sendNotification(Map<String, Object> args) {
         return CloudNotificationPacket.create(this, args).sendPacket();
@@ -43,6 +44,7 @@ public enum NotificationType implements PacketData.Writable {
             case PLAYER_JOINED -> LanguageKey.INGAME_NOTIFY_MESSAGE_PLAYER_JOINED;
             case PLAYER_LEFT -> LanguageKey.INGAME_NOTIFY_MESSAGE_PLAYER_LEFT;
             case PLAYER_JOIN_FAILED -> LanguageKey.INGAME_NOTIFY_MESSAGE_PLAYER_JOIN_FAILED;
+            case PLAYER_SWITCHED_SERVER ->  LanguageKey.INGAME_NOTIFY_MESSAGE_PLAYER_SWITCHED_SERVER;
             default -> null;
         };
     }

@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CloudCommandSender extends ConsoleCommandSender {
+final public class CloudCommandSender extends ConsoleCommandSender {
 
     private final String id;
     @Getter

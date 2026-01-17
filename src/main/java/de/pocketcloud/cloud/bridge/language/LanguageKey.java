@@ -31,6 +31,7 @@ public enum LanguageKey {
     INGAME_NOTIFY_MESSAGE_PLAYER_LEFT("inGame.notify.message.player_left"),
     INGAME_NOTIFY_MESSAGE_PLAYER_JOIN_FAILED("inGame.notify.message.player_join_failed"),
     INGAME_NOTIFY_MESSAGE_PLAYER_KICKED("inGame.notify.message.player_kicked"),
+    INGAME_NOTIFY_MESSAGE_PLAYER_SWITCHED_SERVER("inGame.notify.message.player_switched_server"),
     INGAME_SERVER_VERIFIED("inGame.server.verified"),
     INGAME_SERVER_VERIFY_DENIED("inGame.server.verify.denied"),
     INGAME_SERVER_VERIFY_FAILED("inGame.server.verify.failed"),
