@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ProxyUnregisterServerPacket extends CloudPacket implements ClientboundPacket {
+public final class ProxyUnregisterServerPacket extends CloudPacket implements ClientboundPacket {
 
     private String serverName;
 
@@ -21,9 +21,6 @@ public class ProxyUnregisterServerPacket extends CloudPacket implements Clientbo
     public void handle() {
         ProxyServer.getInstance().removeServerInfo(serverName);
     }
-
-    @Override
-    public void encodePayload(PacketData packetData) {}
 
     @Override
     public void decodePayload(PacketData packetData) {

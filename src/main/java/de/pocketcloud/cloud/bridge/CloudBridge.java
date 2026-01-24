@@ -75,14 +75,14 @@ public class CloudBridge extends Plugin {
 
         ProxyServer.getInstance().getScheduler().scheduleRepeating(() -> this.network.tick(), 1);
 
-        ProcessUtils.getCpuUsage();
+        ProcessUtils.startCpuRetrieveCycle();
         cloudAPI.requestLogin();
+        ProxyServer.getInstance().getScheduler().scheduleDelayedRepeating(ProcessUtils::restartCpuRetrieveCycle, 40, 40);
     }
 
     public void startTasks() {
         ProxyServer.getInstance().getScheduler().scheduleRepeating(new ServerTimeoutTask(), 20);
         ProxyServer.getInstance().getScheduler().scheduleRepeating(new StatusChangeTask(), 20);
-        ProxyServer.getInstance().getScheduler().scheduleDelayedRepeating(ProcessUtils::getCpuUsage, 40, 40);
     }
 
     @Override

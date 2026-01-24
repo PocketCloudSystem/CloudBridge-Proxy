@@ -28,10 +28,7 @@ public final class ServerSyncPacket extends CloudPacket implements ClientboundPa
             CloudServerProvider.provider().add(server);
         }
     }
-    
-    @Override
-    public void encodePayload(PacketData packetData) {}
-    
+
     @Override
     public void decodePayload(PacketData packetData) {
         server = packetData.readServer();

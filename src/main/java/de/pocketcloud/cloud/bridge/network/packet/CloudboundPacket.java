@@ -11,5 +11,6 @@ public interface CloudboundPacket extends Packet {
     @Override
     void encodePayload(PacketData packetData);
 
+    @Override
     default void decodePayload(PacketData packetData) {}
 }

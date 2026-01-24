@@ -12,7 +12,7 @@ import java.net.InetSocketAddress;
 
 @Getter
 @NoArgsConstructor
-public class ProxyRegisterServerPacket extends CloudPacket implements ClientboundPacket {
+public final class ProxyRegisterServerPacket extends CloudPacket implements ClientboundPacket {
 
     private String serverName;
     private int port;
@@ -26,9 +26,6 @@ public class ProxyRegisterServerPacket extends CloudPacket implements Clientboun
     public void handle() {
         ProxyServer.getInstance().registerServerInfo(new BedrockServerInfo(serverName, new InetSocketAddress(port), null));
     }
-
-    @Override
-    public void encodePayload(PacketData packetData) {}
 
     @Override
     public void decodePayload(PacketData packetData) {

@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class MaintenanceListSyncPacket extends CloudPacket implements ClientboundPacket {
+public final class MaintenanceListSyncPacket extends CloudPacket implements ClientboundPacket {
 
     private List<String> maintenanceList;
 

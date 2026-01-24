@@ -30,9 +30,6 @@ public final class TemplateSyncPacket extends CloudPacket implements Clientbound
     }
 
     @Override
-    public void encodePayload(PacketData packetData) {}
-
-    @Override
     public void decodePayload(PacketData packetData) {
         template = packetData.readTemplate();
         removal = Boolean.TRUE.equals(packetData.readBool());

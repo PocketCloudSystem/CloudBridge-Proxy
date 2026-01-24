@@ -28,10 +28,7 @@ public final class ServerGroupSyncPacket extends CloudPacket implements Clientbo
             ServerGroupProvider.provider().add(group);
         }
     }
-    
-    @Override
-    public void encodePayload(PacketData packetData) {}
-    
+
     @Override
     public void decodePayload(PacketData packetData) {
         group = packetData.readServerGroup();

@@ -25,9 +25,6 @@ public final class PlayerConnectPacket extends CloudPacket implements Cloudbound
         packetData.writeAll(player);
     }
     
-    @Override
-    public void decodePayload(PacketData packetData) {}
-
     public static PlayerConnectPacket create(CloudPlayer player) {
         return new PlayerConnectPacket(player);
     }

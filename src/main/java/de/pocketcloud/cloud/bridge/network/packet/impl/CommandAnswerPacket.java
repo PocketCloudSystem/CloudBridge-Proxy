@@ -16,17 +16,14 @@ public final class CommandAnswerPacket extends CloudPacket implements Cloudbound
     public CommandAnswerPacket(ServerCommandExecutionResult commandExecutionResult) {
         this.commandExecutionResult = commandExecutionResult;
     }
-    
+
     @Override
     public void handle() {}
-    
+
     @Override
     public void encodePayload(PacketData packetData) {
         packetData.writeAll(commandExecutionResult);
     }
-    
-    @Override
-    public void decodePayload(PacketData packetData) {}
 
     public static CommandAnswerPacket create(ServerCommandExecutionResult commandExecutionResult) {
         return new CommandAnswerPacket(commandExecutionResult);

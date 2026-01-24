@@ -23,9 +23,6 @@ public final class LibrarySyncPacket extends CloudPacket implements ClientboundP
     public void handle() {}
     
     @Override
-    public void encodePayload(PacketData packetData) {}
-    
-    @Override
     public void decodePayload(PacketData packetData) {
         data = packetData.readArray();
         if (data == null) {

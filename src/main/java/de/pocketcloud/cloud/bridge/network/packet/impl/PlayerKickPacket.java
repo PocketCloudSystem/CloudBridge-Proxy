@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PlayerKickPacket extends CloudPacket implements ClientboundPacket, CloudboundPacket {
+public final class PlayerKickPacket extends CloudPacket implements ClientboundPacket, CloudboundPacket {
 
     private String player;
     private String reason;

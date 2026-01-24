@@ -57,6 +57,7 @@ public final class PacketPool {
         register(PlayerNotificationCheckResponsePacket.class, PlayerNotificationCheckResponsePacket::new);
         register(PlayerWhitelistCheckRequestPacket.class, PlayerWhitelistCheckRequestPacket::new);
         register(PlayerWhitelistCheckResponsePacket.class, PlayerWhitelistCheckResponsePacket::new);
+        register(PlayerUpdateNotificationStatePacket.class, PlayerUpdateNotificationStatePacket::new);
         register(MaintenanceListSyncPacket.class, MaintenanceListSyncPacket::new);
         register(NotificationListSyncPacket.class, NotificationListSyncPacket::new);
     }

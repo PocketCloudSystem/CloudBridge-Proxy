@@ -28,10 +28,7 @@ public final class PlayerSyncPacket extends CloudPacket implements ClientboundPa
             CloudPlayerProvider.provider().add(player);
         }
     }
-    
-    @Override
-    public void encodePayload(PacketData packetData) {}
-    
+
     @Override
     public void decodePayload(PacketData packetData) {
         player = packetData.readPlayer();

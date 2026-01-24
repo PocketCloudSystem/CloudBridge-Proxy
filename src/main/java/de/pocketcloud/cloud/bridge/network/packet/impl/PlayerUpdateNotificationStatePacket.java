@@ -8,25 +8,25 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public final class PlayerSwitchServerPacket extends CloudPacket implements CloudboundPacket {
+public final class PlayerUpdateNotificationStatePacket extends CloudPacket implements CloudboundPacket {
 
     private String player;
-    private String newServer;
+    private boolean value;
 
-    public PlayerSwitchServerPacket(String player, String newServer) {
+    public PlayerUpdateNotificationStatePacket(String player, boolean value) {
         this.player = player;
-        this.newServer = newServer;
+        this.value = value;
     }
 
     @Override
     public void encodePayload(PacketData packetData) {
-        packetData.writeAll(player, newServer);
+        packetData.writeAll(this.player, this.value);
     }
 
     @Override
     public void handle() {}
 
-    public static PlayerSwitchServerPacket create(String player, String newServer) {
-        return new PlayerSwitchServerPacket(player, newServer);
+    public static PlayerUpdateNotificationStatePacket create(String player, boolean value) {
+        return new PlayerUpdateNotificationStatePacket(player, value);
     }
 }

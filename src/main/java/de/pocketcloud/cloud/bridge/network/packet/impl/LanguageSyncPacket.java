@@ -34,9 +34,6 @@ public final class LanguageSyncPacket extends CloudPacket implements Clientbound
     public void handle() {
         Language.sync(language, messages);
     }
-    
-    @Override
-    public void encodePayload(PacketData packetData) {}
 
     @Override
     @SuppressWarnings("unchecked")
