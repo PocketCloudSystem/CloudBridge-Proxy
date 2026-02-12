@@ -60,6 +60,9 @@ public final class PacketPool {
         register(PlayerUpdateNotificationStatePacket.class, PlayerUpdateNotificationStatePacket::new);
         register(MaintenanceListSyncPacket.class, MaintenanceListSyncPacket::new);
         register(NotificationListSyncPacket.class, NotificationListSyncPacket::new);
+        register(ServerChangeStatusPacket.class, ServerChangeStatusPacket::new);
+        register(CloudSyncServerStoragePacket.class, CloudSyncServerStoragePacket::new);
+        register(ProxyPlayerTransferPacket.class, ProxyPlayerTransferPacket::new);
     }
 
     public void register(Class<? extends CloudPacket> packetClass, Supplier<CloudPacket> supplier) {

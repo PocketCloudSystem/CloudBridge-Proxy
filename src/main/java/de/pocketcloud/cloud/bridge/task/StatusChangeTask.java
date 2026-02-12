@@ -13,10 +13,10 @@ final public class StatusChangeTask extends Task {
     public void onRun(int i) {
         if (CloudServerProvider.provider().current().getServerStatus() == ServerStatus.IN_GAME || CloudServerProvider.provider().current().getServerStatus() == ServerStatus.STOPPING) return;
         if (ProxyServer.getInstance().getPlayers().size() >= TemplateProvider.provider().current().getMaxPlayerCount()) {
-            // Set to FULL
+            CloudServerProvider.provider().current().setServerStatus(ServerStatus.FULL);
         } else {
             if (CloudServerProvider.provider().current().getServerStatus() == ServerStatus.FULL) {
-                // Set to ONLINE
+                CloudServerProvider.provider().current().setServerStatus(ServerStatus.ONLINE);
             }
         }
     }

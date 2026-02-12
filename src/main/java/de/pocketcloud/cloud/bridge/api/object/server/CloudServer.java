@@ -8,6 +8,7 @@ import de.pocketcloud.cloud.bridge.api.object.server.util.ServerStatus;
 import de.pocketcloud.cloud.bridge.api.object.template.Template;
 import de.pocketcloud.cloud.bridge.api.provider.CloudPlayerProvider;
 import de.pocketcloud.cloud.bridge.api.provider.TemplateProvider;
+import de.pocketcloud.cloud.bridge.network.packet.impl.ServerChangeStatusPacket;
 import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
 import de.pocketcloud.cloud.bridge.util.Utils;
 import lombok.Getter;
@@ -28,7 +29,6 @@ public final class CloudServer implements PacketData.Writable {
     @Getter
     private final CloudServerData serverData;
     @Getter
-    @Setter
     private ServerStatus serverStatus;
     @Getter
     private CloudServerStorage serverStorage;
@@ -53,6 +53,11 @@ public final class CloudServer implements PacketData.Writable {
             Map<String, Object> storage = (Map<String, Object>) data.get("internalStorage");
             this.serverStorage.sync(storage);
         }
+    }
+
+    public boolean setServerStatus(ServerStatus serverStatus) {
+        this.serverStatus = serverStatus;
+        return ServerChangeStatusPacket.create(this.serverUuid, serverStatus).sendPacket();
     }
 
     public CloudPlayer getPlayer(String identifier) {

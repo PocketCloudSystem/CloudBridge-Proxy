@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PlayerNotificationCheckResponsePacket extends ResponsePacket {
+public final class PlayerNotificationCheckResponsePacket extends ResponsePacket {
     
     private boolean enabled;
     

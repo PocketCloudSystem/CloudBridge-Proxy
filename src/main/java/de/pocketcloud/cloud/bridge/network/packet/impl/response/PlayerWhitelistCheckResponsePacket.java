@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PlayerWhitelistCheckResponsePacket extends ResponsePacket {
+public final class PlayerWhitelistCheckResponsePacket extends ResponsePacket {
 
     private boolean whitelisted;
 

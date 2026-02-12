@@ -1,6 +1,7 @@
 package de.pocketcloud.cloud.bridge.api.object.server.data;
 
 import de.pocketcloud.cloud.bridge.api.object.server.CloudServer;
+import de.pocketcloud.cloud.bridge.network.packet.impl.CloudSyncServerStoragePacket;
 import de.pocketcloud.cloud.bridge.util.CloudEnvironmentConfig;
 
 import java.util.HashMap;
@@ -22,7 +23,7 @@ public final class CloudServerStorage {
 
     private void outgoingSync() {
         if (!server.getName().equals(CloudEnvironmentConfig.getServerName())) throw new RuntimeException("You are not allowed to edit other servers server storage");
-        // TODO: CloudSyncStoragesPacket.create().broadcastPacket();
+        CloudSyncServerStoragePacket.create(storage).sendPacket();
     }
 
     public CloudServerStorage set(String key, Object value) {

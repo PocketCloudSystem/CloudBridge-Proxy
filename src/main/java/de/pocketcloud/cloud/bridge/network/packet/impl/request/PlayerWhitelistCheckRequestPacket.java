@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PlayerWhitelistCheckRequestPacket extends RequestPacket {
+public final class PlayerWhitelistCheckRequestPacket extends RequestPacket {
 
     private String player;
 
