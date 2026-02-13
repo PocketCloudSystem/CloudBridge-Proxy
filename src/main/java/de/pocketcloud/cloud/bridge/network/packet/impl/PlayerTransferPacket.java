@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public final class ProxyPlayerTransferPacket extends CloudPacket implements ClientboundPacket {
+public final class PlayerTransferPacket extends CloudPacket implements ClientboundPacket {
 
     private String player;
     private String server;
 
-    public ProxyPlayerTransferPacket(String player, String server) {
+    public PlayerTransferPacket(String player, String server) {
         this.player = player;
         this.server = server;
     }
@@ -36,7 +36,7 @@ public final class ProxyPlayerTransferPacket extends CloudPacket implements Clie
         server = packetData.readString();
     }
 
-    public static ProxyPlayerTransferPacket create(String player, String server) {
-        return new ProxyPlayerTransferPacket(player, server);
+    public static PlayerTransferPacket create(String player, String server) {
+        return new PlayerTransferPacket(player, server);
     }
 }
