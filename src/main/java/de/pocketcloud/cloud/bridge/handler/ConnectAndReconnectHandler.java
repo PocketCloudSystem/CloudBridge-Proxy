@@ -17,7 +17,10 @@ import java.util.List;
 final public class ConnectAndReconnectHandler implements IReconnectHandler, IJoinHandler {
 
     public ServerInfo getFallbackServer(ProxiedPlayer player, ServerInfo oldServer, ReconnectReason reason, String kickMessage) {
-        return anyLobbyServer(oldServer);
+        if (reason == ReconnectReason.EXCEPTION || reason == ReconnectReason.TIMEOUT || reason == ReconnectReason.TRANSFER_FAILED) {
+            return anyLobbyServer(oldServer);
+        }
+        return null;
     }
 
     @Override
