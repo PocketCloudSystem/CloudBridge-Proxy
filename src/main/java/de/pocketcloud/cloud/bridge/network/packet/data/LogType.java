@@ -22,7 +22,7 @@ public enum LogType implements PacketData.Writable {
     public static LogType fromName(String name) {
         if (name == null) return null;
         try {
-            return valueOf(name);
+            return valueOf(name.toUpperCase());
         } catch (IllegalArgumentException e) {
             return null;
         }

@@ -20,7 +20,7 @@ public enum VerifyStatus implements PacketData.Writable {
     public static VerifyStatus fromName(String name) {
         if (name == null) return null;
         try {
-            return valueOf(name);
+            return valueOf(name.toUpperCase());
         } catch (IllegalArgumentException e) {
             return null;
         }
