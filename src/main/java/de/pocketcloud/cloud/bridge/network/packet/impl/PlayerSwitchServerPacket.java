@@ -19,12 +19,12 @@ public final class PlayerSwitchServerPacket extends CloudPacket implements Cloud
     }
 
     @Override
+    public void handle() {}
+
+    @Override
     public void encodePayload(PacketData packetData) {
         packetData.writeAll(player, newServer);
     }
-
-    @Override
-    public void handle() {}
 
     public static PlayerSwitchServerPacket create(String player, String newServer) {
         return new PlayerSwitchServerPacket(player, newServer);
