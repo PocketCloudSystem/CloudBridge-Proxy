@@ -118,7 +118,7 @@ public final class CloudServer implements PacketData.Writable {
             String name = (String) data.get("name");
             int port = ((Number) data.get("port")).intValue();
             int maxPlayers = ((Number) data.get("maxPlayers")).intValue();
-            Integer processId = data.containsKey("processId") ? 
+            Integer processId = data.containsKey("processId") && data.get("proccessId") != null ?
                 ((Number) data.get("processId")).intValue() : null;
             ServerStatus status = ServerStatus.fromName((String) data.get("serverStatus"));
 

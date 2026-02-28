@@ -94,8 +94,8 @@ public final class CloudPlayer implements PacketData.Writable {
                 (String) data.get("address"),
                 (String) data.get("xboxUserId"),
                 (String) data.get("uniqueId"),
-                (String) data.get("currentServer"),
-                (String) data.get("currentProxy")
+                data.get("currentServer") == null ? null : (String) data.get("currentServer"),
+                data.get("currentProxy") == null ? null : (String) data.get("currentProxy")
             );
         } catch (ClassCastException e) {
             CloudBridge.getInstance().getLogger().error(e);
