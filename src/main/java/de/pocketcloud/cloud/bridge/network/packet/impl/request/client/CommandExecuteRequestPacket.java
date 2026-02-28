@@ -1,9 +1,10 @@
-package de.pocketcloud.cloud.bridge.network.packet.impl;
+package de.pocketcloud.cloud.bridge.network.packet.impl.request.client;
 
 import de.pocketcloud.cloud.bridge.command.sender.CloudCommandSender;
 import de.pocketcloud.cloud.bridge.network.packet.ClientboundPacket;
-import de.pocketcloud.cloud.bridge.network.packet.CloudPacket;
+import de.pocketcloud.cloud.bridge.network.packet.RequestClientPacket;
 import de.pocketcloud.cloud.bridge.network.packet.data.ServerCommandExecutionResult;
+import de.pocketcloud.cloud.bridge.network.packet.impl.response.client.CommandExecuteResponsePacket;
 import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
 import dev.waterdog.waterdogpe.ProxyServer;
 import lombok.Getter;
@@ -11,12 +12,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public final class CommandExecutePacket extends CloudPacket implements ClientboundPacket {
+public final class CommandExecuteRequestPacket extends RequestClientPacket implements ClientboundPacket {
     
     private String commandLine;
     private String id;
     
-    public CommandExecutePacket(String commandLine, String id) {
+    public CommandExecuteRequestPacket(String commandLine, String id) {
         this.commandLine = commandLine;
         this.id = id;
     }
@@ -25,19 +26,16 @@ public final class CommandExecutePacket extends CloudPacket implements Clientbou
     public void handle() {
         CloudCommandSender sender = new CloudCommandSender(id, ProxyServer.getInstance());
         ProxyServer.getInstance().dispatchCommand(sender, commandLine);
-        CommandAnswerPacket.create(new ServerCommandExecutionResult(id, commandLine, sender.getCachedMessages())).sendPacket();
+        sendResponse(CommandExecuteResponsePacket.create(new ServerCommandExecutionResult(id, commandLine, sender.getCachedMessages())));
     }
-    
-    @Override
-    public void encodePayload(PacketData packetData) {}
-    
+
     @Override
     public void decodePayload(PacketData packetData) {
         commandLine = packetData.readString();
         id = packetData.readString();
     }
 
-    public static CommandExecutePacket create(String commandLine, String id) {
-        return new CommandExecutePacket(commandLine, id);
+    public static CommandExecuteRequestPacket create(String commandLine, String id) {
+        return new CommandExecuteRequestPacket(commandLine, id);
     }
 }

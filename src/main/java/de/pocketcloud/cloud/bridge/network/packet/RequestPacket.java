@@ -1,6 +1,7 @@
 package de.pocketcloud.cloud.bridge.network.packet;
 
 import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.cloud.bridge.network.request.RequestManager;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -9,6 +10,10 @@ import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.BiConsumer;
 
+/**
+ * The normal request packet sent from sub-servers to the cloud, which will answer through regular ResponsePacket
+ * @see ResponsePacket
+ */
 public abstract class RequestPacket extends CloudPacket implements CloudboundPacket {
     
     @Getter
@@ -22,20 +27,24 @@ public abstract class RequestPacket extends CloudPacket implements CloudboundPac
     }
     
     @Override
-    public void encode(PacketData packetData) {
+    final public void encode(PacketData packetData) {
         super.encode(packetData);
         packetData.write(requestId);
     }
     
     @Override
-    public void decode(PacketData packetData) {
+    final public void decode(PacketData packetData) {
         super.decode(packetData);
         requestId = packetData.readString();
     }
 
     @Override
-    public void decodePayload(PacketData packetData) {
-        CloudboundPacket.super.decodePayload(packetData);
+    final public boolean sendPacket() {
+        throw new RuntimeException("Use sendRequest() instead of sendPacket()");
+    }
+
+    public RequestPacket sendRequest() {
+        return RequestManager.getInstance().send(this);
     }
 
     public final void invokeCallbacks(boolean failed, ResponsePacket responsePacket, Exception exception) {

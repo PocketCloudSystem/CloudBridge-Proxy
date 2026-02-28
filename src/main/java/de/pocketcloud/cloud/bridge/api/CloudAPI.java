@@ -37,7 +37,7 @@ public final class CloudAPI {
         int processId = (int) ProcessHandle.current().pid();
         int maxPlayers = ProxyServer.getInstance().getConfiguration().getMaxPlayerCount();
 
-         ServerHandshakeRequestPacket.makeRequest(serverName, processId, maxPlayers)
+         ServerHandshakeRequestPacket.create(serverName, processId, maxPlayers).sendRequest()
              .then((response, value) -> {
                  ServerHandshakeResponsePacket packet = (ServerHandshakeResponsePacket) response;
                  VerifyStatus status = packet.getVerifyStatus();

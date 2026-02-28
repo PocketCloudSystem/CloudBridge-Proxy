@@ -4,9 +4,11 @@ import de.pocketcloud.cloud.bridge.network.packet.impl.*;
 import de.pocketcloud.cloud.bridge.network.packet.impl.request.PlayerNotificationCheckRequestPacket;
 import de.pocketcloud.cloud.bridge.network.packet.impl.request.PlayerWhitelistCheckRequestPacket;
 import de.pocketcloud.cloud.bridge.network.packet.impl.request.ServerHandshakeRequestPacket;
+import de.pocketcloud.cloud.bridge.network.packet.impl.request.client.CommandExecuteRequestPacket;
 import de.pocketcloud.cloud.bridge.network.packet.impl.response.PlayerNotificationCheckResponsePacket;
 import de.pocketcloud.cloud.bridge.network.packet.impl.response.PlayerWhitelistCheckResponsePacket;
 import de.pocketcloud.cloud.bridge.network.packet.impl.response.ServerHandshakeResponsePacket;
+import de.pocketcloud.cloud.bridge.network.packet.impl.response.client.CommandExecuteResponsePacket;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,8 +40,8 @@ public final class PacketPool {
         register(DisconnectPacket.class, DisconnectPacket::new);
         register(CloudNotificationPacket.class, CloudNotificationPacket::new);
         register(KeepAlivePacket.class, KeepAlivePacket::new);
-        register(CommandExecutePacket.class, CommandExecutePacket::new);
-        register(CommandAnswerPacket.class, CommandAnswerPacket::new);
+        register(CommandExecuteRequestPacket.class, CommandExecuteRequestPacket::new);
+        register(CommandExecuteResponsePacket.class, CommandExecuteResponsePacket::new);
         register(LanguageSyncPacket.class, LanguageSyncPacket::new);
         register(LibrarySyncPacket.class, LibrarySyncPacket::new);
         register(ModuleSyncPacket.class, ModuleSyncPacket::new);

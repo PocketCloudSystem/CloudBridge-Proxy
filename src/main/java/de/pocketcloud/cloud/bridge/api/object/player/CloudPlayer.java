@@ -2,6 +2,9 @@ package de.pocketcloud.cloud.bridge.api.object.player;
 
 import de.pocketcloud.cloud.bridge.CloudBridge;
 import de.pocketcloud.cloud.bridge.api.object.server.CloudServer;
+import de.pocketcloud.cloud.bridge.network.packet.data.TextType;
+import de.pocketcloud.cloud.bridge.network.packet.impl.PlayerKickPacket;
+import de.pocketcloud.cloud.bridge.network.packet.impl.PlayerTextPacket;
 import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
 import de.pocketcloud.cloud.bridge.api.provider.CloudServerProvider;
 import de.pocketcloud.cloud.bridge.util.Utils;
@@ -40,6 +43,46 @@ public final class CloudPlayer implements PacketData.Writable {
         if (data.containsKey("currentProxy")) {
             this.currentProxy = (String) data.get("currentProxy");
         }
+    }
+
+    public boolean send(String message, TextType textType) {
+        return PlayerTextPacket.create(name, message, textType).sendPacket();
+    }
+
+    public boolean sendMessage(String message) {
+        return send(message, TextType.MESSAGE);
+    }
+
+    public boolean sendPopup(String message) {
+        return send(message, TextType.POPUP);
+    }
+
+    public boolean sendTip(String message) {
+        return send(message, TextType.TIP);
+    }
+
+    public boolean sendTitle(String message) {
+        return send(message, TextType.TITLE);
+    }
+
+    public boolean sendActionBarMessage(String message) {
+        return send(message, TextType.ACTION_BAR);
+    }
+
+    public boolean sendToastNotification(String title, String body) {
+        return send(title + "\n" + body, TextType.TOAST_NOTIFICATION);
+    }
+
+    public boolean kick() {
+        return kick("", "");
+    }
+
+    public boolean kick(String reason) {
+        return kick(reason, "");
+    }
+
+    public boolean kick(String reason, String disconnectScreenMessage) {
+        return PlayerKickPacket.create(name, reason, disconnectScreenMessage).sendPacket();
     }
 
     public void setCurrentServer(String currentServer) {
