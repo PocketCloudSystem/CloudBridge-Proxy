@@ -7,7 +7,8 @@ public enum ServerErrorReason implements PacketData.Writable {
     NO_ERROR,
     TEMPLATE_EXISTENCE,
     MAX_SERVERS,
-    SERVER_EXISTENCE;
+    SERVER_EXISTENCE,
+    REQUEST_TIMEOUT;
     
     public String getName() {
         return name();

@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Getter
 @NoArgsConstructor
-public class CloudSyncServerStoragePacket extends CloudPacket implements CloudboundPacket {
+final public class CloudSyncServerStoragePacket extends CloudPacket implements CloudboundPacket {
 
     private Map<String, Object> data;
 

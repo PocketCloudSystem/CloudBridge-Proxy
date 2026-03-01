@@ -27,6 +27,9 @@ public abstract class RequestClientPacket extends CloudPacket implements Clientb
         requestId = packetData.readString();
     }
 
+    @Override
+    final public void encodePayload(PacketData packetData) {}
+
     public boolean sendResponse(ResponseClientPacket packet) {
         return Network.getInstance().sendPacket(packet.setRequestId(requestId));
     }

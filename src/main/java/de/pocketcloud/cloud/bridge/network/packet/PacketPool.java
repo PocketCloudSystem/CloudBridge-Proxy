@@ -1,13 +1,9 @@
 package de.pocketcloud.cloud.bridge.network.packet;
 
 import de.pocketcloud.cloud.bridge.network.packet.impl.*;
-import de.pocketcloud.cloud.bridge.network.packet.impl.request.PlayerNotificationCheckRequestPacket;
-import de.pocketcloud.cloud.bridge.network.packet.impl.request.PlayerWhitelistCheckRequestPacket;
-import de.pocketcloud.cloud.bridge.network.packet.impl.request.ServerHandshakeRequestPacket;
+import de.pocketcloud.cloud.bridge.network.packet.impl.request.*;
 import de.pocketcloud.cloud.bridge.network.packet.impl.request.client.CommandExecuteRequestPacket;
-import de.pocketcloud.cloud.bridge.network.packet.impl.response.PlayerNotificationCheckResponsePacket;
-import de.pocketcloud.cloud.bridge.network.packet.impl.response.PlayerWhitelistCheckResponsePacket;
-import de.pocketcloud.cloud.bridge.network.packet.impl.response.ServerHandshakeResponsePacket;
+import de.pocketcloud.cloud.bridge.network.packet.impl.response.*;
 import de.pocketcloud.cloud.bridge.network.packet.impl.response.client.CommandExecuteResponsePacket;
 
 import java.util.HashMap;
@@ -66,6 +62,12 @@ public final class PacketPool {
         register(CloudSyncServerStoragePacket.class, CloudSyncServerStoragePacket::new);
         register(PlayerTransferPacket.class, PlayerTransferPacket::new);
         register(PlayerTextPacket.class, PlayerTextPacket::new);
+        register(ServerStartRequestPacket.class, ServerStartRequestPacket::new);
+        register(ServerStartResponsePacket.class, ServerStartResponsePacket::new);
+        register(ServerStopRequestPacket.class, ServerStopRequestPacket::new);
+        register(ServerStopResponsePacket.class, ServerStopResponsePacket::new);
+        register(ServerSaveRequestPacket.class, ServerSaveRequestPacket::new);
+        register(ServerSaveResponsePacket.class, ServerSaveResponsePacket::new);
     }
 
     public void register(Class<? extends CloudPacket> packetClass, Supplier<CloudPacket> supplier) {

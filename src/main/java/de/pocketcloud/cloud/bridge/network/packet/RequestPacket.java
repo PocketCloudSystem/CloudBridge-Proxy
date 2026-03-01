@@ -39,6 +39,9 @@ public abstract class RequestPacket extends CloudPacket implements CloudboundPac
     }
 
     @Override
+    final public void decodePayload(PacketData packetData) {}
+
+    @Override
     final public boolean sendPacket() {
         throw new RuntimeException("Use sendRequest() instead of sendPacket()");
     }

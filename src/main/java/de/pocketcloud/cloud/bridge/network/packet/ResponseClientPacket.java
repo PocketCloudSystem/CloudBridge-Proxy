@@ -3,8 +3,10 @@ package de.pocketcloud.cloud.bridge.network.packet;
 import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
 
 /**
- * The normal response packet sent to sub-servers from the cloud after the sub-servers sent a request via RequestPacket
- * @see RequestPacket
+ * A different version from the regular ResponsePacket
+ * This logic is reversed, means the sub-servers sends this ResponseClientPacket in response to the RequestClientPacket
+ * @see RequestClientPacket
+ * @see ResponseClientPacket
  */
 public abstract class ResponseClientPacket extends CloudPacket implements CloudboundPacket {
 
@@ -21,6 +23,9 @@ public abstract class ResponseClientPacket extends CloudPacket implements Cloudb
         super.decode(packetData);
         requestId = packetData.readString();
     }
+
+    @Override
+    final public void decodePayload(PacketData packetData) {}
 
     public ResponseClientPacket setRequestId(String requestId) {
         this.requestId = requestId;

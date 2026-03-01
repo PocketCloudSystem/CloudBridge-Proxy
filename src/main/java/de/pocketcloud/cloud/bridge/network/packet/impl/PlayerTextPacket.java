@@ -15,7 +15,7 @@ import java.util.Arrays;
 
 @Getter
 @NoArgsConstructor
-public class PlayerTextPacket extends CloudPacket implements ClientboundPacket, CloudboundPacket {
+final public class PlayerTextPacket extends CloudPacket implements ClientboundPacket, CloudboundPacket {
 
     private String player;
     private String text;
