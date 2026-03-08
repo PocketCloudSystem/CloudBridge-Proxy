@@ -24,6 +24,7 @@ public final class ProxyRegisterServerPacket extends CloudPacket implements Clie
 
     @Override
     public void handle() {
+        if (ProxyServer.getInstance().getServerInfo(serverName) != null) ProxyServer.getInstance().removeServerInfo(serverName);
         ProxyServer.getInstance().registerServerInfo(new BedrockServerInfo(serverName, new InetSocketAddress(port), null));
     }
 
