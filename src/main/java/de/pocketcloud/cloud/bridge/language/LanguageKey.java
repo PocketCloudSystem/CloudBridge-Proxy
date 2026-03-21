@@ -79,6 +79,7 @@ public enum LanguageKey {
     INGAME_SKIN_MODEL_REMOVED("inGame.skin_model.removed"),
     INGAME_SKIN_MODEL_FAILED("inGame.skin_model.failed"),
     INGAME_SKIN_MODEL_EXISTS("inGame.skin_model.exists"),
+    INGAME_PROXY_STOPPED("inGame.proxy.stopped"),
     INGAME_UI_GENERAL_SELECTION_TITLE("inGame.ui.general.selection.title"),
     INGAME_UI_GENERAL_SELECTION_TEXT("inGame.ui.general.selection.text"),
     INGAME_UI_GENERAL_SELECTION_OPTION_NAME("inGame.ui.general.selection.option.name"),
@@ -88,6 +89,7 @@ public enum LanguageKey {
     INGAME_UI_CLOUD_MAIN_BUTTON_MANAGE_SERVER("inGame.ui.cloud.main.button.manage_server"),
     INGAME_UI_CLOUD_MAIN_BUTTON_MANAGE_PLAYER("inGame.ui.cloud.main.button.manage_player"),
     INGAME_UI_CLOUD_MAIN_BUTTON_MANAGE_MODULE("inGame.ui.cloud.main.button.manage_module"),
+    INGAME_UI_CLOUD_MAIN_BUTTON_MANAGE_TEMPLATE("inGame.ui.cloud.main.button.manage_template"),
     INGAME_UI_CLOUD_MAIN_BUTTON_SAVE_SERVER("inGame.ui.cloud.main.button.save_server"),
     INGAME_UI_CLOUD_MAIN_BUTTON_CLOUD_LOG_CONSOLE("inGame.ui.cloud.main.button.cloud_log_console"),
     INGAME_UI_CLOUD_LOG_CONSOLE_TITLE("inGame.ui.cloud_log_console.title"),
@@ -140,6 +142,12 @@ public enum LanguageKey {
     INGAME_UI_MANAGE_SERVER_SUB_INFO_TITLE("inGame.ui.manage_server.sub.info.title"),
     INGAME_UI_MANAGE_SERVER_SUB_INFO_NAME_TEXT("inGame.ui.manage_server.sub.info.name.text"),
     INGAME_UI_MANAGE_SERVER_SUB_INFO_DROPDOWN_TEXT("inGame.ui.manage_server.sub.info.dropdown.text"),
+    INGAME_UI_MANAGE_TEMPLATE_TITLE("inGame.ui.manage_template.title"),
+    INGAME_UI_MANAGE_TEMPLATE_BUTTON_INFO("inGame.ui.manage_template.button.info"),
+    INGAME_UI_MANAGE_TEMPLATE_BUTTON_LIST("inGame.ui.manage_template.button.list"),
+    INGAME_UI_MANAGE_TEMPLATE_SUB_INFO_TITLE("inGame.ui.manage_template.sub.info.title"),
+    INGAME_UI_MANAGE_TEMPLATE_SUB_INFO_DROPDOWN_TEXT("inGame.ui.manage_template.sub.info.dropdown.text"),
+    INGAME_KICK_SUCCESSFUL("inGame.kick.successful"),
     INGAME_UI_CLOUDNPC_MAIN_TITLE("inGame.ui.cloudnpc.main.title"),
     INGAME_UI_CLOUDNPC_MAIN_TEXT("inGame.ui.cloudnpc.main.text"),
     INGAME_UI_CLOUDNPC_MAIN_BUTTON_CREATE("inGame.ui.cloudnpc.main.button.create"),
@@ -203,8 +211,7 @@ public enum LanguageKey {
     INGAME_UI_SKIN_MODEL_EDIT_TITLE("inGame.ui.skin_model.edit.title"),
     INGAME_UI_SKIN_MODEL_EDIT_ELEMENT_SKIN_FILE_TEXT("inGame.ui.skin_model.edit.element.skin_file.text"),
     INGAME_UI_SKIN_MODEL_EDIT_ELEMENT_GEO_NAME_TEXT("inGame.ui.skin_model.edit.element.geo_name.text"),
-    INGAME_UI_SKIN_MODEL_EDIT_ELEMENT_GEO_FILE_TEXT("inGame.ui.skin_model.edit.element.geo_file.text"),
-    INGAME_PROXY_STOPPED("inGame.proxy.stopped");
+    INGAME_UI_SKIN_MODEL_EDIT_ELEMENT_GEO_FILE_TEXT("inGame.ui.skin_model.edit.element.geo_file.text");
 
     private final String langKey;
 
