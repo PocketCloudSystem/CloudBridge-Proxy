@@ -68,6 +68,7 @@ public final class PacketPool {
         register(ServerStopResponsePacket.class, ServerStopResponsePacket::new);
         register(ServerSaveRequestPacket.class, ServerSaveRequestPacket::new);
         register(ServerSaveResponsePacket.class, ServerSaveResponsePacket::new);
+        register(ConsoleLogPacket.class, ConsoleLogPacket::new);
     }
 
     public void register(Class<? extends CloudPacket> packetClass, Supplier<CloudPacket> supplier) {
