@@ -4,7 +4,7 @@ import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
 
 public enum ServerErrorReason implements PacketData.Writable {
 
-    NO_ERROR,
+    NONE,
     TEMPLATE_EXISTENCE,
     MAX_SERVERS,
     SERVER_EXISTENCE,
