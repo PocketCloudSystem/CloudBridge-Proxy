@@ -11,6 +11,7 @@ import de.pocketcloud.cloud.bridge.network.util.Address;
 import de.pocketcloud.cloud.bridge.task.RequestTimeoutTask;
 import de.pocketcloud.cloud.bridge.task.ServerTimeoutTask;
 import de.pocketcloud.cloud.bridge.task.StatusChangeTask;
+import de.pocketcloud.cloud.bridge.traffic.TrafficMonitorManager;
 import de.pocketcloud.cloud.bridge.util.CloudEnvironmentConfig;
 import de.pocketcloud.cloud.bridge.util.ProcessUtils;
 import dev.waterdog.waterdogpe.ProxyServer;
@@ -40,6 +41,8 @@ public class CloudBridge extends Plugin {
     private CloudAPI cloudAPI;
     @Getter
     private Network network;
+    @Getter
+    private TrafficMonitorManager trafficMonitorManager;
 
     @Override
     public void onStartup() {
@@ -50,6 +53,7 @@ public class CloudBridge extends Plugin {
 
         this.cloudAPI = new CloudAPI();
         this.network = new Network(Address.create(CloudEnvironmentConfig.getNetworkAddress(), CloudEnvironmentConfig.getNetworkPort()));
+        this.trafficMonitorManager = new TrafficMonitorManager();
     }
 
     @Override
@@ -73,7 +77,10 @@ public class CloudBridge extends Plugin {
         ProxyServer.getInstance().getEventManager().subscribe(ServerTransferEvent.class, EventListener::onServerSwitch);
         ProxyServer.getInstance().getEventManager().subscribe(InitialServerDeterminedEvent.class, EventListener::onInitialServerDetermined);
 
-        ProxyServer.getInstance().getScheduler().scheduleRepeating(() -> this.network.tick(), 1);
+        ProxyServer.getInstance().getScheduler().scheduleRepeating(() -> {
+            this.network.tick();
+            this.trafficMonitorManager.tick(ProxyServer.getInstance().getCurrentTick());
+        }, 1);
 
         ProcessUtils.startCpuRetrieveCycle();
         cloudAPI.requestLogin();

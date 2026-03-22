@@ -1,6 +1,7 @@
 package de.pocketcloud.cloud.bridge.network;
 
 import de.pocketcloud.cloud.bridge.CloudBridge;
+import de.pocketcloud.cloud.bridge.event.network.*;
 import de.pocketcloud.cloud.bridge.network.packet.CloudboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.PacketPool;
 import de.pocketcloud.cloud.bridge.network.packet.ResponsePacket;
@@ -8,7 +9,12 @@ import de.pocketcloud.cloud.bridge.network.packet.UnhandledPacket;
 import de.pocketcloud.cloud.bridge.network.packet.util.PacketSerializer;
 import de.pocketcloud.cloud.bridge.network.request.RequestManager;
 import de.pocketcloud.cloud.bridge.network.util.Address;
+import de.pocketcloud.cloud.bridge.traffic.TrafficMonitor;
+import de.pocketcloud.cloud.bridge.traffic.TrafficMonitorManager;
+import de.pocketcloud.cloud.bridge.traffic.impl.NetworkTrafficMonitor;
 import de.pocketcloud.cloud.bridge.util.CloudEnvironmentConfig;
+import dev.waterdog.waterdogpe.ProxyServer;
+import dev.waterdog.waterdogpe.event.EventManager;
 import lombok.Getter;
 
 import java.io.IOException;
@@ -19,6 +25,7 @@ import java.nio.channels.ClosedSelectorException;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -129,11 +136,31 @@ public final class Network extends Thread {
         UnhandledPacket unhandledPacket;
         while ((unhandledPacket = buffer.poll()) != null) {
             if (!connected.get()) return;
-            
+
+            TrafficMonitorManager.getInstance().pushBytes(TrafficMonitorManager.TRAFFIC_NETWORK, unhandledPacket.bytes(), TrafficMonitor.REGULAR_MODE_IN);
+            TrafficMonitorManager.getInstance().callHandlers(
+                    TrafficMonitorManager.TRAFFIC_NETWORK,
+                    TrafficMonitor.REGULAR_MODE_IN,
+                    unhandledPacket.buffer(), unhandledPacket.bytes(), unhandledPacket.address()
+            );
+
+            NetworkPacketReceivePreProcessEvent networkPacketReceivePreProcessEvent = new NetworkPacketReceivePreProcessEvent(this, unhandledPacket.address(), new String(unhandledPacket.buffer(), StandardCharsets.UTF_8), encryptionEnabled);
+            ProxyServer.getInstance().getEventManager().callEvent(networkPacketReceivePreProcessEvent);
+            if (networkPacketReceivePreProcessEvent.isCancelled()) return;
+
             try {
                 var packet = unhandledPacket.buildCloudPacket(encryptionEnabled, authenticationKey);
-                
                 if (packet != null) {
+                    TrafficMonitorManager.getInstance().callHandlers(
+                            TrafficMonitorManager.TRAFFIC_NETWORK,
+                            NetworkTrafficMonitor.parsePacketMode(NetworkTrafficMonitor.NETWORK_MODE_PACKET_IN, packet.getClass()),
+                            packet, unhandledPacket.address()
+                    );
+
+                    NetworkPacketReceiveEvent networkPacketReceiveEvent = new NetworkPacketReceiveEvent(this, unhandledPacket.address(), packet);
+                    ProxyServer.getInstance().getEventManager().callEvent(networkPacketReceiveEvent);
+                    if (networkPacketReceiveEvent.isCancelled()) return;
+
                     packet.handle();
                     
                     if (packet instanceof ResponsePacket responsePacket) {
@@ -146,7 +173,6 @@ public final class Network extends Thread {
             } catch (Exception e) {
                 CloudBridge.getInstance().getLogger().error("Failed to handle packet from {}!", unhandledPacket.address());
                 CloudBridge.getInstance().getLogger().error(e);
-                e.printStackTrace();
             }
         }
     }
@@ -154,17 +180,41 @@ public final class Network extends Thread {
     public boolean sendPacket(CloudboundPacket packet) {
         if (!connected.get()) return false;
 
+        NetworkPacketPreSendEvent networkPacketPreSendEvent = new NetworkPacketPreSendEvent(this, address, packet);
+        ProxyServer.getInstance().getEventManager().callEvent(networkPacketPreSendEvent);
+        if (networkPacketPreSendEvent.isCancelled()) return false;
+
         byte[] encodedData = PacketSerializer.encode(packet, encryptionEnabled, authenticationKey);
         if (encodedData == null) return false;
+        String encodedDataAsString = new String(encodedData, StandardCharsets.UTF_8);
 
         try {
             ByteBuffer buffer = ByteBuffer.wrap(encodedData);
             channel.write(buffer);
+
+            TrafficMonitorManager.getInstance().pushBytes(TrafficMonitorManager.TRAFFIC_NETWORK, encodedDataAsString.length(), TrafficMonitor.REGULAR_MODE_OUT);
+            TrafficMonitorManager.getInstance().callHandlers(
+                    TrafficMonitorManager.TRAFFIC_NETWORK,
+                    NetworkTrafficMonitor.parsePacketMode(NetworkTrafficMonitor.NETWORK_MODE_PACKET_OUT, packet.getClass()),
+                    encodedDataAsString, encodedDataAsString.length(), address
+            );
+
+            if (encodedDataAsString.length() > 65507) {
+                ProxyServer.getInstance().getEventManager().callEvent(new NetworkPacketTooLargeEvent(this, address, packet, encodedDataAsString.length(), encodedDataAsString));
+                return false;
+            }
+
+            TrafficMonitorManager.getInstance().callHandlers(
+                    TrafficMonitorManager.TRAFFIC_NETWORK,
+                    NetworkTrafficMonitor.parsePacketMode(NetworkTrafficMonitor.NETWORK_MODE_PACKET_OUT, packet.getClass()),
+                    packet, address, true
+            );
+
+            ProxyServer.getInstance().getEventManager().callEvent(new NetworkPacketSentEvent(this, address, packet, true));
             return true;
         } catch (IOException e) {
             CloudBridge.getInstance().getLogger().error("Failed to send packet {}: {}", packet.getName(), e.getMessage());
             CloudBridge.getInstance().getLogger().error(e);
-            e.printStackTrace();
             return false;
         }
     }
@@ -174,6 +224,8 @@ public final class Network extends Thread {
 
         running.set(false);
         connected.set(false);
+
+        ProxyServer.getInstance().getEventManager().callEvent(new NetworkCloseEvent(this));
 
         try {
             if (channel != null && channel.isOpen()) channel.close();
