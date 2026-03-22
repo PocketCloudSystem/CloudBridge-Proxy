@@ -17,7 +17,6 @@ import java.util.List;
 final public class ConnectAndReconnectHandler implements IReconnectHandler, IJoinHandler {
 
     public ServerInfo getFallbackServer(ProxiedPlayer player, ServerInfo oldServer, ReconnectReason reason, String kickMessage) {
-        CloudAPI.get().logConsole("reason: " + reason.getName());
         if (reason != ReconnectReason.UNKNOWN) {
             if (reason == ReconnectReason.SERVER_KICK) {
                 if (kickMessage != null) {
