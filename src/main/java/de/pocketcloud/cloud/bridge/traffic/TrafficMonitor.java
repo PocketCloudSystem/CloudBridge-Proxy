@@ -3,7 +3,9 @@ package de.pocketcloud.cloud.bridge.traffic;
 import lombok.Getter;
 import org.apache.logging.log4j.util.InternalApi;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,18 +17,23 @@ public abstract class TrafficMonitor {
     public static final String REGULAR_MODE_OUT = "out";
     public static final String SUFFIX_AVG = "_avg";
 
+    @Getter
     protected boolean active = true;
+    @Getter
     protected final long timestamp;
     protected Long monitoringDuration = null;
 
     /** mode -> list of handlers */
+    @Getter
     protected final Map<String, List<Consumer<Object[]>>> handlers = new HashMap<>();
 
+    @Getter
     protected long totalBytesIn = 0;
+    @Getter
     protected long totalBytesOut = 0;
     /** each entry: [timestampSeconds, bytes] */
-    protected final List<double[]> byteHistoryIn = new ArrayList<>();
-    protected final List<double[]> byteHistoryOut = new ArrayList<>();
+    protected final Deque<double[]> byteHistoryIn = new ArrayDeque<>();
+    protected final Deque<double[]> byteHistoryOut = new ArrayDeque<>();
 
     protected Consumer<Object[]> stopMonitoringHandler = null;
 
@@ -77,8 +84,8 @@ public abstract class TrafficMonitor {
     @InternalApi
     public void cleanupHistory() {
         double threshold = currentTime() - 1.0;
-        byteHistoryIn.removeIf(data -> data[0] < threshold);
-        byteHistoryOut.removeIf(data -> data[0] < threshold);
+        while (!byteHistoryIn.isEmpty() && byteHistoryIn.peekFirst()[0] < threshold) byteHistoryIn.pollFirst();
+        while (!byteHistoryOut.isEmpty() && byteHistoryOut.peekFirst()[0] < threshold) byteHistoryOut.pollFirst();
     }
 
     public void callHandlers(String mode, Object... args) {
@@ -110,29 +117,9 @@ public abstract class TrafficMonitor {
         return false;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
     public long getMonitoringDuration() {
         if (monitoringDuration == null) return currentSeconds() - timestamp;
         return monitoringDuration;
-    }
-
-    public Map<String, List<Consumer<Object[]>>> getHandlers() {
-        return handlers;
-    }
-
-    public long getTotalBytesIn() {
-        return totalBytesIn;
-    }
-
-    public long getTotalBytesOut() {
-        return totalBytesOut;
     }
 
     public long getTotalBytes() {

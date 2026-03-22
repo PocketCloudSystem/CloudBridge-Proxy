@@ -12,6 +12,7 @@ import dev.waterdog.waterdogpe.network.serverinfo.BedrockServerInfo;
 import dev.waterdog.waterdogpe.network.serverinfo.ServerInfo;
 import dev.waterdog.waterdogpe.player.ProxiedPlayer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 final public class ConnectAndReconnectHandler implements IReconnectHandler, IJoinHandler {
@@ -36,7 +37,7 @@ final public class ConnectAndReconnectHandler implements IReconnectHandler, IJoi
 
     private BedrockServerInfo anyLobbyServer(ServerInfo oldServer) {
         if (CloudAPI.get().getVerifyStatus() == VerifyStatus.VERIFIED) {
-            List<CloudServer> lobbyServers = CloudServerProvider.provider().lobbyServers();
+            List<CloudServer> lobbyServers = new ArrayList<>(CloudServerProvider.provider().lobbyServers());
             if (oldServer != null) {
                 if (lobbyServers.stream().anyMatch(server -> server.getName().equals(oldServer.getServerName())))
                     lobbyServers.remove(lobbyServers.stream().filter(server -> server.getName().equals(oldServer.getServerName())).findFirst().orElse(null));

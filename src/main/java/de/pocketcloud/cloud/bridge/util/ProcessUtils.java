@@ -1,6 +1,7 @@
 package de.pocketcloud.cloud.bridge.util;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,7 +38,7 @@ public final class ProcessUtils {
 
     public static void stopCpuRetrieveCycle(Long pid) {
         long actualPid = pid != null ? pid : ProcessHandle.current().pid();
-        CpuSnapshot firstSnapshot = cycleSnapshots.get(actualPid);
+        CpuSnapshot firstSnapshot = cycleSnapshots.remove(actualPid);
         if (firstSnapshot == null) return;
 
         CpuSnapshot secondSnapshot = getCpuSnapshot(actualPid);
@@ -142,12 +143,16 @@ public final class ProcessUtils {
 
     private static int getClockTicks() {
         if (clockTicks == null) {
+            Process process = null;
             try {
-                Process process = Runtime.getRuntime().exec(new String[]{"getconf", "CLK_TCK"});
+                process = Runtime.getRuntime().exec(new String[]{"getconf", "CLK_TCK"});
+                process.getErrorStream().transferTo(OutputStream.nullOutputStream());
                 String output = new String(process.getInputStream().readAllBytes()).trim();
                 clockTicks = output.matches("\\d+") ? Integer.parseInt(output) : 100;
             } catch (IOException | NumberFormatException e) {
                 clockTicks = 100;
+            } finally {
+               if (process != null) process.destroy();
             }
         }
         return clockTicks;

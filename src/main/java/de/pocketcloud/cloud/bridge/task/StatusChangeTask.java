@@ -1,7 +1,6 @@
 package de.pocketcloud.cloud.bridge.task;
 
 import de.pocketcloud.cloud.bridge.api.object.server.util.ServerStatus;
-import de.pocketcloud.cloud.bridge.api.object.template.Template;
 import de.pocketcloud.cloud.bridge.api.provider.CloudServerProvider;
 import de.pocketcloud.cloud.bridge.api.provider.TemplateProvider;
 import dev.waterdog.waterdogpe.ProxyServer;
@@ -23,9 +22,4 @@ final public class StatusChangeTask extends Task {
 
     @Override
     public void onCancel() {}
-
-    private int getMaxPlayers() {
-        Template template = TemplateProvider.provider().current();
-        return template.getMaxPlayerCount();
-    }
 }

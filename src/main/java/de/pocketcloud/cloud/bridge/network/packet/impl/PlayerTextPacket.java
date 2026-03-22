@@ -49,7 +49,7 @@ final public class PlayerTextPacket extends CloudPacket implements ClientboundPa
                 }
                 case ACTION_BAR -> {
                     SetTitlePacket packet = new SetTitlePacket();
-                    packet.setType(org.cloudburstmc.protocol.bedrock.packet.SetTitlePacket.Type.ACTIONBAR);
+                    packet.setType(SetTitlePacket.Type.ACTIONBAR);
                     packet.setText((CharSequence) text);
                     packet.setXuid(player.getXuid());
                     packet.setPlatformOnlineId("");

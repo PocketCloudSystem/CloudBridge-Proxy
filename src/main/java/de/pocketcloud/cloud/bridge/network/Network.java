@@ -14,7 +14,6 @@ import de.pocketcloud.cloud.bridge.traffic.TrafficMonitorManager;
 import de.pocketcloud.cloud.bridge.traffic.impl.NetworkTrafficMonitor;
 import de.pocketcloud.cloud.bridge.util.CloudEnvironmentConfig;
 import dev.waterdog.waterdogpe.ProxyServer;
-import dev.waterdog.waterdogpe.event.EventManager;
 import lombok.Getter;
 
 import java.io.IOException;
@@ -113,7 +112,6 @@ public final class Network extends Thread {
                         receiveBuffer.get(data);
 
                         UnhandledPacket unhandledPacket = new UnhandledPacket(data, address, data.length);
-
                         buffer.offer(unhandledPacket);
                     }
                 }
@@ -189,20 +187,20 @@ public final class Network extends Thread {
         String encodedDataAsString = new String(encodedData, StandardCharsets.UTF_8);
 
         try {
+            if (encodedDataAsString.length() > 65507) {
+                ProxyServer.getInstance().getEventManager().callEvent(new NetworkPacketTooLargeEvent(this, address, packet, encodedDataAsString.length(), encodedDataAsString));
+                return false;
+            }
+
             ByteBuffer buffer = ByteBuffer.wrap(encodedData);
             channel.write(buffer);
 
             TrafficMonitorManager.getInstance().pushBytes(TrafficMonitorManager.TRAFFIC_NETWORK, encodedDataAsString.length(), TrafficMonitor.REGULAR_MODE_OUT);
             TrafficMonitorManager.getInstance().callHandlers(
                     TrafficMonitorManager.TRAFFIC_NETWORK,
-                    NetworkTrafficMonitor.parsePacketMode(NetworkTrafficMonitor.NETWORK_MODE_PACKET_OUT, packet.getClass()),
-                    encodedDataAsString, encodedDataAsString.length(), address
+                    TrafficMonitor.REGULAR_MODE_OUT,
+                    encodedDataAsString, encodedDataAsString.length(), encodedDataAsString
             );
-
-            if (encodedDataAsString.length() > 65507) {
-                ProxyServer.getInstance().getEventManager().callEvent(new NetworkPacketTooLargeEvent(this, address, packet, encodedDataAsString.length(), encodedDataAsString));
-                return false;
-            }
 
             TrafficMonitorManager.getInstance().callHandlers(
                     TrafficMonitorManager.TRAFFIC_NETWORK,

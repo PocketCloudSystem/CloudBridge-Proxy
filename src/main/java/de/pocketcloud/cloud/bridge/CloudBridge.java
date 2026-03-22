@@ -102,7 +102,7 @@ public class CloudBridge extends Plugin {
     }
 
     public List<Integer> getAcceptedProtocols() {
-        List<Integer> acceptedProtocols = new ArrayList<>(ProtocolVersion.latest().getProtocol());
-        return getConfig().getList("acceptedProtocols", acceptedProtocols);
+        List<Integer> defaultProtocols = new ArrayList<>(List.of(ProtocolVersion.latest().getProtocol()));
+        return getConfig().getList("acceptedProtocols", defaultProtocols);
     }
 }

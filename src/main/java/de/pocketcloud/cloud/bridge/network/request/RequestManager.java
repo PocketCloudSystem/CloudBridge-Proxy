@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class RequestManager {
 
-    private static RequestManager instance;
+    private static final RequestManager INSTANCE = new RequestManager();
     
     private final Map<String, RequestPacket> requests = new ConcurrentHashMap<>();
     
@@ -62,7 +62,6 @@ public final class RequestManager {
     }
 
     public static RequestManager getInstance() {
-        if (instance == null) instance = new RequestManager();
-        return instance;
+        return INSTANCE;
     }
 }
