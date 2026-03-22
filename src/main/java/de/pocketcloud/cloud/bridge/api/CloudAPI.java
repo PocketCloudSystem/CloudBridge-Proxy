@@ -3,7 +3,9 @@ package de.pocketcloud.cloud.bridge.api;
 import de.pocketcloud.cloud.bridge.CloudBridge;
 import de.pocketcloud.cloud.bridge.api.provider.*;
 import de.pocketcloud.cloud.bridge.language.LanguageKey;
+import de.pocketcloud.cloud.bridge.network.packet.data.LogType;
 import de.pocketcloud.cloud.bridge.network.packet.data.VerifyStatus;
+import de.pocketcloud.cloud.bridge.network.packet.impl.ConsoleLogPacket;
 import de.pocketcloud.cloud.bridge.network.packet.impl.KeepAlivePacket;
 import de.pocketcloud.cloud.bridge.network.packet.impl.request.ServerHandshakeRequestPacket;
 import de.pocketcloud.cloud.bridge.network.packet.impl.response.ServerHandshakeResponsePacket;
@@ -59,6 +61,14 @@ public final class CloudAPI {
                  CloudBridge.getInstance().getLogger().warn("Cloud did not respond to ServerHandshakeRequestPacket, shutting down...");
                  ProxyServer.getInstance().shutdown();
              });
+    }
+
+    public boolean logConsole(String message) {
+        return logConsole(message, LogType.INFO);
+    }
+
+    public boolean logConsole(String message, LogType logType) {
+        return ConsoleLogPacket.create(message, logType).sendPacket();
     }
 
     public void registerProvider(CloudAPIProvider provider) {

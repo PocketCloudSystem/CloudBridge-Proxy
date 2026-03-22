@@ -17,7 +17,14 @@ import java.util.List;
 final public class ConnectAndReconnectHandler implements IReconnectHandler, IJoinHandler {
 
     public ServerInfo getFallbackServer(ProxiedPlayer player, ServerInfo oldServer, ReconnectReason reason, String kickMessage) {
-        if (reason == ReconnectReason.EXCEPTION || reason == ReconnectReason.TIMEOUT || reason == ReconnectReason.TRANSFER_FAILED) {
+        CloudAPI.get().logConsole("reason: " + reason.getName());
+        if (reason != ReconnectReason.UNKNOWN) {
+            if (reason == ReconnectReason.SERVER_KICK) {
+                if (kickMessage != null) {
+                    return (kickMessage.contains("closed") || kickMessage.contains("shutdown")) ? anyLobbyServer(oldServer) : null;
+                }
+                return null;
+            }
             return anyLobbyServer(oldServer);
         }
         return null;
