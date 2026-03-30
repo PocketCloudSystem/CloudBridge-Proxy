@@ -22,6 +22,8 @@ import java.nio.channels.ClosedSelectorException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -40,6 +42,8 @@ public final class Network extends Thread {
     private final AtomicBoolean running = new AtomicBoolean(false);
 
     @Getter
+    private int packetSizeLimit;
+    @Getter
     private boolean encryptionEnabled;
     @Getter
     private String authenticationKey;
@@ -50,6 +54,7 @@ public final class Network extends Thread {
         this.buffer = new ConcurrentLinkedQueue<>();
 
         PacketPool.initialize();
+        packetSizeLimit = CloudEnvironmentConfig.getNetworkPacketSizeLimit();
         encryptionEnabled = CloudEnvironmentConfig.isNetworkEncryptionEnabled();
         authenticationKey = CloudEnvironmentConfig.getNetworkAuthKey();
 
@@ -122,6 +127,11 @@ public final class Network extends Thread {
             buffer.mark();
             int length = buffer.getInt();
 
+            if (length > packetSizeLimit || length < 0) {
+                CloudBridge.getInstance().getLogger().error("§cReceived packet exceeding limit: {} bytes. Disconnecting...", length);
+                return;
+            }
+
             if (buffer.remaining() < length) {
                 buffer.reset();
                 break;
@@ -143,14 +153,14 @@ public final class Network extends Thread {
 
             TrafficMonitorManager.getInstance().pushBytes(TrafficMonitorManager.TRAFFIC_NETWORK, unhandledPacket.bytes(), TrafficMonitor.REGULAR_MODE_IN);
 
-            NetworkPacketReceivePreProcessEvent ev = new NetworkPacketReceivePreProcessEvent(this, unhandledPacket.address(), "", encryptionEnabled);
+            NetworkPacketReceivePreProcessEvent ev = new NetworkPacketReceivePreProcessEvent(this, new String(unhandledPacket.buffer(), StandardCharsets.UTF_8), encryptionEnabled);
             ProxyServer.getInstance().getEventManager().callEvent(ev);
             if (ev.isCancelled()) continue;
 
             try {
                 var packet = unhandledPacket.buildCloudPacket(encryptionEnabled, authenticationKey);
                 if (packet != null) {
-                    NetworkPacketReceiveEvent receiveEvent = new NetworkPacketReceiveEvent(this, unhandledPacket.address(), packet);
+                    NetworkPacketReceiveEvent receiveEvent = new NetworkPacketReceiveEvent(this, packet);
                     ProxyServer.getInstance().getEventManager().callEvent(receiveEvent);
                     if (!receiveEvent.isCancelled()) {
                         packet.handle();
@@ -169,12 +179,17 @@ public final class Network extends Thread {
     public boolean sendPacket(CloudboundPacket packet) {
         if (!connected.get() || !channel.isConnected()) return false;
 
-        NetworkPacketPreSendEvent preSendEvent = new NetworkPacketPreSendEvent(this, address, packet);
+        NetworkPacketPreSendEvent preSendEvent = new NetworkPacketPreSendEvent(this, packet);
         ProxyServer.getInstance().getEventManager().callEvent(preSendEvent);
         if (preSendEvent.isCancelled()) return false;
 
         byte[] encodedData = PacketSerializer.encode(packet, encryptionEnabled, authenticationKey);
         if (encodedData == null) return false;
+
+        if (encodedData.length > packetSizeLimit) {
+            ProxyServer.getInstance().getEventManager().callEvent(new NetworkPacketTooLargeEvent(this, packet, encodedData.length, new String(encodedData, StandardCharsets.UTF_8)));
+            return false;
+        }
 
         try {
             ByteBuffer sendBuf = ByteBuffer.allocate(4 + encodedData.length);
@@ -183,13 +198,17 @@ public final class Network extends Thread {
             sendBuf.flip();
 
             while (sendBuf.hasRemaining()) {
-                channel.write(sendBuf);
+                if (channel.write(sendBuf) == 0) {
+                    Thread.yield();
+                }
             }
 
             TrafficMonitorManager.getInstance().pushBytes(TrafficMonitorManager.TRAFFIC_NETWORK, encodedData.length, TrafficMonitor.REGULAR_MODE_OUT);
-            ProxyServer.getInstance().getEventManager().callEvent(new NetworkPacketSentEvent(this, address, packet, true));
+            ProxyServer.getInstance().getEventManager().callEvent(new NetworkPacketSentEvent(this, packet, true));
             return true;
         } catch (IOException e) {
+            CloudBridge.getInstance().getLogger().error("Failed to send TCP packet: {}", e.getMessage());
+            close();
             return false;
         }
     }

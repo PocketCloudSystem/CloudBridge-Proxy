@@ -21,6 +21,7 @@ final public class CloudEnvironmentConfig {
         data.put("cloud-language", null);
         data.put("server-timeout", null);
         data.put("auth-key", null);
+        data.put("packet-size-limit", null);
     }
 
     private static YamlConfig serverProperties() {
@@ -95,5 +96,9 @@ final public class CloudEnvironmentConfig {
 
     public static String getNetworkAuthKey() {
         return fetchVariable("auth-key", false, String.class);
+    }
+
+    public static int getNetworkPacketSizeLimit() {
+        return fetchVariable("packet-size-limit", false, Integer.class);
     }
 }

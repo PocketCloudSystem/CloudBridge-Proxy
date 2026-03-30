@@ -2,17 +2,16 @@ package de.pocketcloud.cloud.bridge.event.network;
 
 import de.pocketcloud.cloud.bridge.network.Network;
 import de.pocketcloud.cloud.bridge.network.packet.CloudboundPacket;
-import de.pocketcloud.cloud.bridge.network.util.Address;
 import dev.waterdog.waterdogpe.event.CancellableEvent;
+import lombok.Getter;
 
-public class NetworkPacketPreSendEvent extends NetworkPacketEvent implements CancellableEvent {
+@Getter
+public class NetworkPacketPreSendEvent extends NetworkEvent implements CancellableEvent {
 
-    public NetworkPacketPreSendEvent(Network network, Address sender, CloudboundPacket packet) {
-        super(network, sender, packet);
-    }
+    protected CloudboundPacket packet;
 
-    @Override
-    public CloudboundPacket getPacket() {
-        return (CloudboundPacket) packet;
+    public NetworkPacketPreSendEvent(Network network, CloudboundPacket packet) {
+        super(network);
+        this.packet = packet;
     }
 }
