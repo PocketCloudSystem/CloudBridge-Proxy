@@ -12,7 +12,6 @@ import de.pocketcloud.cloud.bridge.network.packet.impl.ServerChangeStatusPacket;
 import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
 import de.pocketcloud.cloud.bridge.util.Utils;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -134,7 +133,6 @@ public final class CloudServer implements PacketData.Writable {
             return new CloudServer(id, uuid, template, serverData, status, storage);
         } catch (ClassCastException | NullPointerException e) {
             CloudBridge.getInstance().getLogger().error(e);
-            e.printStackTrace();
             return null;
         }
     }

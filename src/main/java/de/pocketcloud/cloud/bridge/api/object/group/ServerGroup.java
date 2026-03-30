@@ -74,7 +74,6 @@ public final class ServerGroup implements PacketData.Writable {
             );
         } catch (ClassCastException e) {
             CloudBridge.getInstance().getLogger().error(e);
-            e.printStackTrace();
             return null;
         }
     }

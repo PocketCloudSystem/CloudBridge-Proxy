@@ -113,7 +113,6 @@ public final class Template implements PacketData.Writable {
             );
         } catch (ClassCastException | NullPointerException e) {
             CloudBridge.getInstance().getLogger().error(e);
-            e.printStackTrace();
             return null;
         }
     }

@@ -142,7 +142,6 @@ public final class CloudPlayer implements PacketData.Writable {
             );
         } catch (ClassCastException e) {
             CloudBridge.getInstance().getLogger().error(e);
-            e.printStackTrace();
             return null;
         }
     }
