@@ -1,0 +1,87 @@
+package de.pocketcloud.cloud.bridge.api;
+
+import de.pocketcloud.cloud.bridge.CloudBridge;
+import de.pocketcloud.cloud.bridge.api.provider.*;
+import de.pocketcloud.cloud.bridge.language.LanguageKey;
+import de.pocketcloud.cloud.bridge.network.packet.data.LogType;
+import de.pocketcloud.cloud.bridge.network.packet.data.VerifyStatus;
+import de.pocketcloud.cloud.bridge.network.packet.impl.ConsoleLogPacket;
+import de.pocketcloud.cloud.bridge.network.packet.impl.KeepAlivePacket;
+import de.pocketcloud.cloud.bridge.network.packet.impl.request.ServerHandshakeRequestPacket;
+import de.pocketcloud.cloud.bridge.network.packet.impl.response.ServerHandshakeResponsePacket;
+import de.pocketcloud.cloud.bridge.util.CloudEnvironmentConfig;
+import de.pocketcloud.cloud.bridge.util.Utils;
+import dev.waterdog.waterdogpe.ProxyServer;
+import lombok.Getter;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public final class CloudAPI {
+
+    private static CloudAPI instance;
+    
+    @Getter
+    private VerifyStatus verifyStatus = VerifyStatus.NOT_APPLIED;
+    private final Map<Class<? extends CloudAPIProvider>, CloudAPIProvider> providers = new HashMap<>();
+    
+    public CloudAPI() {
+        instance = this;
+
+        registerProvider(new TemplateProvider());
+        registerProvider(new CloudServerProvider());
+        registerProvider(new ServerGroupProvider());
+        registerProvider(new CloudPlayerProvider());
+    }
+
+    public void requestLogin() {
+        String serverName = CloudEnvironmentConfig.getServerName();
+        int processId = (int) ProcessHandle.current().pid();
+        int maxPlayers = ProxyServer.getInstance().getConfiguration().getMaxPlayerCount();
+
+         ServerHandshakeRequestPacket.create(serverName, processId, maxPlayers).sendRequest()
+             .then((response, value) -> {
+                 ServerHandshakeResponsePacket packet = (ServerHandshakeResponsePacket) response;
+                 VerifyStatus status = packet.getVerifyStatus();
+                 this.verifyStatus = status;
+
+                 if (status == VerifyStatus.VERIFIED) {
+                     CloudBridge.getInstance().setLastKeepAliveCheck(Utils.time());
+                     CloudBridge.getInstance().startTasks();
+                     CloudBridge.getInstance().getLogger().info(LanguageKey.INGAME_SERVER_VERIFIED.translate());
+                     KeepAlivePacket.create().sendPacket(); // Start keep-alive cycle
+                 } else {
+                     CloudBridge.getInstance().getLogger().warn("Cloud responded with verification status '{}', shutting down...", status.getName());
+                     ProxyServer.getInstance().shutdown();
+                 }
+
+                 return null;
+             })
+             .failure((request, exception) -> {
+                 CloudBridge.getInstance().getLogger().warn("Cloud did not respond to ServerHandshakeRequestPacket, shutting down...");
+                 ProxyServer.getInstance().shutdown();
+             });
+    }
+
+    public boolean logConsole(String message) {
+        return logConsole(message, LogType.INFO);
+    }
+
+    public boolean logConsole(String message, LogType logType) {
+        return ConsoleLogPacket.create(message, logType).sendPacket();
+    }
+
+    public void registerProvider(CloudAPIProvider provider) {
+        providers.put(provider.getClass(), provider);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends CloudAPIProvider> T getProvider(Class<T> providerClass) {
+        return (T) providers.get(providerClass);
+    }
+
+    public static CloudAPI get() {
+        if (instance == null) instance = new CloudAPI();
+        return instance;
+    }
+}
