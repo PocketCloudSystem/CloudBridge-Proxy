@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public final class CloudPlayerProvider implements CloudAPIProvider {
 
@@ -17,6 +18,12 @@ public final class CloudPlayerProvider implements CloudAPIProvider {
             players.get(player.getName()).sync(player.write());
         } else {
             players.put(player.getName(), player);
+        }
+    }
+
+    public void addAll(List<CloudPlayer> players) {
+        for (CloudPlayer player : players) {
+            add(player);
         }
     }
 

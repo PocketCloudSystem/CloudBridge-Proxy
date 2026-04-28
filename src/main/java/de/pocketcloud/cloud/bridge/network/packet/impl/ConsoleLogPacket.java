@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ConsoleLogPacket extends CloudPacket implements ClientboundPacket, CloudboundPacket {
+final public class ConsoleLogPacket extends CloudPacket implements ClientboundPacket, CloudboundPacket {
 
     private String message;
     private LogType logType;

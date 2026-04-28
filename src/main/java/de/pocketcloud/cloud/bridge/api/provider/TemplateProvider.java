@@ -1,10 +1,12 @@
 package de.pocketcloud.cloud.bridge.api.provider;
 
 import de.pocketcloud.cloud.bridge.api.CloudAPI;
+import de.pocketcloud.cloud.bridge.api.object.group.ServerGroup;
 import de.pocketcloud.cloud.bridge.api.object.template.Template;
 import de.pocketcloud.cloud.bridge.util.CloudEnvironmentConfig;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class TemplateProvider implements CloudAPIProvider {
@@ -16,6 +18,12 @@ public final class TemplateProvider implements CloudAPIProvider {
             templates.get(template.getName()).sync(template.write());
         } else {
             templates.put(template.getName(), template);
+        }
+    }
+
+    public void addAll(List<Template> templates) {
+        for (Template template : templates) {
+            add(template);
         }
     }
 

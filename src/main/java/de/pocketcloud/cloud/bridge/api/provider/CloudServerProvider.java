@@ -2,6 +2,7 @@ package de.pocketcloud.cloud.bridge.api.provider;
 
 import de.pocketcloud.cloud.bridge.api.CloudAPI;
 import de.pocketcloud.cloud.bridge.api.object.group.ServerGroup;
+import de.pocketcloud.cloud.bridge.api.object.player.CloudPlayer;
 import de.pocketcloud.cloud.bridge.api.object.server.CloudServer;
 import de.pocketcloud.cloud.bridge.api.object.template.Template;
 import de.pocketcloud.cloud.bridge.network.packet.RequestPacket;
@@ -81,6 +82,12 @@ public final class CloudServerProvider implements CloudAPIProvider {
             servers.get(server.getName()).sync(server.write());
         } else {
             servers.put(server.getName(), server);
+        }
+    }
+
+    public void addAll(List<CloudServer> servers) {
+        for (CloudServer server : servers) {
+            add(server);
         }
     }
 

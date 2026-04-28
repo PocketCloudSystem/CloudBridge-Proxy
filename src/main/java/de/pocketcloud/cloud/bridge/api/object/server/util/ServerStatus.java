@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public enum ServerStatus {
 
+    PENDING("§gPENDING"),
     STARTING("§2STARTING"),
     ONLINE("§aONLINE"),
     FULL("§eFULL"),

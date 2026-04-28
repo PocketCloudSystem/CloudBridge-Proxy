@@ -2,10 +2,12 @@ package de.pocketcloud.cloud.bridge.api.provider;
 
 import de.pocketcloud.cloud.bridge.api.CloudAPI;
 import de.pocketcloud.cloud.bridge.api.object.group.ServerGroup;
+import de.pocketcloud.cloud.bridge.api.object.server.CloudServer;
 import de.pocketcloud.cloud.bridge.api.object.template.Template;
 import de.pocketcloud.cloud.bridge.util.CloudEnvironmentConfig;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class ServerGroupProvider implements CloudAPIProvider {
@@ -16,6 +18,12 @@ public final class ServerGroupProvider implements CloudAPIProvider {
             serverGroups.get(serverGroup.getName()).sync(serverGroup.write());
         } else {
             serverGroups.put(serverGroup.getName(), serverGroup);
+        }
+    }
+
+    public void addAll(List<ServerGroup> serverGroups) {
+        for (ServerGroup group : serverGroups) {
+            add(group);
         }
     }
 
