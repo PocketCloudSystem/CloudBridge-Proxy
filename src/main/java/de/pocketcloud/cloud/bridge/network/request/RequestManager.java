@@ -17,7 +17,7 @@ public final class RequestManager {
 
     public RequestPacket send(RequestPacket packet) {
         packet.prepare();
-        if (!Network.getInstance().sendPacket(packet)) return null;
+        Network.getInstance().sendPacket(packet);
         requests.put(packet.getRequestId(), packet);
         return packet;
     }

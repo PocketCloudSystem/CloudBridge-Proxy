@@ -30,7 +30,7 @@ public abstract class RequestClientPacket extends CloudPacket implements Clientb
     @Override
     final public void encodePayload(PacketData packetData) {}
 
-    public boolean sendResponse(ResponseClientPacket packet) {
-        return Network.getInstance().sendPacket(packet.setRequestId(requestId));
+    public void sendResponse(ResponseClientPacket packet) {
+        Network.getInstance().sendPacket(packet.setRequestId(requestId));
     }
 }

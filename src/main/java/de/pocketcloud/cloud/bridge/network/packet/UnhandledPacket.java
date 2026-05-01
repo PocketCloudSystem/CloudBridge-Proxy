@@ -1,6 +1,6 @@
 package de.pocketcloud.cloud.bridge.network.packet;
 
-import de.pocketcloud.cloud.bridge.network.exception.PacketException;
+import de.pocketcloud.cloud.bridge.exception.PacketException;
 import de.pocketcloud.cloud.bridge.network.packet.util.PacketSerializer;
 import de.pocketcloud.cloud.bridge.network.util.Address;
 

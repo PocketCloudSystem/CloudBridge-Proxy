@@ -27,9 +27,9 @@ public abstract class CloudPacket implements Packet {
         decodePayload(packetData);
     }
 
-    public boolean sendPacket() {
-        if (!(this instanceof CloudboundPacket)) return false;
-        return Network.getInstance().sendPacket((CloudboundPacket) this);
+    public void sendPacket() {
+        if (!(this instanceof CloudboundPacket)) return;
+        Network.getInstance().sendPacket((CloudboundPacket) this);
     }
     
     @Override

@@ -1,11 +1,10 @@
 package de.pocketcloud.cloud.bridge.network.packet.util;
 
 import com.google.gson.JsonSyntaxException;
-import de.pocketcloud.cloud.bridge.CloudBridge;
 import de.pocketcloud.cloud.bridge.network.packet.ClientboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.CloudboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.PacketPool;
-import de.pocketcloud.cloud.bridge.network.exception.PacketException;
+import de.pocketcloud.cloud.bridge.exception.PacketException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,7 +17,7 @@ public final class PacketSerializer {
     
     private PacketSerializer() {}
 
-    public static byte[] encode(CloudboundPacket packet, boolean encryptionEnabled, String authenticationKey) {
+    public static byte[] encode(CloudboundPacket packet, boolean encryptionEnabled, String authenticationKey) throws PacketException {
         try {
             PacketData buffer = new PacketData();
             packet.encode(buffer);
@@ -33,17 +32,13 @@ public final class PacketSerializer {
             
             return bytes;
         } catch (Exception e) {
-            CloudBridge.getInstance().getLogger().error("Error while encoding packet", e);
-            return null;
+            throw new PacketException(e.getMessage());
         }
     }
 
     public static ClientboundPacket decode(byte[] buffer, boolean encryptionEnabled, String authenticationKey) throws PacketException {
         try {
-            if (buffer == null || buffer.length == 0) {
-                return null;
-            }
-            
+            if (buffer == null || buffer.length == 0) throw new PacketException("Cannot decode an empty buffer");
             byte[] decompressed = buffer;
             if (encryptionEnabled) {
                 decompressed = decompress(buffer);
@@ -73,7 +68,6 @@ public final class PacketSerializer {
             if (!givenKey.equals(authenticationKey)) throw new PacketException("Received packet does not contain a valid authentication key");
             
             return (ClientboundPacket) packet;
-            
         } catch (JsonSyntaxException e) {
             throw new PacketException("Failed to parse JSON: " + e.getMessage(), e);
         } catch (DataFormatException e) {

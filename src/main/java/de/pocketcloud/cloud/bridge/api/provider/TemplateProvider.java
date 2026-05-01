@@ -1,7 +1,6 @@
 package de.pocketcloud.cloud.bridge.api.provider;
 
 import de.pocketcloud.cloud.bridge.api.CloudAPI;
-import de.pocketcloud.cloud.bridge.api.object.group.ServerGroup;
 import de.pocketcloud.cloud.bridge.api.object.template.Template;
 import de.pocketcloud.cloud.bridge.util.CloudEnvironmentConfig;
 

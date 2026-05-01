@@ -45,44 +45,44 @@ public final class CloudPlayer implements PacketData.Writable {
         }
     }
 
-    public boolean send(String message, TextType textType) {
-        return PlayerTextPacket.create(name, message, textType).sendPacket();
+    public void send(String message, TextType textType) {
+        PlayerTextPacket.create(name, message, textType).sendPacket();
     }
 
-    public boolean sendMessage(String message) {
-        return send(message, TextType.MESSAGE);
+    public void sendMessage(String message) {
+        send(message, TextType.MESSAGE);
     }
 
-    public boolean sendPopup(String message) {
-        return send(message, TextType.POPUP);
+    public void sendPopup(String message) {
+        send(message, TextType.POPUP);
     }
 
-    public boolean sendTip(String message) {
-        return send(message, TextType.TIP);
+    public void sendTip(String message) {
+        send(message, TextType.TIP);
     }
 
-    public boolean sendTitle(String message) {
-        return send(message, TextType.TITLE);
+    public void sendTitle(String message) {
+        send(message, TextType.TITLE);
     }
 
-    public boolean sendActionBarMessage(String message) {
-        return send(message, TextType.ACTION_BAR);
+    public void sendActionBarMessage(String message) {
+        send(message, TextType.ACTION_BAR);
     }
 
-    public boolean sendToastNotification(String title, String body) {
-        return send(title + "\n" + body, TextType.TOAST_NOTIFICATION);
+    public void sendToastNotification(String title, String body) {
+        send(title + "\n" + body, TextType.TOAST_NOTIFICATION);
     }
 
-    public boolean kick() {
-        return kick("", "");
+    public void kick() {
+        kick("", "");
     }
 
-    public boolean kick(String reason) {
-        return kick(reason, "");
+    public void kick(String reason) {
+        kick(reason, "");
     }
 
-    public boolean kick(String reason, String disconnectScreenMessage) {
-        return PlayerKickPacket.create(name, reason, disconnectScreenMessage).sendPacket();
+    public void kick(String reason, String disconnectScreenMessage) {
+        PlayerKickPacket.create(name, reason, disconnectScreenMessage).sendPacket();
     }
 
     public void setCurrentServer(String currentServer) {

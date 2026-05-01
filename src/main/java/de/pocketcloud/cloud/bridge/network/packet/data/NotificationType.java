@@ -20,8 +20,8 @@ public enum NotificationType implements PacketData.Writable {
     PLAYER_KICKED,
     PLAYER_SWITCHED_SERVER;
 
-    public boolean sendNotification(Map<String, Object> args) {
-        return CloudNotificationPacket.create(this, args).sendPacket();
+    public void sendNotification(Map<String, Object> args) {
+        CloudNotificationPacket.create(this, args).sendPacket();
     }
 
     public String getName() {

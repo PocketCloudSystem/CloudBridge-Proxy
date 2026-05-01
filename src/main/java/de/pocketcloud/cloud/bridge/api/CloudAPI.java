@@ -63,12 +63,12 @@ public final class CloudAPI {
              });
     }
 
-    public boolean logConsole(String message) {
-        return logConsole(message, LogType.INFO);
+    public void logConsole(String message) {
+        logConsole(message, LogType.INFO);
     }
 
-    public boolean logConsole(String message, LogType logType) {
-        return ConsoleLogPacket.create(message, logType).sendPacket();
+    public void logConsole(String message, LogType logType) {
+        ConsoleLogPacket.create(message, logType).sendPacket();
     }
 
     public void registerProvider(CloudAPIProvider provider) {

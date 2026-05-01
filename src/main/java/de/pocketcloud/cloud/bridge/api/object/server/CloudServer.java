@@ -54,9 +54,9 @@ public final class CloudServer implements PacketData.Writable {
         }
     }
 
-    public boolean setServerStatus(ServerStatus serverStatus) {
+    public void setServerStatus(ServerStatus serverStatus) {
         this.serverStatus = serverStatus;
-        return ServerChangeStatusPacket.create(this.serverUuid, serverStatus).sendPacket();
+        ServerChangeStatusPacket.create(this.serverUuid, serverStatus).sendPacket();
     }
 
     public CloudPlayer getPlayer(String identifier) {

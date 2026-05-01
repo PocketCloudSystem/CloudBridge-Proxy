@@ -61,7 +61,7 @@ public class CloudBridge extends Plugin {
         try {
             network.init();
         } catch (IOException e) {
-            this.getLogger().error("Error while initializing network", e);
+            this.getLogger().error("Error whilst initializing network", e);
             ProxyServer.getInstance().shutdown();
             return;
         }

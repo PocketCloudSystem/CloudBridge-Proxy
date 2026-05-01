@@ -2,6 +2,8 @@ package de.pocketcloud.cloud.bridge.network;
 
 import de.pocketcloud.cloud.bridge.CloudBridge;
 import de.pocketcloud.cloud.bridge.event.network.*;
+import de.pocketcloud.cloud.bridge.exception.NetworkException;
+import de.pocketcloud.cloud.bridge.exception.PacketTooLargeException;
 import de.pocketcloud.cloud.bridge.network.packet.CloudboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.PacketPool;
 import de.pocketcloud.cloud.bridge.network.packet.ResponsePacket;
@@ -102,6 +104,7 @@ public final class Network extends Thread {
                         int bytesRead = channel.read(streamBuffer);
                         if (bytesRead == -1) {
                             close();
+                            ProxyServer.getInstance().shutdown();
                             return;
                         }
 
@@ -114,6 +117,7 @@ public final class Network extends Thread {
                 if (running.get()) {
                     CloudBridge.getInstance().getLogger().error("Network error: {}", e.getMessage());
                     close();
+                    ProxyServer.getInstance().shutdown();
                 }
             }
         }
@@ -175,19 +179,17 @@ public final class Network extends Thread {
         }
     }
 
-    public boolean sendPacket(CloudboundPacket packet) {
-        if (!connected.get() || !channel.isConnected()) return false;
+    public void sendPacket(CloudboundPacket packet) {
+        if (!connected.get() || !channel.isConnected()) throw new NetworkException("Client not connected to cloud");
 
         NetworkPacketPreSendEvent preSendEvent = new NetworkPacketPreSendEvent(this, packet);
         ProxyServer.getInstance().getEventManager().callEvent(preSendEvent);
-        if (preSendEvent.isCancelled()) return false;
+        if (preSendEvent.isCancelled()) return;
 
         byte[] encodedData = PacketSerializer.encode(packet, encryptionEnabled, authenticationKey);
-        if (encodedData == null) return false;
-
         if (encodedData.length > packetSizeLimit) {
             ProxyServer.getInstance().getEventManager().callEvent(new NetworkPacketTooLargeEvent(this, packet, encodedData.length, new String(encodedData, StandardCharsets.UTF_8)));
-            return false;
+            throw new PacketTooLargeException(packet, encodedData.length, packetSizeLimit);
         }
 
         try {
@@ -204,11 +206,8 @@ public final class Network extends Thread {
 
             TrafficMonitorManager.getInstance().pushBytes(TrafficMonitorManager.TRAFFIC_NETWORK, encodedData.length, TrafficMonitor.REGULAR_MODE_OUT);
             ProxyServer.getInstance().getEventManager().callEvent(new NetworkPacketSentEvent(this, packet, true));
-            return true;
         } catch (IOException e) {
-            CloudBridge.getInstance().getLogger().error("Failed to send TCP packet: {}", e.getMessage());
-            close();
-            return false;
+            throw new NetworkException(e.getMessage());
         }
     }
 
