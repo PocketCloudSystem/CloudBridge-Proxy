@@ -7,3 +7,6 @@
 # --- LIST OF PROTOCOL VERSIONS: https://minecraft.wiki/w/Protocol_version#Bedrock_Edition
 acceptedProtocols:
   - 898
+  - 924
+  - 944
+  - 975
