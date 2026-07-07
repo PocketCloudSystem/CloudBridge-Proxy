@@ -1,8 +1,8 @@
 package de.pocketcloud.cloud.bridge.network.packet.impl;
 
-import de.pocketcloud.cloud.bridge.network.packet.ClientboundPacket;
+import de.pocketcloud.network.packet.ClientboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.CloudPacket;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.network.packet.data.PacketData;
 import dev.waterdog.waterdogpe.ProxyServer;
 import dev.waterdog.waterdogpe.network.serverinfo.BedrockServerInfo;
 import lombok.Getter;
@@ -27,6 +27,9 @@ public final class ProxyRegisterServerPacket extends CloudPacket implements Clie
         if (ProxyServer.getInstance().getServerInfo(serverName) != null) ProxyServer.getInstance().removeServerInfo(serverName);
         ProxyServer.getInstance().registerServerInfo(new BedrockServerInfo(serverName, new InetSocketAddress(port), null));
     }
+
+    @Override
+    public void encodePayload(PacketData packetData) {}
 
     @Override
     public void decodePayload(PacketData packetData) {

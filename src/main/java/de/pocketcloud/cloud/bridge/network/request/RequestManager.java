@@ -1,6 +1,6 @@
 package de.pocketcloud.cloud.bridge.network.request;
 
-import de.pocketcloud.cloud.bridge.network.Network;
+import de.pocketcloud.cloud.bridge.CloudBridge;
 import de.pocketcloud.cloud.bridge.network.packet.RequestPacket;
 import de.pocketcloud.cloud.bridge.network.packet.ResponsePacket;
 
@@ -17,7 +17,10 @@ public final class RequestManager {
 
     public RequestPacket send(RequestPacket packet) {
         packet.prepare();
-        Network.getInstance().sendPacket(packet);
+        CloudBridge.getInstance().getNetwork().sendPacket(packet).exceptionally(e -> {
+            CloudBridge.getInstance().getLogger().error("Failed to send packet " + packet.getName(), e);
+            return null;
+        });
         requests.put(packet.getRequestId(), packet);
         return packet;
     }

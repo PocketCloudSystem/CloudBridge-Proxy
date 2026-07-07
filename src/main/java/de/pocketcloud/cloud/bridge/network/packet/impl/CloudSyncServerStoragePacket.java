@@ -1,8 +1,8 @@
 package de.pocketcloud.cloud.bridge.network.packet.impl;
 
 import de.pocketcloud.cloud.bridge.network.packet.CloudPacket;
-import de.pocketcloud.cloud.bridge.network.packet.CloudboundPacket;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.network.packet.CloudboundPacket;
+import de.pocketcloud.network.packet.data.PacketData;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +22,9 @@ final public class CloudSyncServerStoragePacket extends CloudPacket implements C
     public void encodePayload(PacketData packetData) {
         packetData.writeAll(data);
     }
+
+    @Override
+    public void decodePayload(PacketData packetData) {}
 
     @Override
     public void handle() {}

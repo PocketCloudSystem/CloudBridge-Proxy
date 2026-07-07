@@ -1,9 +1,9 @@
-package de.pocketcloud.cloud.bridge.network.packet.data;
+package de.pocketcloud.cloud.bridge.network.packet.type;
 
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.cloud.bridge.util.Writable;
 import org.apache.logging.log4j.Level;
 
-public enum LogType implements PacketData.Writable {
+public enum LogType implements Writable<String> {
 
     INFO,
     WARN,
@@ -27,14 +27,5 @@ public enum LogType implements PacketData.Writable {
     @Override
     public String write() {
         return name();
-    }
-
-    public static LogType fromName(String name) {
-        if (name == null) return null;
-        try {
-            return valueOf(name.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
     }
 }

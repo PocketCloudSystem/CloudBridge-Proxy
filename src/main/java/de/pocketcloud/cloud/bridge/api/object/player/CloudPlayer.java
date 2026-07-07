@@ -1,20 +1,18 @@
 package de.pocketcloud.cloud.bridge.api.object.player;
 
-import de.pocketcloud.cloud.bridge.CloudBridge;
 import de.pocketcloud.cloud.bridge.api.object.server.CloudServer;
-import de.pocketcloud.cloud.bridge.network.packet.data.TextType;
+import de.pocketcloud.cloud.bridge.network.packet.type.TextType;
 import de.pocketcloud.cloud.bridge.network.packet.impl.PlayerKickPacket;
 import de.pocketcloud.cloud.bridge.network.packet.impl.PlayerTextPacket;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
 import de.pocketcloud.cloud.bridge.api.provider.CloudServerProvider;
-import de.pocketcloud.cloud.bridge.util.Utils;
+import de.pocketcloud.cloud.bridge.util.Writable;
+import de.pocketcloud.cloud.bridge.util.mapper.MapperUtils;
 import dev.waterdog.waterdogpe.player.ProxiedPlayer;
 import lombok.Getter;
 
-import java.util.HashMap;
 import java.util.Map;
 
-public final class CloudPlayer implements PacketData.Writable {
+public final class CloudPlayer implements Writable<Map<String, Object>> {
 
     @Getter
     private final String name;
@@ -119,31 +117,11 @@ public final class CloudPlayer implements PacketData.Writable {
     
     @Override
     public Map<String, Object> write() {
-        Map<String, Object> data = new HashMap<>();
-        data.put("name", name);
-        data.put("address", address);
-        data.put("xboxUserId", xboxUserId);
-        data.put("uniqueId", uniqueId);
-        data.put("currentServer", currentServer);
-        data.put("currentProxy", currentProxy);
-        return data;
+        return MapperUtils.toMap(this);
     }
     
     public static CloudPlayer read(Map<String, Object> data) {
-        if (!Utils.containKeys(data, "name", "address", "xboxUserId", "uniqueId")) return null;
-        try {
-            return new CloudPlayer(
-                (String) data.get("name"),
-                (String) data.get("address"),
-                (String) data.get("xboxUserId"),
-                (String) data.get("uniqueId"),
-                data.get("currentServer") == null ? null : (String) data.get("currentServer"),
-                data.get("currentProxy") == null ? null : (String) data.get("currentProxy")
-            );
-        } catch (ClassCastException e) {
-            CloudBridge.getInstance().getLogger().error(e);
-            return null;
-        }
+        return MapperUtils.fromMap(data, CloudPlayer.class);
     }
 
     public static CloudPlayer fromProxiedPlayer(ProxiedPlayer proxiedPlayer) {

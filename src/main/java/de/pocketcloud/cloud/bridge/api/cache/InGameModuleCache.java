@@ -15,9 +15,11 @@ final public class InGameModuleCache {
     @Getter
     private static final Map<String, Boolean> moduleStates = new HashMap<>();
 
-    public static void sync(Map<String, Boolean> data) {
-        moduleStates.clear();
-        moduleStates.putAll(data);
+    public static void sync(List<String> enabledModules) {
+        moduleStates.replaceAll((m, v) -> false);
+        for (String enabledModule : enabledModules) {
+            moduleStates.put(enabledModule, true);
+        }
     }
 
     public static void setModuleState(String module, boolean state) {
@@ -25,7 +27,7 @@ final public class InGameModuleCache {
     }
 
     public static boolean getModuleState(String module) {
-        return moduleStates.get(module);
+        return moduleStates.getOrDefault(module, false);
     }
 
     public static List<String> getAll() {

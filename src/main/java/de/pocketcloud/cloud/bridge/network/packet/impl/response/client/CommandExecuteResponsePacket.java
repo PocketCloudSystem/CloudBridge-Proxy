@@ -1,9 +1,9 @@
 package de.pocketcloud.cloud.bridge.network.packet.impl.response.client;
 
-import de.pocketcloud.cloud.bridge.network.packet.CloudboundPacket;
+import de.pocketcloud.network.packet.CloudboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.ResponseClientPacket;
-import de.pocketcloud.cloud.bridge.network.packet.data.ServerCommandExecutionResult;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.cloud.bridge.network.packet.type.ServerCommandExecutionResult;
+import de.pocketcloud.network.packet.data.PacketData;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

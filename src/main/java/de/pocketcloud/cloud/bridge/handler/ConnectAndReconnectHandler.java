@@ -3,7 +3,7 @@ package de.pocketcloud.cloud.bridge.handler;
 import de.pocketcloud.cloud.bridge.api.CloudAPI;
 import de.pocketcloud.cloud.bridge.api.object.server.CloudServer;
 import de.pocketcloud.cloud.bridge.api.provider.CloudServerProvider;
-import de.pocketcloud.cloud.bridge.network.packet.data.VerifyStatus;
+import de.pocketcloud.cloud.bridge.network.packet.type.VerificationStatus;
 import dev.waterdog.waterdogpe.ProxyServer;
 import dev.waterdog.waterdogpe.network.connection.handler.IJoinHandler;
 import dev.waterdog.waterdogpe.network.connection.handler.IReconnectHandler;
@@ -36,7 +36,7 @@ final public class ConnectAndReconnectHandler implements IReconnectHandler, IJoi
     }
 
     private BedrockServerInfo anyLobbyServer(ServerInfo oldServer) {
-        if (CloudAPI.get().getVerifyStatus() == VerifyStatus.VERIFIED) {
+        if (CloudAPI.get().getVerificationStatus() == VerificationStatus.VERIFIED) {
             List<CloudServer> lobbyServers = new ArrayList<>(CloudServerProvider.provider().lobbyServers());
             if (oldServer != null) {
                 if (lobbyServers.stream().anyMatch(server -> server.getName().equals(oldServer.getServerName())))

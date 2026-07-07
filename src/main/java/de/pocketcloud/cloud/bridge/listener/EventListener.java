@@ -5,7 +5,7 @@ import de.pocketcloud.cloud.bridge.api.cache.MaintenanceListCache;
 import de.pocketcloud.cloud.bridge.api.object.player.CloudPlayer;
 import de.pocketcloud.cloud.bridge.api.provider.TemplateProvider;
 import de.pocketcloud.cloud.bridge.language.LanguageKey;
-import de.pocketcloud.cloud.bridge.network.packet.data.NotificationType;
+import de.pocketcloud.cloud.bridge.network.packet.type.NotificationType;
 import de.pocketcloud.cloud.bridge.network.packet.impl.PlayerConnectPacket;
 import de.pocketcloud.cloud.bridge.network.packet.impl.PlayerDisconnectPacket;
 import de.pocketcloud.cloud.bridge.network.packet.impl.PlayerSwitchServerPacket;

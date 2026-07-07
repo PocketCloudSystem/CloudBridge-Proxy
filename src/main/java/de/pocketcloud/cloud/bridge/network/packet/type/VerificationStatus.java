@@ -1,12 +1,12 @@
-package de.pocketcloud.cloud.bridge.network.packet.data;
+package de.pocketcloud.cloud.bridge.network.packet.type;
 
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.cloud.bridge.util.Writable;
 
-public enum VerifyStatus implements PacketData.Writable {
+public enum VerificationStatus implements Writable<String> {
 
     DENIED,
     VERIFIED,
-    NOT_APPLIED;
+    PENDING;
     
     public String getName() {
         return name();
@@ -17,7 +17,7 @@ public enum VerifyStatus implements PacketData.Writable {
         return name();
     }
 
-    public static VerifyStatus fromName(String name) {
+    public static VerificationStatus fromName(String name) {
         if (name == null) return null;
         try {
             return valueOf(name.toUpperCase());

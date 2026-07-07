@@ -8,9 +8,9 @@ import de.pocketcloud.cloud.bridge.api.provider.CloudPlayerProvider;
 import de.pocketcloud.cloud.bridge.api.provider.CloudServerProvider;
 import de.pocketcloud.cloud.bridge.api.provider.ServerGroupProvider;
 import de.pocketcloud.cloud.bridge.api.provider.TemplateProvider;
-import de.pocketcloud.cloud.bridge.network.packet.ClientboundPacket;
+import de.pocketcloud.network.packet.ClientboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.CloudPacket;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.network.packet.data.PacketData;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -42,6 +42,9 @@ final public class BulkSyncPacket extends CloudPacket implements ClientboundPack
         CloudPlayerProvider.provider().addAll(players);
         ServerGroupProvider.provider().addAll(groups);
     }
+
+    @Override
+    public void encodePayload(PacketData packetData) {}
 
     @Override
     public void decodePayload(PacketData packetData) {

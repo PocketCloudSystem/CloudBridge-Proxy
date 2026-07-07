@@ -1,11 +1,11 @@
 package de.pocketcloud.cloud.bridge.network.packet.impl;
 
 import de.pocketcloud.cloud.bridge.CloudBridge;
-import de.pocketcloud.cloud.bridge.network.packet.ClientboundPacket;
-import de.pocketcloud.cloud.bridge.network.packet.CloudboundPacket;
+import de.pocketcloud.network.packet.ClientboundPacket;
+import de.pocketcloud.network.packet.CloudboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.CloudPacket;
-import de.pocketcloud.cloud.bridge.network.packet.data.ServerDisconnectReason;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.cloud.bridge.network.packet.type.ServerDisconnectReason;
+import de.pocketcloud.network.packet.data.PacketData;
 import dev.waterdog.waterdogpe.ProxyServer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,7 +38,7 @@ public final class DisconnectPacket extends CloudPacket implements ClientboundPa
     
     @Override
     public void decodePayload(PacketData packetData) {
-        reason = packetData.readServerDisconnectReason();
+        reason = packetData.readEnum(ServerDisconnectReason.class);
     }
 
     public static DisconnectPacket create(ServerDisconnectReason reason) {

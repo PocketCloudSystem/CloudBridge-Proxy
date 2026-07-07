@@ -1,6 +1,7 @@
 package de.pocketcloud.cloud.bridge.network.packet;
 
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.network.packet.CloudboundPacket;
+import de.pocketcloud.network.packet.data.PacketData;
 import de.pocketcloud.cloud.bridge.network.request.RequestManager;
 import lombok.Getter;
 

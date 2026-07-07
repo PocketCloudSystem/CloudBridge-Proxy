@@ -2,9 +2,9 @@ package de.pocketcloud.cloud.bridge.network.packet.impl;
 
 import de.pocketcloud.cloud.bridge.api.object.group.ServerGroup;
 import de.pocketcloud.cloud.bridge.api.provider.ServerGroupProvider;
-import de.pocketcloud.cloud.bridge.network.packet.ClientboundPacket;
+import de.pocketcloud.network.packet.ClientboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.CloudPacket;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.network.packet.data.PacketData;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,8 +30,11 @@ public final class ServerGroupSyncPacket extends CloudPacket implements Clientbo
     }
 
     @Override
+    public void encodePayload(PacketData packetData) {}
+
+    @Override
     public void decodePayload(PacketData packetData) {
-        group = packetData.readServerGroup();
+        group = ServerGroup.read(packetData.readMap());
         removal = Boolean.TRUE.equals(packetData.readBool());
     }
 

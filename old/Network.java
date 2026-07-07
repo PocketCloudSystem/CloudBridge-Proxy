@@ -8,7 +8,7 @@ import de.pocketcloud.cloud.bridge.network.packet.CloudboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.PacketPool;
 import de.pocketcloud.cloud.bridge.network.packet.ResponsePacket;
 import de.pocketcloud.cloud.bridge.network.packet.UnhandledPacket;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketSerializer;
+import de.pocketcloud.cloud.bridge.network.packet.codec.PacketSerializer;
 import de.pocketcloud.cloud.bridge.network.request.RequestManager;
 import de.pocketcloud.cloud.bridge.network.util.Address;
 import de.pocketcloud.cloud.bridge.traffic.TrafficMonitor;

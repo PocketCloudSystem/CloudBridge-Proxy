@@ -1,8 +1,8 @@
 package de.pocketcloud.cloud.bridge.network.packet.impl;
 
-import de.pocketcloud.cloud.bridge.network.packet.ClientboundPacket;
+import de.pocketcloud.network.packet.ClientboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.CloudPacket;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.network.packet.data.PacketData;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,7 +21,10 @@ public final class LibrarySyncPacket extends CloudPacket implements ClientboundP
     
     @Override
     public void handle() {}
-    
+
+    @Override
+    public void encodePayload(PacketData packetData) {}
+
     @Override
     public void decodePayload(PacketData packetData) {
         data = packetData.readArray();

@@ -1,7 +1,8 @@
 package de.pocketcloud.cloud.bridge.network.packet;
 
-import de.pocketcloud.cloud.bridge.network.Network;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.cloud.bridge.CloudBridge;
+import de.pocketcloud.network.packet.ClientboundPacket;
+import de.pocketcloud.network.packet.data.PacketData;
 import lombok.Getter;
 
 /**
@@ -31,6 +32,6 @@ public abstract class RequestClientPacket extends CloudPacket implements Clientb
     final public void encodePayload(PacketData packetData) {}
 
     public void sendResponse(ResponseClientPacket packet) {
-        Network.getInstance().sendPacket(packet.setRequestId(requestId));
+        CloudBridge.getInstance().getNetwork().sendPacket(packet.setRequestId(requestId));
     }
 }

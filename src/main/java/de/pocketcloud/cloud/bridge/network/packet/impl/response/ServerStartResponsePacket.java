@@ -1,8 +1,8 @@
 package de.pocketcloud.cloud.bridge.network.packet.impl.response;
 
 import de.pocketcloud.cloud.bridge.network.packet.ResponsePacket;
-import de.pocketcloud.cloud.bridge.network.packet.data.ServerErrorReason;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.cloud.bridge.network.packet.type.ActionFailureReason;
+import de.pocketcloud.network.packet.data.PacketData;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,21 +10,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 final public class ServerStartResponsePacket extends ResponsePacket {
 
-    private ServerErrorReason errorReason;
+    private ActionFailureReason errorReason;
 
-    public ServerStartResponsePacket(ServerErrorReason errorReason) {
+    public ServerStartResponsePacket(ActionFailureReason errorReason) {
         this.errorReason = errorReason;
     }
 
     @Override
     public void decodePayload(PacketData packetData) {
-        errorReason = packetData.readServerErrorReason();
+        errorReason = packetData.readEnum(ActionFailureReason.class);
     }
 
     @Override
     public void handle() {}
 
-    public static ServerSaveResponsePacket create(ServerErrorReason errorReason) {
-        return new ServerSaveResponsePacket(errorReason);
+    public static ServerStartResponsePacket create(ActionFailureReason errorReason) {
+        return new ServerStartResponsePacket(errorReason);
     }
 }

@@ -1,11 +1,11 @@
 package de.pocketcloud.cloud.bridge.network.packet.impl;
 
 import de.pocketcloud.cloud.bridge.CloudBridge;
-import de.pocketcloud.cloud.bridge.network.packet.ClientboundPacket;
+import de.pocketcloud.network.packet.ClientboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.CloudPacket;
-import de.pocketcloud.cloud.bridge.network.packet.CloudboundPacket;
-import de.pocketcloud.cloud.bridge.network.packet.data.LogType;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.network.packet.CloudboundPacket;
+import de.pocketcloud.cloud.bridge.network.packet.type.LogType;
+import de.pocketcloud.network.packet.data.PacketData;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -34,7 +34,7 @@ final public class ConsoleLogPacket extends CloudPacket implements ClientboundPa
     @Override
     public void decodePayload(PacketData packetData) {
         message = packetData.readString();
-        logType = packetData.readLogType();
+        logType = packetData.readEnum(LogType.class);
     }
 
     public static ConsoleLogPacket create(String message, LogType logType) {

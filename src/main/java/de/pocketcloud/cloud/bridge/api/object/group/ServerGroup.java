@@ -1,17 +1,15 @@
 package de.pocketcloud.cloud.bridge.api.object.group;
 
-import de.pocketcloud.cloud.bridge.CloudBridge;
 import de.pocketcloud.cloud.bridge.api.object.template.Template;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
-import de.pocketcloud.cloud.bridge.util.Utils;
+import de.pocketcloud.cloud.bridge.util.Writable;
+import de.pocketcloud.cloud.bridge.util.mapper.MapperUtils;
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class ServerGroup implements PacketData.Writable {
+public final class ServerGroup implements Writable<Map<String, Object>> {
 
     @Getter
     private final String name;
@@ -46,35 +44,10 @@ public final class ServerGroup implements PacketData.Writable {
     
     @Override
     public Map<String, Object> write() {
-        Map<String, Object> data = new HashMap<>();
-        data.put("name", name);
-        data.put("templates", new ArrayList<>(templates));
-        return data;
+        return MapperUtils.toMap(this);
     }
     
-    @SuppressWarnings("unchecked")
     public static ServerGroup read(Map<String, Object> data) {
-        if (data == null) return null;
-        
-        if (!Utils.containKeys(data, "name", "templates")) return null;
-        
-        try {
-            Object templatesObj = data.get("templates");
-            List<String> templates;
-            
-            if (templatesObj instanceof List) {
-                templates = new ArrayList<>((List<String>) templatesObj);
-            } else {
-                return null;
-            }
-            
-            return new ServerGroup(
-                (String) data.get("name"),
-                templates
-            );
-        } catch (ClassCastException e) {
-            CloudBridge.getInstance().getLogger().error(e);
-            return null;
-        }
+        return MapperUtils.fromMap(data, ServerGroup.class);
     }
 }

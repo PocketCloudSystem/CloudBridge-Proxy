@@ -1,12 +1,12 @@
-package de.pocketcloud.cloud.bridge.network.packet.data;
+package de.pocketcloud.cloud.bridge.network.packet.type;
 
 import de.pocketcloud.cloud.bridge.language.LanguageKey;
 import de.pocketcloud.cloud.bridge.network.packet.impl.CloudNotificationPacket;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.cloud.bridge.util.Writable;
 
 import java.util.Map;
 
-public enum NotificationType implements PacketData.Writable {
+public enum NotificationType implements Writable<String> {
 
     SERVER_STARTING,
     SERVER_STOPPING,
@@ -47,14 +47,5 @@ public enum NotificationType implements PacketData.Writable {
             case PLAYER_SWITCHED_SERVER ->  LanguageKey.INGAME_NOTIFY_MESSAGE_PLAYER_SWITCHED_SERVER;
             default -> null;
         };
-    }
-
-    public static NotificationType fromName(String name) {
-        if (name == null) return null;
-        try {
-            return valueOf(name.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
     }
 }

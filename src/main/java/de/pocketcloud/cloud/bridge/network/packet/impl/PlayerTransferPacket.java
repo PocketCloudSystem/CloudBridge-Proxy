@@ -1,8 +1,8 @@
 package de.pocketcloud.cloud.bridge.network.packet.impl;
 
-import de.pocketcloud.cloud.bridge.network.packet.ClientboundPacket;
+import de.pocketcloud.network.packet.ClientboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.CloudPacket;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.network.packet.data.PacketData;
 import dev.waterdog.waterdogpe.ProxyServer;
 import dev.waterdog.waterdogpe.network.serverinfo.ServerInfo;
 import dev.waterdog.waterdogpe.player.ProxiedPlayer;
@@ -29,6 +29,9 @@ public final class PlayerTransferPacket extends CloudPacket implements Clientbou
             player.connect(info);
         }
     }
+
+    @Override
+    public void encodePayload(PacketData packetData) {}
 
     @Override
     public void decodePayload(PacketData packetData) {

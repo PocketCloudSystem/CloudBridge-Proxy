@@ -1,8 +1,8 @@
 package de.pocketcloud.cloud.bridge.network.packet.impl.response;
 
 import de.pocketcloud.cloud.bridge.network.packet.ResponsePacket;
-import de.pocketcloud.cloud.bridge.network.packet.data.VerifyStatus;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.cloud.bridge.network.packet.type.VerificationStatus;
+import de.pocketcloud.network.packet.data.PacketData;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,21 +10,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public final class ServerHandshakeResponsePacket extends ResponsePacket {
     
-    private VerifyStatus verifyStatus;
+    private VerificationStatus verifyStatus;
 
-    public ServerHandshakeResponsePacket(VerifyStatus verifyStatus) {
+    public ServerHandshakeResponsePacket(VerificationStatus verifyStatus) {
         this.verifyStatus = verifyStatus;
     }
 
     @Override
     public void decodePayload(PacketData packetData) {
-        verifyStatus = packetData.readVerifyStatus();
+        verifyStatus = packetData.readEnum(VerificationStatus.class);
     }
     
     @Override
     public void handle() {}
 
-    public static ServerHandshakeResponsePacket create(VerifyStatus verifyStatus) {
+    public static ServerHandshakeResponsePacket create(VerificationStatus verifyStatus) {
         return new ServerHandshakeResponsePacket(verifyStatus);
     }
 }

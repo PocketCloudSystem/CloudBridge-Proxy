@@ -3,9 +3,9 @@ package de.pocketcloud.cloud.bridge.network.packet.impl;
 import com.google.gson.Gson;
 import de.pocketcloud.cloud.bridge.CloudBridge;
 import de.pocketcloud.cloud.bridge.language.Language;
-import de.pocketcloud.cloud.bridge.network.packet.ClientboundPacket;
+import de.pocketcloud.network.packet.ClientboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.CloudPacket;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.network.packet.data.PacketData;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -34,6 +34,9 @@ public final class LanguageSyncPacket extends CloudPacket implements Clientbound
     public void handle() {
         Language.sync(language, messages);
     }
+
+    @Override
+    public void encodePayload(PacketData packetData) {}
 
     @Override
     @SuppressWarnings("unchecked")

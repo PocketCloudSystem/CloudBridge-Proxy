@@ -1,16 +1,14 @@
 package de.pocketcloud.cloud.bridge.api.object.template;
 
-import de.pocketcloud.cloud.bridge.CloudBridge;
 import de.pocketcloud.cloud.bridge.api.object.group.ServerGroup;
 import de.pocketcloud.cloud.bridge.api.provider.ServerGroupProvider;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
-import de.pocketcloud.cloud.bridge.util.Utils;
+import de.pocketcloud.cloud.bridge.util.Writable;
+import de.pocketcloud.cloud.bridge.util.mapper.MapperUtils;
 import lombok.Getter;
 
-import java.util.HashMap;
 import java.util.Map;
 
-public final class Template implements PacketData.Writable {
+public final class Template implements Writable<Map<String, Object>> {
 
     @Getter
     private final String name;
@@ -77,43 +75,10 @@ public final class Template implements PacketData.Writable {
     
     @Override
     public Map<String, Object> write() {
-        Map<String, Object> data = new HashMap<>();
-        data.put("name", name);
-        data.put("lobby", lobby);
-        data.put("maintenance", maintenance);
-        data.put("static", staticServer);
-        data.put("alwaysCopyToStaticServers", alwaysCopyToStaticServers);
-        data.put("maxPlayerCount", maxPlayerCount);
-        data.put("minServerCount", minServerCount);
-        data.put("maxServerCount", maxServerCount);
-        data.put("startNewPercentage", startNewPercentage);
-        data.put("autoStart", autoStart);
-        data.put("templateType", templateType);
-        return data;
+        return MapperUtils.toMap(this);
     }
     
-    public static Template read(Map<String, ?> data) {
-        if (!Utils.containKeys(data, "name", "lobby", "maintenance", "static", "alwaysCopyToStaticServers",
-                "maxPlayerCount", "minServerCount", "maxServerCount", "startNewPercentage",
-                "autoStart", "templateType")) return null;
-
-        try {
-            return new Template(
-                (String) data.get("name"),
-                (Boolean) data.get("lobby"),
-                (Boolean) data.get("maintenance"),
-                (Boolean) data.get("static"),
-                (Boolean) data.get("alwaysCopyToStaticServers"),
-                ((Number) data.get("maxPlayerCount")).intValue(),
-                ((Number) data.get("minServerCount")).intValue(),
-                ((Number) data.get("maxServerCount")).intValue(),
-                ((Number) data.get("startNewPercentage")).floatValue(),
-                (Boolean) data.get("autoStart"),
-                (String) data.get("templateType")
-            );
-        } catch (ClassCastException | NullPointerException e) {
-            CloudBridge.getInstance().getLogger().error(e);
-            return null;
-        }
+    public static Template read(Map<String, Object> data) {
+        return MapperUtils.fromMap(data, Template.class);
     }
 }

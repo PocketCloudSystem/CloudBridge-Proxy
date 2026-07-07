@@ -1,30 +1,27 @@
 package de.pocketcloud.cloud.bridge.network.packet.impl;
 
 import de.pocketcloud.cloud.bridge.api.cache.InGameModuleCache;
-import de.pocketcloud.cloud.bridge.network.packet.ClientboundPacket;
+import de.pocketcloud.network.packet.ClientboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.CloudPacket;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.network.packet.data.PacketData;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
 public final class ModuleSyncPacket extends CloudPacket implements ClientboundPacket {
     
-    private Map<String, Boolean> data;
+    private List<String> data;
 
-    public ModuleSyncPacket(Map<String, Boolean> data) {
+    public ModuleSyncPacket(List<String> data) {
         this.data = data;
     }
     
     @Override
     public void handle() {
-        for (Map.Entry<String, Boolean> entry : data.entrySet()) {
-            InGameModuleCache.setModuleState(entry.getKey(), entry.getValue());
-        }
+        InGameModuleCache.sync(data);
     }
     
     @Override
@@ -32,15 +29,10 @@ public final class ModuleSyncPacket extends CloudPacket implements ClientboundPa
     
     @Override
     public void decodePayload(PacketData packetData) {
-        data = new HashMap<>();
-        for (Map.Entry<String, Object> entry : packetData.readMap().entrySet()) {
-            if (entry.getValue() instanceof Boolean bool) {
-                data.put(entry.getKey(), bool);
-            }
-        }
+        data = packetData.readArray(String.class);
     }
 
-    public static ModuleSyncPacket create(Map<String, Boolean> data) {
+    public static ModuleSyncPacket create(List<String> data) {
         return new ModuleSyncPacket(data);
     }
 }

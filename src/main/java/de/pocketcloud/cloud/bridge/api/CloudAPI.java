@@ -3,8 +3,8 @@ package de.pocketcloud.cloud.bridge.api;
 import de.pocketcloud.cloud.bridge.CloudBridge;
 import de.pocketcloud.cloud.bridge.api.provider.*;
 import de.pocketcloud.cloud.bridge.language.LanguageKey;
-import de.pocketcloud.cloud.bridge.network.packet.data.LogType;
-import de.pocketcloud.cloud.bridge.network.packet.data.VerifyStatus;
+import de.pocketcloud.cloud.bridge.network.packet.type.LogType;
+import de.pocketcloud.cloud.bridge.network.packet.type.VerificationStatus;
 import de.pocketcloud.cloud.bridge.network.packet.impl.ConsoleLogPacket;
 import de.pocketcloud.cloud.bridge.network.packet.impl.KeepAlivePacket;
 import de.pocketcloud.cloud.bridge.network.packet.impl.request.ServerHandshakeRequestPacket;
@@ -22,7 +22,7 @@ public final class CloudAPI {
     private static CloudAPI instance;
     
     @Getter
-    private VerifyStatus verifyStatus = VerifyStatus.NOT_APPLIED;
+    private VerificationStatus verificationStatus = VerificationStatus.PENDING;
     private final Map<Class<? extends CloudAPIProvider>, CloudAPIProvider> providers = new HashMap<>();
     
     public CloudAPI() {
@@ -42,14 +42,14 @@ public final class CloudAPI {
          ServerHandshakeRequestPacket.create(serverName, processId, maxPlayers).sendRequest()
              .then((response, value) -> {
                  ServerHandshakeResponsePacket packet = (ServerHandshakeResponsePacket) response;
-                 VerifyStatus status = packet.getVerifyStatus();
-                 this.verifyStatus = status;
+                 VerificationStatus status = packet.getVerifyStatus();
+                 this.verificationStatus = status;
 
-                 if (status == VerifyStatus.VERIFIED) {
+                 if (status == VerificationStatus.VERIFIED) {
                      CloudBridge.getInstance().setLastKeepAliveCheck(Utils.time());
                      CloudBridge.getInstance().startTasks();
                      CloudBridge.getInstance().getLogger().info(LanguageKey.INGAME_SERVER_VERIFIED.translate());
-                     KeepAlivePacket.create().sendPacket(); // Start keep-alive cycle
+                     KeepAlivePacket.create().sendPacket();
                  } else {
                      CloudBridge.getInstance().getLogger().warn("Cloud responded with verification status '{}', shutting down...", status.getName());
                      ProxyServer.getInstance().shutdown();

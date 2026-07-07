@@ -1,11 +1,11 @@
 package de.pocketcloud.cloud.bridge.network.packet.impl.request.client;
 
 import de.pocketcloud.cloud.bridge.command.sender.CloudCommandSender;
-import de.pocketcloud.cloud.bridge.network.packet.ClientboundPacket;
+import de.pocketcloud.network.packet.ClientboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.RequestClientPacket;
-import de.pocketcloud.cloud.bridge.network.packet.data.ServerCommandExecutionResult;
+import de.pocketcloud.cloud.bridge.network.packet.type.ServerCommandExecutionResult;
 import de.pocketcloud.cloud.bridge.network.packet.impl.response.client.CommandExecuteResponsePacket;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.network.packet.data.PacketData;
 import dev.waterdog.waterdogpe.ProxyServer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

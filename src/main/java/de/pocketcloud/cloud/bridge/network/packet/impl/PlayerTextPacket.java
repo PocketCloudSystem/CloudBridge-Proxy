@@ -1,10 +1,10 @@
 package de.pocketcloud.cloud.bridge.network.packet.impl;
 
-import de.pocketcloud.cloud.bridge.network.packet.ClientboundPacket;
+import de.pocketcloud.network.packet.ClientboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.CloudPacket;
-import de.pocketcloud.cloud.bridge.network.packet.CloudboundPacket;
-import de.pocketcloud.cloud.bridge.network.packet.data.TextType;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.network.packet.CloudboundPacket;
+import de.pocketcloud.cloud.bridge.network.packet.type.TextType;
+import de.pocketcloud.network.packet.data.PacketData;
 import dev.waterdog.waterdogpe.ProxyServer;
 import dev.waterdog.waterdogpe.player.ProxiedPlayer;
 import lombok.Getter;
@@ -80,7 +80,7 @@ final public class PlayerTextPacket extends CloudPacket implements ClientboundPa
     public void decodePayload(PacketData packetData) {
         player = packetData.readString();
         text = packetData.readString();
-        type = packetData.readTextType();
+        type = packetData.readEnum(TextType.class);
     }
 
     public static PlayerTextPacket create(String player, String text, TextType type) {

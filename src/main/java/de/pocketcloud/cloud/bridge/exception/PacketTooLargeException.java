@@ -1,6 +1,6 @@
 package de.pocketcloud.cloud.bridge.exception;
 
-import de.pocketcloud.cloud.bridge.network.packet.CloudboundPacket;
+import de.pocketcloud.network.packet.CloudboundPacket;
 
 public class PacketTooLargeException extends PacketException {
 

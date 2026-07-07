@@ -1,6 +1,5 @@
 package de.pocketcloud.cloud.bridge.api.object.server;
 
-import de.pocketcloud.cloud.bridge.CloudBridge;
 import de.pocketcloud.cloud.bridge.api.object.player.CloudPlayer;
 import de.pocketcloud.cloud.bridge.api.object.server.data.CloudServerData;
 import de.pocketcloud.cloud.bridge.api.object.server.data.CloudServerStorage;
@@ -8,55 +7,68 @@ import de.pocketcloud.cloud.bridge.api.object.server.util.ServerStatus;
 import de.pocketcloud.cloud.bridge.api.object.template.Template;
 import de.pocketcloud.cloud.bridge.api.provider.CloudPlayerProvider;
 import de.pocketcloud.cloud.bridge.api.provider.TemplateProvider;
+import de.pocketcloud.cloud.bridge.network.packet.type.VerificationStatus;
 import de.pocketcloud.cloud.bridge.network.packet.impl.ServerChangeStatusPacket;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
-import de.pocketcloud.cloud.bridge.util.Utils;
+import de.pocketcloud.cloud.bridge.util.Writable;
+import de.pocketcloud.cloud.bridge.util.mapper.MapperUtils;
 import lombok.Getter;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-public final class CloudServer implements PacketData.Writable {
+@Getter
+public final class CloudServer implements Writable<Map<String, Object>> {
 
-    @Getter
     private final int id;
-    @Getter
-    private final String serverUuid;
-    private final String template;
-    @Getter
+    private final UUID uuid;
+    private final String templateName;
     private final CloudServerData serverData;
-    @Getter
-    private ServerStatus serverStatus;
-    @Getter
-    private CloudServerStorage serverStorage;
-    
-    public CloudServer(int id, String serverUuid, String template, CloudServerData serverData, ServerStatus serverStatus, Map<String, Object> serverStorage) {
+    private ServerStatus status;
+    private final CloudServerStorage serverStorage;
+    private VerificationStatus verificationStatus = VerificationStatus.PENDING;
+    private Long startTime = null;
+    private Long verifiedTime = null;
+
+    public CloudServer(int id, UUID uuid, String templateName, CloudServerData serverData, ServerStatus status, Map<String, Object> serverStorage) {
         this.id = id;
-        this.serverUuid = serverUuid;
-        this.template = template;
+        this.uuid = uuid;
+        this.templateName = templateName;
         this.serverData = serverData;
-        this.serverStatus = serverStatus;
+        this.status = status;
         this.serverStorage = new CloudServerStorage(this, serverStorage);
     }
-    
 
     @SuppressWarnings("unchecked")
     public void sync(Map<String, Object> data) {
-        if (data.containsKey("serverStatus")) {
-            String statusName = (String) data.get("serverStatus");
-            this.serverStatus = ServerStatus.fromName(statusName);
+        if (data.containsKey("status")) {
+            String statusName = (String) data.get("status");
+            this.status = ServerStatus.fromName(statusName);
         }
-        if (data.containsKey("internalStorage")) {
-            Map<String, Object> storage = (Map<String, Object>) data.get("internalStorage");
+
+        if (data.containsKey("storage")) {
+            Map<String, Object> storage = (Map<String, Object>) data.get("storage");
             this.serverStorage.sync(storage);
+        }
+
+        if (data.containsKey("verificationStatus")) {
+            String statusName = (String) data.get("verificationStatus");
+            this.verificationStatus = VerificationStatus.fromName(statusName);
+        }
+
+        if (data.containsKey("startTime")) {
+            this.startTime = (Long) data.get("startTime");
+        }
+
+        if (data.containsKey("verifiedTime")) {
+            this.verifiedTime = (Long) data.get("verifiedTime");
         }
     }
 
-    public void setServerStatus(ServerStatus serverStatus) {
-        this.serverStatus = serverStatus;
-        ServerChangeStatusPacket.create(this.serverUuid, serverStatus).sendPacket();
+    public void setServerStatus(ServerStatus status) {
+        this.status = status;
+        ServerChangeStatusPacket.create(this.uuid.toString(), status).sendPacket();
     }
 
     public CloudPlayer getPlayer(String identifier) {
@@ -80,60 +92,20 @@ public final class CloudServer implements PacketData.Writable {
     }
 
     public String getName() {
-        return template + "-" + id;
+        return templateName + "-" + id;
     }
 
     public Template getTemplate() {
-        return TemplateProvider.provider().get(template);
-    }
-    
-    public String getTemplateName() {
-        return template;
+        return TemplateProvider.provider().get(templateName);
     }
 
     @Override
     public Map<String, Object> write() {
-        Map<String, Object> data = new HashMap<>();
-        data.put("name", getName());
-        data.put("uuid", serverUuid);
-        data.put("id", id);
-        data.put("template", template);
-        data.put("port", serverData.port());
-        data.put("maxPlayers", serverData.maxPlayers());
-        data.put("processId", serverData.processId());
-        data.put("serverStatus", serverStatus.getName());
-        data.put("internalStorage", serverStorage.getAll());
-        return data;
+        return MapperUtils.toMap(this);
     }
     
     @SuppressWarnings("unchecked")
     public static CloudServer read(Map<String, Object> data) {
-        if (!Utils.containKeys(data, "name", "uuid", "id", "template", "port", "maxPlayers", "serverStatus")) return null;
-
-        try {
-            int id = ((Number) data.get("id")).intValue();
-            String uuid = (String) data.get("uuid");
-            String template = (String) data.get("template");
-            String name = (String) data.get("name");
-            int port = ((Number) data.get("port")).intValue();
-            int maxPlayers = ((Number) data.get("maxPlayers")).intValue();
-            Integer processId = data.containsKey("processId") && data.get("proccessId") != null ?
-                ((Number) data.get("processId")).intValue() : null;
-            ServerStatus status = ServerStatus.fromName((String) data.get("serverStatus"));
-
-            Map<String, Object> storage = Map.of();
-            if (data.containsKey("internalStorage")) {
-                if (data.get("internalStorage") instanceof Map) {
-                    storage = (Map<String, Object>) data.get("internalStorage");
-                }
-            }
-
-            CloudServerData serverData = new CloudServerData(name, port, maxPlayers, processId);
-            
-            return new CloudServer(id, uuid, template, serverData, status, storage);
-        } catch (ClassCastException | NullPointerException e) {
-            CloudBridge.getInstance().getLogger().error(e);
-            return null;
-        }
+        return MapperUtils.fromMap(data, CloudServer.class);
     }
 }

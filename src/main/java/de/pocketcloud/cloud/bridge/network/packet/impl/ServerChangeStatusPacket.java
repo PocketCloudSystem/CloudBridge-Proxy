@@ -2,8 +2,8 @@ package de.pocketcloud.cloud.bridge.network.packet.impl;
 
 import de.pocketcloud.cloud.bridge.api.object.server.util.ServerStatus;
 import de.pocketcloud.cloud.bridge.network.packet.CloudPacket;
-import de.pocketcloud.cloud.bridge.network.packet.CloudboundPacket;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.network.packet.CloudboundPacket;
+import de.pocketcloud.network.packet.data.PacketData;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,6 +26,9 @@ public final class ServerChangeStatusPacket extends CloudPacket implements Cloud
     public void encodePayload(PacketData packetData) {
         packetData.writeAll(serverUuid, status);
     }
+
+    @Override
+    public void decodePayload(PacketData packetData) {}
 
     public static ServerChangeStatusPacket create(String serverUuid, ServerStatus status) {
         return new ServerChangeStatusPacket(serverUuid, status);

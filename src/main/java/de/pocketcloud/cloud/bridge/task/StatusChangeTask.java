@@ -10,11 +10,11 @@ final public class StatusChangeTask extends Task {
 
     @Override
     public void onRun(int i) {
-        if (CloudServerProvider.provider().current().getServerStatus() == ServerStatus.IN_GAME || CloudServerProvider.provider().current().getServerStatus() == ServerStatus.STOPPING) return;
+        if (CloudServerProvider.provider().current().getStatus() == ServerStatus.IN_GAME || CloudServerProvider.provider().current().getStatus() == ServerStatus.STOPPING) return;
         if (ProxyServer.getInstance().getPlayers().size() >= TemplateProvider.provider().current().getMaxPlayerCount()) {
             CloudServerProvider.provider().current().setServerStatus(ServerStatus.FULL);
         } else {
-            if (CloudServerProvider.provider().current().getServerStatus() == ServerStatus.FULL) {
+            if (CloudServerProvider.provider().current().getStatus() == ServerStatus.FULL) {
                 CloudServerProvider.provider().current().setServerStatus(ServerStatus.ONLINE);
             }
         }

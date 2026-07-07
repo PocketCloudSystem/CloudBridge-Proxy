@@ -1,8 +1,8 @@
 package de.pocketcloud.cloud.bridge.network.packet.impl;
 
-import de.pocketcloud.cloud.bridge.network.packet.ClientboundPacket;
+import de.pocketcloud.network.packet.ClientboundPacket;
 import de.pocketcloud.cloud.bridge.network.packet.CloudPacket;
-import de.pocketcloud.cloud.bridge.network.packet.util.PacketData;
+import de.pocketcloud.network.packet.data.PacketData;
 import dev.waterdog.waterdogpe.ProxyServer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +21,9 @@ public final class ProxyUnregisterServerPacket extends CloudPacket implements Cl
     public void handle() {
         ProxyServer.getInstance().removeServerInfo(serverName);
     }
+
+    @Override
+    public void encodePayload(PacketData packetData) {}
 
     @Override
     public void decodePayload(PacketData packetData) {
